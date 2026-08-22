@@ -8,11 +8,11 @@ import { BottomFooterBar } from '@/components/layout/BottomFooterBar';
 import { CalendarHeatmap } from '@/components/ui/CalendarHeatmap';
 import { useTradeFilterStore } from '@/stores/tradeFilterStore';
 import { fetchApi } from '@/lib/api-client';
+import { BarChart3, TrendingUp, ShieldCheck, AlertTriangle, Calendar as CalendarIcon, RotateCcw } from 'lucide-react';
 import {
   ResponsiveContainer,
   ComposedChart,
   Area,
-  LineChart,
   Line,
   BarChart,
   Bar,
@@ -112,21 +112,24 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070a14] grid-bg flex flex-col font-mono text-slate-200">
+    <div className="min-h-screen bg-[#070a14] flex flex-col font-sans text-slate-200">
       <TopHeaderBar />
 
-      <div className="flex flex-1 overflow-hidden pb-10">
+      <div className="flex flex-1 overflow-hidden pb-12">
         <SidebarNav />
 
-        <main className="flex-1 p-6 overflow-y-auto space-y-6">
+        <main className="flex-1 p-6 md:p-8 overflow-y-auto space-y-8">
           {/* HEADER BAR */}
-          <div className="flex justify-between items-center border-b border-[#1d2640] pb-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
             <div>
-              <h1 className="text-sm font-bold text-[#dfff00] tracking-wider uppercase">
-                SYS_ANALYTICS // DEEP REVIEW
-              </h1>
-              <p className="text-[10px] text-slate-400 uppercase mt-0.5">
-                QUANTITATIVE PERFORMANCE & BEHAVIORAL MULTI-ZONE ENGINE
+              <div className="flex items-center gap-2">
+                <BarChart3 className="w-5 h-5 text-[#dfff00]" />
+                <h1 className="font-mono text-base font-bold text-white tracking-tight">
+                  SYS_ANALYTICS // DEEP REVIEW
+                </h1>
+              </div>
+              <p className="text-xs text-slate-400 mt-1">
+                Multi-Zone Quantitative Performance & Behavioral Analysis
               </p>
             </div>
 
@@ -135,61 +138,77 @@ export default function AnalyticsPage() {
                 type="date"
                 value={filterStore.startDate || ''}
                 onChange={(e) => filterStore.setFilter('startDate', e.target.value)}
-                className="bg-[#0e1424] border border-[#1d2640] text-xs font-mono text-slate-300 px-3 py-1 rounded"
+                className="bg-[#070a14] border border-slate-800 text-xs font-mono text-slate-300 px-3.5 py-2 rounded-xl"
               />
-              <span className="text-slate-500 text-xs">/</span>
+              <span className="text-slate-500 text-xs font-mono">/</span>
               <input
                 type="date"
                 value={filterStore.endDate || ''}
                 onChange={(e) => filterStore.setFilter('endDate', e.target.value)}
-                className="bg-[#0e1424] border border-[#1d2640] text-xs font-mono text-slate-300 px-3 py-1 rounded"
+                className="bg-[#070a14] border border-slate-800 text-xs font-mono text-slate-300 px-3.5 py-2 rounded-xl"
               />
+              <button
+                onClick={() => filterStore.resetFilters()}
+                className="p-2 rounded-xl border border-slate-800 bg-[#070a14] font-mono text-xs text-[#dfff00] hover:border-slate-700"
+              >
+                <RotateCcw className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
           {/* ZONE 1: PERFORMANCE DYNAMICS */}
-          <div className="bg-[#0b0f1d] border border-[#1d2640] p-4 space-y-4">
-            <div className="text-xs font-bold text-slate-300 uppercase tracking-wider border-b border-[#1d2640] pb-2">
-              ZONE 1: PERFORMANCE DYNAMICS
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+              <TrendingUp className="w-4 h-4 text-[#dfff00]" />
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                Zone 1: Performance Dynamics
+              </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-              {/* Cumulative Equity Curve & Drawdown */}
-              <div className="md:col-span-8 bg-[#090d1a] border border-[#1d2640] p-4 space-y-3">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                  CUMULATIVE P&L & DRAWDOWN DEPTH
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+              {/* Cumulative Equity Curve */}
+              <div className="md:col-span-8 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-4">
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block">
+                  Cumulative P&L Curve Over Time
                 </span>
-                <div className="h-44 w-full">
+                <div className="h-64 w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <ComposedChart data={equity} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
-                      <CartesianGrid stroke="#1d2640" strokeDasharray="3 3" vertical={false} />
-                      <XAxis dataKey="entry_time" tick={{ fill: '#64748b', fontSize: 10 }} tickFormatter={(s) => s.slice(5, 10)} />
-                      <YAxis tick={{ fill: '#64748b', fontSize: 10 }} />
-                      <Tooltip contentStyle={{ backgroundColor: '#0b0f1d', borderColor: '#1d2640', borderRadius: '0px' }} />
-                      <Line type="monotone" dataKey="cumulative_pnl" stroke="#dfff00" strokeWidth={3} dot={false} />
+                    <ComposedChart data={equity} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="anGradSoft" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#dfff00" stopOpacity={0.2} />
+                          <stop offset="95%" stopColor="#dfff00" stopOpacity={0.0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid stroke="#1e293b" strokeDasharray="3 3" vertical={false} />
+                      <XAxis dataKey="entry_time" tick={{ fill: '#64748b', fontSize: 11 }} tickFormatter={(s) => s.slice(5, 10)} />
+                      <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#0d1322', borderColor: '#334155', borderRadius: '8px' }} />
+                      <Area type="monotone" dataKey="cumulative_pnl" fill="url(#anGradSoft)" stroke="none" />
+                      <Line type="monotone" dataKey="cumulative_pnl" stroke="#dfff00" strokeWidth={2.5} dot={false} />
                     </ComposedChart>
                   </ResponsiveContainer>
                 </div>
-                <div className="h-20 w-full pt-1 border-t border-[#1d2640]">
-                  <DrawdownAreaChart data={equity} margin={{ top: 0, right: 5, left: -20, bottom: 0 }}>
-                    <Area type="monotone" dataKey="cumulative_pnl" fill="#3a0a0a" stroke="#f43f5e" />
-                  </DrawdownAreaChart>
-                </div>
               </div>
 
-              {/* Risk Consistency Scatter */}
-              <div className="md:col-span-4 bg-[#090d1a] border border-[#1d2640] p-4 flex flex-col justify-between">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-                  RISK CONSISTENCY (%/TRADE)
-                </span>
-                <div className="h-56 w-full">
+              {/* Risk % Over Time */}
+              <div className="md:col-span-4 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                    Risk Consistency (%/Trade)
+                  </span>
+                  <span className="font-mono text-xs text-[#dfff00]">
+                    Avg: {riskTime?.average_risk_percent || 0}%
+                  </span>
+                </div>
+                <div className="h-64 w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={riskTime?.risk_series || []} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
-                      <CartesianGrid stroke="#1d2640" vertical={false} />
-                      <XAxis dataKey="entry_time" tick={{ fill: '#64748b', fontSize: 10 }} tickFormatter={(s) => s.slice(5, 10)} />
-                      <YAxis tick={{ fill: '#64748b', fontSize: 10 }} />
-                      <Tooltip contentStyle={{ backgroundColor: '#0b0f1d', borderColor: '#1d2640' }} />
-                      <Bar dataKey="risk_percent" fill="#f43f5e" />
+                    <BarChart data={riskTime?.risk_series || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <CartesianGrid stroke="#1e293b" vertical={false} />
+                      <XAxis dataKey="entry_time" tick={{ fill: '#64748b', fontSize: 11 }} tickFormatter={(s) => s.slice(5, 10)} />
+                      <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#0d1322', borderColor: '#334155', borderRadius: '8px' }} />
+                      <Bar dataKey="risk_percent" fill="#f43f5e" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -197,161 +216,78 @@ export default function AnalyticsPage() {
             </div>
           </div>
 
-          {/* ZONE 2 & ZONE 3 ROW */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            {/* ZONE 2: STRATEGY EDGE */}
-            <div className="md:col-span-7 bg-[#0b0f1d] border border-[#1d2640] p-4 space-y-4">
-              <div className="text-xs font-bold text-slate-300 uppercase tracking-wider border-b border-[#1d2640] pb-2">
-                ZONE 2: STRATEGY EDGE
+          {/* ZONE 2 & 3 ROW */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+            <div className="md:col-span-7 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-4">
+              <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+                <ShieldCheck className="w-4 h-4 text-[#dfff00]" />
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  Zone 2: Strategy Edge
+                </span>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left font-mono text-xs">
                   <thead>
-                    <tr className="border-b border-[#1d2640] text-slate-400">
-                      <th className="py-2">STRATEGY</th>
-                      <th className="py-2 text-right">WIN %</th>
-                      <th className="py-2 text-right">AVG R</th>
-                      <th className="py-2 text-right">AVG W</th>
-                      <th className="py-2 text-right">AVG L</th>
-                      <th className="py-2 text-right">TRADES</th>
-                      <th className="py-2 text-right">EV</th>
+                    <tr className="border-b border-slate-800 text-slate-400">
+                      <th className="py-2.5">STRATEGY</th>
+                      <th className="py-2.5 text-right">WIN %</th>
+                      <th className="py-2.5 text-right">AVG R</th>
+                      <th className="py-2.5 text-right">EV ($)</th>
+                      <th className="py-2.5 text-right">NET P&L</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#1d2640]">
+                  <tbody className="divide-y divide-slate-800/60">
                     {expectancy.map((row) => (
                       <tr key={row.setup_name}>
-                        <td className="py-2 font-bold text-white uppercase">{row.setup_name}</td>
-                        <td className="py-2 text-right text-emerald-400 font-bold">{row.win_rate_percent}%</td>
-                        <td className="py-2 text-right">{row.avg_r_multiple}R</td>
-                        <td className="py-2 text-right text-emerald-400">+${row.expected_value}</td>
-                        <td className="py-2 text-right text-rose-500">-$210</td>
-                        <td className="py-2 text-right">{row.total_trades}</td>
-                        <td className="py-2 text-right text-[#dfff00] font-bold">{row.expected_value}</td>
+                        <td className="py-2.5 font-bold text-white uppercase">{row.setup_name}</td>
+                        <td className="py-2.5 text-right text-emerald-400 font-bold">{row.win_rate_percent}%</td>
+                        <td className="py-2.5 text-right">{row.avg_r_multiple}R</td>
+                        <td className="py-2.5 text-right text-[#dfff00] font-bold">${row.expected_value}</td>
+                        <td className={`py-2.5 text-right font-bold ${row.total_pnl >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                          ${row.total_pnl}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-
-              <div className="grid grid-cols-2 gap-4 pt-2 border-t border-[#1d2640]">
-                <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase block mb-1">R-MULT DISTRIBUTION</span>
-                  <div className="h-28 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={rDist}>
-                        <Bar dataKey="count" fill="#dfff00" />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold text-slate-400 uppercase block mb-1">WIN% VS AVG R (PAIRED)</span>
-                  <div className="h-28 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={expectancy}>
-                        <Bar dataKey="win_rate_percent" fill="#10b981" />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              </div>
             </div>
 
-            {/* ZONE 3: EXECUTION QUALITY */}
-            <div className="md:col-span-5 bg-[#0b0f1d] border border-[#1d2640] p-4 space-y-4 flex flex-col justify-between">
-              <div className="text-xs font-bold text-slate-300 uppercase tracking-wider border-b border-[#1d2640] pb-2">
-                ZONE 3: EXECUTION QUALITY
+            <div className="md:col-span-5 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-4">
+              <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+                <AlertTriangle className="w-4 h-4 text-rose-400" />
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  Zone 3: Execution Quality
+                </span>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <span className="text-[10px] text-slate-400 uppercase block mb-2">EXIT REASON PROFITABILITY</span>
-                  <div className="space-y-2 text-xs">
-                    {exitReasons.map((r) => (
-                      <div key={r.exit_reason} className="flex justify-between items-center">
-                        <span className="uppercase text-slate-400">{r.exit_reason.slice(0, 3)}</span>
-                        <span className={r.total_pnl_currency >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-500 font-bold'}>
-                          ${r.total_pnl_currency}
-                        </span>
-                      </div>
-                    ))}
+              <div className="space-y-3 font-mono text-xs">
+                {exitReasons.map((r) => (
+                  <div key={r.exit_reason} className="flex justify-between items-center border-b border-slate-800 pb-2">
+                    <span className="uppercase text-slate-400">{r.exit_reason.replace('_', ' ')}</span>
+                    <span className="text-white font-bold">{r.win_rate_percent}% WIN</span>
+                    <span className={r.total_pnl_currency >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
+                      ${r.total_pnl_currency}
+                    </span>
                   </div>
-                </div>
-                <div>
-                  <span className="text-[10px] text-slate-400 uppercase block mb-2">GRADE VS OUTCOME</span>
-                  <div className="h-32 w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <ScatterChart>
-                        <XAxis dataKey="trade_grade" domain={[1, 5]} hide />
-                        <YAxis dataKey="r_multiple" hide />
-                        <Scatter data={gradeVsOutcome?.data_points || []} fill="#dfff00" />
-                      </ScatterChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex justify-between items-center border-t border-[#1d2640] pt-3 text-xs">
-                <div>
-                  <span className="text-slate-500 uppercase block text-[10px]">AVG ENTRY SLIPPAGE</span>
-                  <span className="text-rose-500 font-bold">-1.2 Ticks</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-slate-500 uppercase block text-[10px]">PLAN DEVIATION</span>
-                  <span className="text-emerald-400 font-bold">14% ↓2%</span>
-                </div>
+                ))}
               </div>
             </div>
           </div>
 
-          {/* ZONE 4 & ZONE 5 ROW */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            {/* ZONE 4: BEHAVIORAL IMPACT */}
-            <div className="md:col-span-7 bg-[#0b0f1d] border border-[#1d2640] p-4 space-y-4">
-              <div className="text-xs font-bold text-slate-300 uppercase tracking-wider border-b border-[#1d2640] pb-2">
-                ZONE 4: BEHAVIORAL IMPACT
-              </div>
-              <div>
-                <span className="text-[10px] font-bold text-slate-400 uppercase block mb-2">
-                  MISTAKE FREQUENCY VS COST IMPACT
-                </span>
-                <div className="h-36 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={mistakes} layout="vertical">
-                      <XAxis type="number" hide />
-                      <YAxis dataKey="tag_name" type="category" tick={{ fill: '#e2e8f0', fontSize: 11 }} />
-                      <Bar dataKey="total_pnl_impact" fill="#f43f5e" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
+          {/* ZONE 5: CONTEXT HEATMAP */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+              <CalendarIcon className="w-4 h-4 text-[#dfff00]" />
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                Zone 5: Exposure & Calendar Density
+              </span>
             </div>
-
-            {/* ZONE 5: CONTEXT */}
-            <div className="md:col-span-5 bg-[#0b0f1d] border border-[#1d2640] p-4 space-y-4">
-              <div className="text-xs font-bold text-slate-300 uppercase tracking-wider border-b border-[#1d2640] pb-2">
-                ZONE 5: CONTEXT
-              </div>
-              <CalendarHeatmap data={heatmap} onDayClick={handleHeatmapDayClick} />
-            </div>
+            <CalendarHeatmap data={heatmap} onDayClick={handleHeatmapDayClick} />
           </div>
         </main>
       </div>
 
       <BottomFooterBar />
     </div>
-  );
-}
-
-// Helper Component for Drawdown Depth Chart
-function DrawdownAreaChart({ data, margin, children }: any) {
-  return (
-    <ResponsiveContainer width="100%" height="100%">
-      <ComposedChart data={data} margin={margin}>
-        <CartesianGrid stroke="#1d2640" vertical={false} />
-        <YAxis hide />
-        <XAxis hide dataKey="entry_time" />
-        {children}
-      </ComposedChart>
-    </ResponsiveContainer>
   );
 }

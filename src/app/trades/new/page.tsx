@@ -13,6 +13,7 @@ import { ScreenshotDropzone } from '@/components/ui/ScreenshotDropzone';
 import { fetchApi } from '@/lib/api-client';
 import { calculateTradeMetrics } from '@/lib/utils/trade-calculations';
 import { TradeDirection, ExitReason, EmotionalState, TradeSession } from '@/types/database.types';
+import { FileText, Compass, DollarSign, Target, CheckCircle2, HeartHandshake, Save, Clock } from 'lucide-react';
 
 export default function NewTradePage() {
   const router = useRouter();
@@ -215,39 +216,44 @@ export default function NewTradePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070a14] grid-bg flex flex-col font-mono text-slate-200">
+    <div className="min-h-screen bg-[#070a14] flex flex-col font-sans text-slate-200">
       <TopHeaderBar />
 
-      <div className="flex flex-1 overflow-hidden pb-12">
+      <div className="flex flex-1 overflow-hidden pb-16">
         <SidebarNav />
 
-        <main className="flex-1 p-6 overflow-y-auto max-w-5xl">
+        <main className="flex-1 p-6 md:p-8 overflow-y-auto max-w-5xl">
           {errorMsg && (
-            <div className="mb-6 p-3 bg-rose-500/10 border border-rose-500 text-rose-400 text-xs">
+            <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 font-mono text-xs">
               {errorMsg}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* SECTION 0: PRE-TRADE PLAN */}
-            <section className="bg-[#0b0f1d] border border-[#1d2640] p-5">
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  00 — PRE-TRADE PLAN (TIMESTAMPED BEFORE EXECUTION)
-                </span>
+            <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-4">
+              <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-[#dfff00]" />
+                  <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                    00 — Pre-Trade Plan (Timestamped Before Execution)
+                  </span>
+                </div>
                 <button
                   type="button"
                   onClick={() => setHasPlan(!hasPlan)}
-                  className={`text-xs font-mono px-3 py-1 border transition-colors ${
-                    hasPlan ? 'bg-[#dfff00] text-black border-[#dfff00] font-bold' : 'border-[#1d2640] text-slate-400'
+                  className={`text-xs font-mono px-3.5 py-1.5 rounded-xl border transition-all ${
+                    hasPlan
+                      ? 'bg-[#dfff00] text-black border-[#dfff00] font-bold shadow-[0_0_10px_rgba(223,255,0,0.2)]'
+                      : 'border-slate-800 text-slate-400 hover:border-slate-700'
                   }`}
                 >
-                  {hasPlan ? '✓ PLAN LINKED' : '+ LINK PRE-TRADE PLAN'}
+                  {hasPlan ? '✓ Plan Linked' : '+ Link Pre-Trade Plan'}
                 </button>
               </div>
 
               {hasPlan && (
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 pt-3 border-t border-[#1d2640]">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-slate-800">
                   <div>
                     <label className="form-label">PLANNED ENTRY</label>
                     <input
@@ -296,8 +302,14 @@ export default function NewTradePage() {
             </section>
 
             {/* SECTION 1: TRADE BASICS */}
-            <section className="bg-[#0b0f1d] border border-[#1d2640] p-5 space-y-4">
-              <div className="panel-title">01 — TRADE BASICS</div>
+            <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+              <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+                <Compass className="w-4 h-4 text-[#dfff00]" />
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  01 — Trade Basics
+                </span>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                 <div className="md:col-span-3">
                   <label className="form-label">TICKER / ASSET</label>
@@ -336,7 +348,7 @@ export default function NewTradePage() {
                     <select
                       value={positionUnit}
                       onChange={(e) => setPositionUnit(e.target.value)}
-                      className="form-input bg-[#0c101d] text-xs w-28"
+                      className="form-input bg-slate-900 text-xs w-28"
                     >
                       <option value="shares">SHARES</option>
                       <option value="lots">LOTS</option>
@@ -379,16 +391,23 @@ export default function NewTradePage() {
                 </div>
                 <div className="md:col-span-2">
                   <label className="form-label">DURATION</label>
-                  <div className="form-input bg-[#080c18] text-center text-slate-400">
-                    {getDuration()}
+                  <div className="form-input bg-slate-900/60 text-center text-slate-400 flex items-center justify-center gap-1">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>{getDuration()}</span>
                   </div>
                 </div>
               </div>
             </section>
 
             {/* SECTION 2: PRICE & RISK */}
-            <section className="bg-[#0b0f1d] border border-[#1d2640] p-5 space-y-4">
-              <div className="panel-title">02 — PRICE & RISK</div>
+            <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+              <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+                <DollarSign className="w-4 h-4 text-[#dfff00]" />
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  02 — Price & Risk Parameters
+                </span>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
                 <div className="md:col-span-8 grid grid-cols-3 gap-4">
                   <div>
@@ -420,7 +439,7 @@ export default function NewTradePage() {
                       step="0.01"
                       value={stopLoss}
                       onChange={(e) => setStopLoss(e.target.value)}
-                      className="form-input text-right text-rose-500"
+                      className="form-input text-right text-rose-400"
                       required
                     />
                   </div>
@@ -457,7 +476,7 @@ export default function NewTradePage() {
                   </div>
                 </div>
 
-                <div className="md:col-span-4 border border-[#1d2640] bg-[#090d1a] p-5 flex flex-col justify-center items-end">
+                <div className="md:col-span-4 border border-slate-800 bg-slate-900/60 p-6 rounded-2xl flex flex-col justify-center items-end shadow-inner">
                   <span className="font-mono text-xs text-slate-400">
                     R-MULTIPLE:{' '}
                     <span className="text-[#dfff00] font-bold">
@@ -465,8 +484,8 @@ export default function NewTradePage() {
                     </span>
                   </span>
                   <div
-                    className={`font-mono text-3xl font-bold mt-2 ${
-                      metricsReadout.pnl_currency >= 0 ? 'text-emerald-400' : 'text-rose-500'
+                    className={`font-mono text-3xl md:text-4xl font-bold mt-2 tracking-tight ${
+                      metricsReadout.pnl_currency >= 0 ? 'text-emerald-400' : 'text-rose-400'
                     }`}
                   >
                     {metricsReadout.pnl_currency >= 0
@@ -478,8 +497,14 @@ export default function NewTradePage() {
             </section>
 
             {/* SECTION 3: STRATEGY & CONTEXT */}
-            <section className="bg-[#0b0f1d] border border-[#1d2640] p-5 space-y-4">
-              <div className="panel-title">03 — STRATEGY & CONTEXT</div>
+            <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+              <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+                <Target className="w-4 h-4 text-[#dfff00]" />
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  03 — Strategy & Market Context
+                </span>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
@@ -523,8 +548,14 @@ export default function NewTradePage() {
             </section>
 
             {/* SECTION 4: EXIT REVIEW */}
-            <section className="bg-[#0b0f1d] border border-[#1d2640] p-5 space-y-4">
-              <div className="panel-title">04 — EXIT & EXECUTION REVIEW</div>
+            <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+              <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+                <CheckCircle2 className="w-4 h-4 text-[#dfff00]" />
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  04 — Exit Reason & Execution Grade
+                </span>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="form-label mb-2">EXIT REASON</label>
@@ -549,8 +580,14 @@ export default function NewTradePage() {
             </section>
 
             {/* SECTION 5: PSYCHOLOGY */}
-            <section className="bg-[#0b0f1d] border border-[#1d2640] p-5 space-y-4">
-              <div className="panel-title">05 — PSYCHOLOGY & REVIEW</div>
+            <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+              <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+                <HeartHandshake className="w-4 h-4 text-[#dfff00]" />
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  05 — Psychology & Discipline Review
+                </span>
+              </div>
+
               <div className="space-y-6">
                 <div>
                   <label className="form-label mb-2">EMOTIONAL STATE</label>
@@ -563,8 +600,10 @@ export default function NewTradePage() {
                     <button
                       type="button"
                       onClick={() => setFollowedPlan(true)}
-                      className={`px-4 py-2 font-mono text-xs font-bold border transition-colors ${
-                        followedPlan ? 'bg-emerald-500 text-black border-emerald-500' : 'border-[#1d2640] text-slate-400'
+                      className={`px-5 py-2.5 rounded-xl font-mono text-xs font-bold border transition-all ${
+                        followedPlan
+                          ? 'bg-emerald-500 text-black border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.2)]'
+                          : 'border-slate-800 text-slate-400 hover:border-slate-700'
                       }`}
                     >
                       ✓ FOLLOWED MY PLAN
@@ -572,8 +611,10 @@ export default function NewTradePage() {
                     <button
                       type="button"
                       onClick={() => setFollowedPlan(false)}
-                      className={`px-4 py-2 font-mono text-xs font-bold border transition-colors ${
-                        !followedPlan ? 'bg-rose-500 text-white border-rose-500' : 'border-[#1d2640] text-slate-400'
+                      className={`px-5 py-2.5 rounded-xl font-mono text-xs font-bold border transition-all ${
+                        !followedPlan
+                          ? 'bg-rose-500 text-white border-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.2)]'
+                          : 'border-slate-800 text-slate-400 hover:border-slate-700'
                       }`}
                     >
                       ✗ BROKE MY PLAN
@@ -603,15 +644,22 @@ export default function NewTradePage() {
               </div>
             </section>
 
-            {/* SUBMIT BUTTON */}
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={loading}
-                className="bg-[#dfff00] text-black font-mono font-extrabold text-xs px-8 py-3 hover:bg-[#c8e600] transition-colors disabled:opacity-50 uppercase tracking-wider cursor-pointer"
-              >
-                {loading ? 'SAVING TRADE...' : 'SAVE TRADE'}
-              </button>
+            {/* STICKY SAVE BAR */}
+            <div className="fixed bottom-0 left-0 w-full bg-[#070a14]/95 border-t border-slate-800 p-4 z-50">
+              <div className="max-w-5xl mx-auto w-full flex justify-between items-center">
+                <span className="font-mono text-xs text-emerald-400 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  Autosave Active
+                </span>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-[#dfff00] text-black font-sans font-bold text-xs px-8 py-3 rounded-xl hover:bg-[#c8e600] transition-all shadow-[0_0_15px_rgba(223,255,0,0.2)] disabled:opacity-50 uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>{loading ? 'Saving Trade...' : 'Save Trade'}</span>
+                </button>
+              </div>
             </div>
           </form>
         </main>

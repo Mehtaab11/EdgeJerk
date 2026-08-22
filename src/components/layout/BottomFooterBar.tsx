@@ -30,7 +30,7 @@ export function BottomFooterBar() {
   }, []);
 
   return (
-    <footer className="fixed bottom-0 left-0 w-full h-8 bg-[#060913] border-t border-[#1d2640] px-4 flex items-center justify-between font-mono text-[11px] z-40 text-slate-400">
+    <footer className="fixed bottom-0 left-0 w-full h-8 bg-[#070a14] border-t border-slate-800/80 px-6 flex items-center justify-between font-mono text-xs z-40 text-slate-400">
       <div>SYSTEM_STABLE_V2.4</div>
 
       <div className="flex items-center gap-6">
