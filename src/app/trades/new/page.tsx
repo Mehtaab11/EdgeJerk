@@ -11,6 +11,7 @@ import { ScreenshotDropzone } from '@/components/ui/ScreenshotDropzone';
 import { fetchApi } from '@/lib/api-client';
 import { calculateTradeMetrics } from '@/lib/utils/trade-calculations';
 import { TradeDirection, ExitReason, EmotionalState, TradeSession } from '@/types/database.types';
+import { FileText, Compass, DollarSign, Target, HeartHandshake, Save, Clock, CheckCircle2 } from 'lucide-react';
 
 export default function NewTradePage() {
   const router = useRouter();
@@ -61,7 +62,7 @@ export default function NewTradePage() {
   const [mistakeTags, setMistakeTags] = useState<string[]>([]);
   const [lessonsLearned, setLessonsLearned] = useState('');
 
-  // Auto-calculated trade metrics readout
+  // Metrics readout
   const [metricsReadout, setMetricsReadout] = useState({
     pnl_currency: 0,
     pnl_percent: 0,
@@ -70,7 +71,6 @@ export default function NewTradePage() {
     session: 'overlap' as TradeSession,
   });
 
-  // Calculate Duration
   const getDuration = () => {
     try {
       const start = new Date(entryTime).getTime();
@@ -85,7 +85,6 @@ export default function NewTradePage() {
     }
   };
 
-  // Recalculate metrics on input change
   useEffect(() => {
     try {
       const numEntry = parseFloat(entryPrice) || 0;
@@ -130,7 +129,6 @@ export default function NewTradePage() {
     try {
       let linkedPlanId = null;
 
-      // 1. Create Pre-Trade Plan if user entered plan details
       if (hasPlan && plannedEntry && plannedStop && plannedTarget) {
         const planRes = await fetchApi('/api/trade-plans', {
           method: 'POST',
@@ -149,7 +147,6 @@ export default function NewTradePage() {
         }
       }
 
-      // 2. Log Trade Record
       const tradePayload = {
         trade_plan_id: linkedPlanId,
         asset,
@@ -192,7 +189,6 @@ export default function NewTradePage() {
 
       const tradeId = tradeRes.data.id;
 
-      // 3. Upload Before Screenshot if attached
       if (beforeFile) {
         const formData = new FormData();
         formData.append('trade_id', tradeId);
@@ -201,7 +197,6 @@ export default function NewTradePage() {
         await fetch('/api/screenshots/upload', { method: 'POST', body: formData });
       }
 
-      // 4. Upload After Screenshot if attached
       if (afterFile) {
         const formData = new FormData();
         formData.append('trade_id', tradeId);
@@ -219,36 +214,41 @@ export default function NewTradePage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen pb-24">
+    <div className="flex-1 flex flex-col min-h-screen pb-28 bg-[#070a12]">
       <NavigationHeader />
 
       <main className="flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full">
         {errorMsg && (
-          <div className="mb-6 p-3 bg-[#ff6b6b]/10 border border-[#ff6b6b] text-[#ff6b6b] font-mono text-xs">
+          <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 font-mono text-xs">
             {errorMsg}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-10">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {/* SECTION 0: PRE-TRADE PLAN */}
-          <section className="bg-[#111624] border border-[#2d3748] p-6">
+          <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
             <div className="flex justify-between items-center mb-4">
-              <span className="font-sans text-[11px] font-bold text-[#8b949e] uppercase tracking-wider">
-                00 — PRE-TRADE PLAN (TIMESTAMPED BEFORE EXECUTION)
-              </span>
+              <div className="flex items-center gap-2">
+                <FileText className="w-4 h-4 text-[#dfff00]" />
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  00 — Pre-Trade Plan (Timestamped Before Execution)
+                </span>
+              </div>
               <button
                 type="button"
                 onClick={() => setHasPlan(!hasPlan)}
-                className={`font-mono text-xs px-3 py-1 border transition-colors ${
-                  hasPlan ? 'bg-[#dfff00] text-[#0a0f1e] border-[#dfff00] font-bold' : 'border-[#2d3748] text-[#8b949e]'
+                className={`font-mono text-xs px-3 py-1.5 rounded-lg border transition-all ${
+                  hasPlan
+                    ? 'bg-[#dfff00] text-black border-[#dfff00] font-bold shadow-[0_0_10px_rgba(223,255,0,0.2)]'
+                    : 'border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
                 }`}
               >
-                {hasPlan ? 'PLAN LINKED' : '+ LINK PRE-TRADE PLAN'}
+                {hasPlan ? '✓ Plan Linked' : '+ Link Pre-Trade Plan'}
               </button>
             </div>
 
             {hasPlan && (
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-slate-800">
                 <div>
                   <label className="form-label">PLANNED ENTRY</label>
                   <input
@@ -268,7 +268,7 @@ export default function NewTradePage() {
                     value={plannedStop}
                     onChange={(e) => setPlannedStop(e.target.value)}
                     placeholder="0.00"
-                    className="form-input"
+                    className="form-input text-rose-400"
                   />
                 </div>
                 <div>
@@ -279,7 +279,7 @@ export default function NewTradePage() {
                     value={plannedTarget}
                     onChange={(e) => setPlannedTarget(e.target.value)}
                     placeholder="0.00"
-                    className="form-input"
+                    className="form-input text-[#dfff00]"
                   />
                 </div>
                 <div>
@@ -297,8 +297,14 @@ export default function NewTradePage() {
           </section>
 
           {/* SECTION 1: TRADE BASICS */}
-          <section>
-            <div className="panel-title">01 — TRADE BASICS</div>
+          <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+              <Compass className="w-4 h-4 text-[#dfff00]" />
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                01 — Trade Basics
+              </span>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
               <div className="md:col-span-3">
                 <label className="form-label">TICKER / ASSET</label>
@@ -306,7 +312,7 @@ export default function NewTradePage() {
                   type="text"
                   value={asset}
                   onChange={(e) => setAsset(e.target.value.toUpperCase())}
-                  className="form-input uppercase"
+                  className="form-input font-bold text-white uppercase"
                   required
                 />
               </div>
@@ -326,7 +332,7 @@ export default function NewTradePage() {
 
               <div className="md:col-span-3">
                 <label className="form-label">POSITION SIZE</label>
-                <div className="flex">
+                <div className="flex gap-2">
                   <input
                     type="number"
                     value={positionSize}
@@ -337,7 +343,7 @@ export default function NewTradePage() {
                   <select
                     value={positionUnit}
                     onChange={(e) => setPositionUnit(e.target.value)}
-                    className="form-input bg-[#1a1f2f] text-xs font-mono border-l-0 w-24"
+                    className="form-input bg-slate-900 text-xs font-mono w-28"
                   >
                     <option value="shares">SHARES</option>
                     <option value="lots">LOTS</option>
@@ -357,7 +363,7 @@ export default function NewTradePage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
               <div className="md:col-span-5">
                 <label className="form-label">ENTRY TIME (UTC)</label>
                 <input
@@ -380,16 +386,23 @@ export default function NewTradePage() {
               </div>
               <div className="md:col-span-2">
                 <label className="form-label">DURATION</label>
-                <div className="form-input bg-[#111624] text-center text-[#8b949e]">
-                  {getDuration()}
+                <div className="form-input bg-slate-900/60 text-center text-slate-400 flex items-center justify-center gap-1">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>{getDuration()}</span>
                 </div>
               </div>
             </div>
           </section>
 
           {/* SECTION 2: PRICE & RISK */}
-          <section>
-            <div className="panel-title">02 — PRICE & RISK</div>
+          <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+              <DollarSign className="w-4 h-4 text-[#dfff00]" />
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                02 — Price & Risk Parameters
+              </span>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
               <div className="md:col-span-8 grid grid-cols-3 gap-4">
                 <div>
@@ -421,7 +434,7 @@ export default function NewTradePage() {
                     step="0.01"
                     value={stopLoss}
                     onChange={(e) => setStopLoss(e.target.value)}
-                    className="form-input text-right text-[#ff6b6b]"
+                    className="form-input text-right text-rose-400"
                     required
                   />
                 </div>
@@ -458,24 +471,24 @@ export default function NewTradePage() {
                 </div>
               </div>
 
-              {/* LIVE P&L BOLD READOUT */}
-              <div className="md:col-span-4 border border-[#2d3748] bg-[#111624] p-6 flex flex-col justify-center items-end">
-                <span className="font-mono text-xs text-[#8b949e]">
+              {/* LIVE BOLD READOUT BADGE */}
+              <div className="md:col-span-4 rounded-xl border border-slate-800 bg-slate-900/60 p-6 flex flex-col justify-center items-end shadow-inner">
+                <span className="font-mono text-xs text-slate-400">
                   R-MULTIPLE:{' '}
                   <span className="text-[#dfff00] font-bold">
                     {metricsReadout.r_multiple}R
                   </span>
                 </span>
                 <div
-                  className={`font-mono text-3xl font-bold mt-2 ${
-                    metricsReadout.pnl_currency >= 0 ? 'text-[#40e56c]' : 'text-[#ff6b6b]'
+                  className={`font-mono text-3xl md:text-4xl font-bold mt-2 tracking-tight ${
+                    metricsReadout.pnl_currency >= 0 ? 'text-emerald-400' : 'text-rose-400'
                   }`}
                 >
                   {metricsReadout.pnl_currency >= 0
                     ? `+$${metricsReadout.pnl_currency.toFixed(2)}`
                     : `-$${Math.abs(metricsReadout.pnl_currency).toFixed(2)}`}
                 </div>
-                <span className="font-mono text-xs text-[#8b949e] mt-1">
+                <span className="font-mono text-xs text-slate-400 mt-1">
                   {metricsReadout.pnl_percent >= 0
                     ? `+${metricsReadout.pnl_percent}%`
                     : `${metricsReadout.pnl_percent}%`}{' '}
@@ -486,8 +499,14 @@ export default function NewTradePage() {
           </section>
 
           {/* SECTION 3: STRATEGY & CONTEXT */}
-          <section>
-            <div className="panel-title">03 — STRATEGY & CONTEXT</div>
+          <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+              <Target className="w-4 h-4 text-[#dfff00]" />
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                03 — Strategy & Market Context
+              </span>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
@@ -531,8 +550,14 @@ export default function NewTradePage() {
           </section>
 
           {/* SECTION 4: EXIT & EXECUTION REVIEW */}
-          <section>
-            <div className="panel-title">04 — EXIT & EXECUTION REVIEW</div>
+          <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+              <CheckCircle2 className="w-4 h-4 text-[#dfff00]" />
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                04 — Exit Reason & Execution Grade
+              </span>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="form-label mb-2">EXIT REASON</label>
@@ -557,8 +582,14 @@ export default function NewTradePage() {
           </section>
 
           {/* SECTION 5: PSYCHOLOGY & REVIEW */}
-          <section>
-            <div className="panel-title">05 — PSYCHOLOGY & REVIEW</div>
+          <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
+            <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+              <HeartHandshake className="w-4 h-4 text-[#dfff00]" />
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                05 — Psychology & Discipline Review
+              </span>
+            </div>
+
             <div className="space-y-6">
               <div>
                 <label className="form-label mb-2">EMOTIONAL STATE</label>
@@ -571,20 +602,24 @@ export default function NewTradePage() {
                   <button
                     type="button"
                     onClick={() => setFollowedPlan(true)}
-                    className={`px-4 py-2 font-mono text-xs font-bold border transition-colors ${
-                      followedPlan ? 'bg-[#40e56c] text-[#0a0f1e] border-[#40e56c]' : 'border-[#2d3748] text-[#8b949e]'
+                    className={`px-5 py-2.5 rounded-xl font-mono text-xs font-bold border transition-all ${
+                      followedPlan
+                        ? 'bg-emerald-500 text-black border-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]'
+                        : 'border-slate-800 text-slate-400 hover:border-slate-700'
                     }`}
                   >
-                    FOLLOWED MY PLAN
+                    ✓ FOLLOWED MY PLAN
                   </button>
                   <button
                     type="button"
                     onClick={() => setFollowedPlan(false)}
-                    className={`px-4 py-2 font-mono text-xs font-bold border transition-colors ${
-                      !followedPlan ? 'bg-[#ff6b6b] text-[#ffffff] border-[#ff6b6b]' : 'border-[#2d3748] text-[#8b949e]'
+                    className={`px-5 py-2.5 rounded-xl font-mono text-xs font-bold border transition-all ${
+                      !followedPlan
+                        ? 'bg-rose-500 text-white border-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.3)]'
+                        : 'border-slate-800 text-slate-400 hover:border-slate-700'
                     }`}
                   >
-                    BROKE MY PLAN
+                    ✗ BROKE MY PLAN
                   </button>
                 </div>
               </div>
@@ -612,17 +647,19 @@ export default function NewTradePage() {
           </section>
 
           {/* STICKY SAVE BAR */}
-          <div className="fixed bottom-0 left-0 w-full bg-[#0a0f1e]/95 border-t border-[#2d3748] p-4 z-50 flex justify-end">
+          <div className="fixed bottom-0 left-0 w-full bg-[#070a12]/95 backdrop-blur-md border-t border-slate-800 p-4 z-50">
             <div className="max-w-5xl mx-auto w-full flex justify-between items-center">
-              <span className="font-mono text-xs text-[#8b949e]">
-                AUTOSAVE_ACTIVE
+              <span className="font-mono text-xs text-emerald-400 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                Autosave Active
               </span>
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-[#dfff00] text-[#0a0f1e] font-sans font-bold text-sm px-8 py-3 hover:bg-[#c8e600] transition-colors border border-transparent disabled:opacity-50 uppercase tracking-wider"
+                className="bg-[#dfff00] text-black font-semibold text-xs px-8 py-3 rounded-xl hover:bg-[#c8e600] transition-all shadow-[0_0_20px_rgba(223,255,0,0.3)] disabled:opacity-50 uppercase tracking-wider flex items-center gap-2"
               >
-                {loading ? 'SAVING TRADE...' : 'SAVE TRADE'}
+                <Save className="w-4 h-4" />
+                <span>{loading ? 'Saving Trade...' : 'Save Trade'}</span>
               </button>
             </div>
           </div>

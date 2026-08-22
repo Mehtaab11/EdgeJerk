@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { fetchApi } from '@/lib/api-client';
 import { useAuthStore } from '@/stores/authStore';
+import { Terminal, Lock, Mail, ArrowRight } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -36,26 +37,36 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen grid-bg flex flex-col justify-center items-center p-4 bg-[#0a0f1e]">
-      <div className="w-full max-w-md bg-[#111624] border border-[#2d3748] p-8 shadow-none">
-        <div className="text-center mb-8">
-          <div className="font-mono text-sm font-bold text-[#dfff00] tracking-tighter mb-1">
-            TRADER_LOG_V1
+    <div className="min-h-screen bg-[#070a12] flex flex-col justify-center items-center p-4 relative overflow-hidden">
+      {/* Background Subtle Ambient Glow */}
+      <div className="absolute w-[500px] h-[500px] bg-[#dfff00]/5 rounded-full blur-[120px] pointer-events-none -top-40 -left-40"></div>
+      <div className="absolute w-[400px] h-[400px] bg-cyan-500/5 rounded-full blur-[100px] pointer-events-none -bottom-20 -right-20"></div>
+
+      <div className="w-full max-w-md bg-[#0d1322]/90 border border-slate-800 rounded-2xl p-8 shadow-2xl backdrop-blur-xl relative z-10">
+        <div className="text-center mb-8 flex flex-col items-center">
+          <div className="w-12 h-12 rounded-xl bg-[#dfff00] flex items-center justify-center text-black font-bold shadow-[0_0_20px_rgba(223,255,0,0.3)] mb-3">
+            <Terminal className="w-6 h-6 stroke-[2.5]" />
           </div>
-          <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-widest">
-            SECURE_TERMINAL_AUTHENTICATION
-          </span>
+          <h1 className="font-mono text-xl font-bold text-white tracking-tight">
+            EDGEJERK <span className="text-xs bg-slate-800 text-[#dfff00] px-2 py-0.5 rounded border border-slate-700 font-mono">v1.0</span>
+          </h1>
+          <p className="text-xs font-medium text-slate-400 mt-1">
+            Quantitative Performance & Trading Journal
+          </p>
         </div>
 
         {errorMsg && (
-          <div className="mb-6 p-3 bg-[#ff6b6b]/10 border border-[#ff6b6b] text-[#ff6b6b] font-mono text-xs">
+          <div className="mb-6 p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 font-mono text-xs leading-relaxed">
             {errorMsg}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="form-label">EMAIL ADDRESS</label>
+            <label className="form-label flex items-center gap-1.5">
+              <Mail className="w-3.5 h-3.5 text-slate-400" />
+              Email Address
+            </label>
             <input
               type="email"
               value={email}
@@ -67,7 +78,10 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="form-label">ACCESS KEY / PASSWORD</label>
+            <label className="form-label flex items-center gap-1.5">
+              <Lock className="w-3.5 h-3.5 text-slate-400" />
+              Access Key / Password
+            </label>
             <input
               type="password"
               value={password}
@@ -81,14 +95,15 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-[#dfff00] text-[#0a0f1e] font-sans font-bold text-xs uppercase tracking-wider hover:bg-[#c8e600] transition-colors border border-transparent disabled:opacity-50"
+            className="w-full py-3 rounded-xl bg-[#dfff00] text-black font-semibold text-xs uppercase tracking-wider hover:bg-[#c8e600] transition-all shadow-[0_0_15px_rgba(223,255,0,0.25)] flex items-center justify-center gap-2 border border-transparent disabled:opacity-50 mt-2"
           >
-            {loading ? 'CONNECTING...' : isSignUp ? 'CREATE ACCOUNT' : 'CONNECT TERMINAL'}
+            <span>{loading ? 'Connecting...' : isSignUp ? 'Create Account' : 'Connect Terminal'}</span>
+            {!loading && <ArrowRight className="w-4 h-4" />}
           </button>
         </form>
 
-        <div className="mt-6 pt-6 border-t border-[#2d3748] flex justify-between items-center font-mono text-xs">
-          <span className="text-[#8b949e]">
+        <div className="mt-6 pt-6 border-t border-slate-800/80 flex justify-between items-center text-xs">
+          <span className="text-slate-400">
             {isSignUp ? 'Already registered?' : 'Need an account?'}
           </span>
           <button
@@ -97,9 +112,9 @@ export default function LoginPage() {
               setIsSignUp(!isSignUp);
               setErrorMsg(null);
             }}
-            className="text-[#dfff00] hover:underline uppercase font-bold"
+            className="text-[#dfff00] font-semibold hover:underline uppercase"
           >
-            {isSignUp ? 'SWITCH TO LOGIN' : 'CREATE ACCOUNT'}
+            {isSignUp ? 'Switch to Login' : 'Create Account'}
           </button>
         </div>
       </div>

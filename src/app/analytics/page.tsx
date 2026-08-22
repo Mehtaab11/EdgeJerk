@@ -6,6 +6,7 @@ import { NavigationHeader } from '@/components/layout/NavigationHeader';
 import { CalendarHeatmap } from '@/components/ui/CalendarHeatmap';
 import { useTradeFilterStore } from '@/stores/tradeFilterStore';
 import { fetchApi } from '@/lib/api-client';
+import { BarChart3, TrendingUp, AlertTriangle, ShieldCheck, Calendar as CalendarIcon, Filter, RotateCcw } from 'lucide-react';
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -21,7 +22,6 @@ import {
   ScatterChart,
   Scatter,
 } from 'recharts';
-
 
 export default function AnalyticsPage() {
   const router = useRouter();
@@ -111,22 +111,27 @@ export default function AnalyticsPage() {
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen pb-16">
+    <div className="flex-1 flex flex-col min-h-screen pb-16 bg-[#070a12]">
       <NavigationHeader />
 
-      <main className="flex-1 p-4 md:p-6 max-w-7xl mx-auto w-full space-y-8">
+      <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full space-y-8">
         {/* TOP BAR WITH GLOBAL DATE FILTER */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#111624] border border-[#2d3748] p-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
           <div>
-            <div className="font-mono text-sm font-bold text-[#dfff00]">SYS_ANALYTICS // DEEP REVIEW</div>
-            <span className="font-sans text-[10px] text-[#8b949e] uppercase font-bold tracking-wider">
-              MULTI-ZONE QUANTITATIVE PERFORMANCE ANALYSIS
-            </span>
+            <div className="flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-[#dfff00]" />
+              <h1 className="font-mono text-base font-bold text-white tracking-tight">
+                SYS_ANALYTICS // DEEP REVIEW
+              </h1>
+            </div>
+            <p className="text-xs text-slate-400 mt-1">
+              Multi-Zone Quantitative Performance & Behavioral Analysis
+            </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2">
-              <span className="form-label mb-0">START:</span>
+              <span className="form-label mb-0 text-[10px]">Start:</span>
               <input
                 type="date"
                 value={filterStore.startDate || ''}
@@ -135,7 +140,7 @@ export default function AnalyticsPage() {
               />
             </div>
             <div className="flex items-center gap-2">
-              <span className="form-label mb-0">END:</span>
+              <span className="form-label mb-0 text-[10px]">End:</span>
               <input
                 type="date"
                 value={filterStore.endDate || ''}
@@ -145,57 +150,67 @@ export default function AnalyticsPage() {
             </div>
             <button
               onClick={() => filterStore.resetFilters()}
-              className="px-3 py-1.5 border border-[#2d3748] font-mono text-xs text-[#dfff00] hover:underline"
+              className="px-3 py-2 rounded-lg border border-slate-800 bg-slate-900 font-mono text-xs text-[#dfff00] hover:border-slate-700 flex items-center gap-1.5"
             >
-              RESET
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset</span>
             </button>
           </div>
         </div>
 
         {/* ZONE 1: PERFORMANCE DYNAMICS */}
         <div className="space-y-4">
-          <span className="font-sans text-[11px] font-bold text-[#8b949e] uppercase tracking-wider block border-b border-[#2d3748] pb-2">
-            ZONE 1: PERFORMANCE DYNAMICS
-          </span>
+          <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+            <TrendingUp className="w-4 h-4 text-[#dfff00]" />
+            <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+              Zone 1: Performance Dynamics & Risk
+            </span>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Cumulative Equity Curve */}
-            <div className="md:col-span-8 bg-[#111624] border border-[#2d3748] p-4">
-              <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider block mb-2">
-                CUMULATIVE P&L OVER TIME
+            <div className="md:col-span-8 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block mb-4">
+                Cumulative P&L Curve Over Time
               </span>
-              <div className="h-56 w-full">
+              <div className="h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <ComposedChart data={equity} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid stroke="#2d3748" strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="entry_time" tick={{ fill: '#8b949e', fontSize: 10 }} tickFormatter={(s) => s.slice(5, 10)} />
-                    <YAxis tick={{ fill: '#8b949e', fontSize: 10 }} />
-                    <Tooltip contentStyle={{ backgroundColor: '#111624', borderColor: '#2d3748' }} />
-                    <Area type="monotone" dataKey="cumulative_pnl" fill="#dfff00" fillOpacity={0.15} stroke="none" />
-                    <Line type="monotone" dataKey="cumulative_pnl" stroke="#dfff00" strokeWidth={2} dot={false} />
+                    <defs>
+                      <linearGradient id="anGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#dfff00" stopOpacity={0.2} />
+                        <stop offset="95%" stopColor="#dfff00" stopOpacity={0.0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid stroke="#1e293b" strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="entry_time" tick={{ fill: '#64748b', fontSize: 11 }} tickFormatter={(s) => s.slice(5, 10)} />
+                    <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#0d1322', borderColor: '#334155', borderRadius: '8px' }} />
+                    <Area type="monotone" dataKey="cumulative_pnl" fill="url(#anGrad)" stroke="none" />
+                    <Line type="monotone" dataKey="cumulative_pnl" stroke="#dfff00" strokeWidth={2.5} dot={false} />
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
             {/* Risk % Over Time */}
-            <div className="md:col-span-4 bg-[#111624] border border-[#2d3748] p-4">
+            <div className="md:col-span-4 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
               <div className="flex justify-between items-center mb-2">
-                <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider">
-                  RISK CONSISTENCY (%/TRADE)
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  Risk Consistency (%/Trade)
                 </span>
                 <span className="font-mono text-xs text-[#dfff00]">
-                  AVG: {riskTime?.average_risk_percent || 0}%
+                  Avg: {riskTime?.average_risk_percent || 0}%
                 </span>
               </div>
-              <div className="h-56 w-full">
+              <div className="h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={riskTime?.risk_series || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid stroke="#2d3748" vertical={false} />
-                    <XAxis dataKey="entry_time" tick={{ fill: '#8b949e', fontSize: 10 }} tickFormatter={(s) => s.slice(5, 10)} />
-                    <YAxis tick={{ fill: '#8b949e', fontSize: 10 }} />
-                    <Tooltip contentStyle={{ backgroundColor: '#111624', borderColor: '#2d3748' }} />
-                    <Bar dataKey="risk_percent" fill="#ffb4a2" />
+                    <CartesianGrid stroke="#1e293b" vertical={false} />
+                    <XAxis dataKey="entry_time" tick={{ fill: '#64748b', fontSize: 11 }} tickFormatter={(s) => s.slice(5, 10)} />
+                    <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#0d1322', borderColor: '#334155', borderRadius: '8px' }} />
+                    <Bar dataKey="risk_percent" fill="#f43f5e" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -205,37 +220,40 @@ export default function AnalyticsPage() {
 
         {/* ZONE 2: STRATEGY EDGE */}
         <div className="space-y-4">
-          <span className="font-sans text-[11px] font-bold text-[#8b949e] uppercase tracking-wider block border-b border-[#2d3748] pb-2">
-            ZONE 2: STRATEGY EDGE & R-DISTRIBUTION
-          </span>
+          <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+            <ShieldCheck className="w-4 h-4 text-[#dfff00]" />
+            <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+              Zone 2: Strategy Edge & R-Multiple Distribution
+            </span>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Expectancy Matrix */}
-            <div className="md:col-span-7 bg-[#111624] border border-[#2d3748] p-4">
-              <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider block mb-3">
-                EXPECTANCY MATRIX PER STRATEGY
+            <div className="md:col-span-7 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block mb-4">
+                Expectancy Matrix per Strategy
               </span>
               <div className="overflow-x-auto">
                 <table className="w-full text-left font-mono text-xs">
                   <thead>
-                    <tr className="border-b border-[#2d3748] text-[#8b949e]">
-                      <th className="py-2">STRATEGY</th>
-                      <th className="py-2 text-right">WIN %</th>
-                      <th className="py-2 text-right">AVG R</th>
-                      <th className="py-2 text-right">EXPECTED VAL</th>
-                      <th className="py-2 text-right">NET P&L</th>
+                    <tr className="border-b border-slate-800 text-slate-400">
+                      <th className="py-2.5">STRATEGY</th>
+                      <th className="py-2.5 text-right">WIN %</th>
+                      <th className="py-2.5 text-right">AVG R</th>
+                      <th className="py-2.5 text-right">EV ($)</th>
+                      <th className="py-2.5 text-right">NET P&L</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#2d3748]">
+                  <tbody className="divide-y divide-slate-800/60">
                     {expectancy.map((row) => (
                       <tr key={row.setup_name}>
-                        <td className="py-2 font-bold text-white">{row.setup_name}</td>
-                        <td className="py-2 text-right text-[#40e56c]">{row.win_rate_percent}%</td>
-                        <td className="py-2 text-right">{row.avg_r_multiple}R</td>
-                        <td className="py-2 text-right text-[#dfff00]">${row.expected_value}</td>
+                        <td className="py-2.5 font-bold text-white">{row.setup_name}</td>
+                        <td className="py-2.5 text-right text-emerald-400 font-bold">{row.win_rate_percent}%</td>
+                        <td className="py-2.5 text-right">{row.avg_r_multiple}R</td>
+                        <td className="py-2.5 text-right text-[#dfff00] font-bold">${row.expected_value}</td>
                         <td
-                          className={`py-2 text-right font-bold ${
-                            row.total_pnl >= 0 ? 'text-[#40e56c]' : 'text-[#ff6b6b]'
+                          className={`py-2.5 text-right font-bold ${
+                            row.total_pnl >= 0 ? 'text-emerald-400' : 'text-rose-400'
                           }`}
                         >
                           ${row.total_pnl}
@@ -248,18 +266,18 @@ export default function AnalyticsPage() {
             </div>
 
             {/* R-Multiple Distribution Histogram */}
-            <div className="md:col-span-5 bg-[#111624] border border-[#2d3748] p-4">
-              <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider block mb-2">
-                R-MULTIPLE BUCKET DISTRIBUTION
+            <div className="md:col-span-5 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block mb-4">
+                R-Multiple Bucket Distribution
               </span>
-              <div className="h-48 w-full">
+              <div className="h-56 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={rDist} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid stroke="#2d3748" vertical={false} />
-                    <XAxis dataKey="range" tick={{ fill: '#8b949e', fontSize: 10 }} />
-                    <YAxis tick={{ fill: '#8b949e', fontSize: 10 }} />
-                    <Tooltip contentStyle={{ backgroundColor: '#111624', borderColor: '#2d3748' }} />
-                    <Bar dataKey="count" fill="#dfff00" />
+                    <CartesianGrid stroke="#1e293b" vertical={false} />
+                    <XAxis dataKey="range" tick={{ fill: '#64748b', fontSize: 11 }} />
+                    <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#0d1322', borderColor: '#334155', borderRadius: '8px' }} />
+                    <Bar dataKey="count" fill="#dfff00" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -269,22 +287,25 @@ export default function AnalyticsPage() {
 
         {/* ZONE 3: EXECUTION QUALITY */}
         <div className="space-y-4">
-          <span className="font-sans text-[11px] font-bold text-[#8b949e] uppercase tracking-wider block border-b border-[#2d3748] pb-2">
-            ZONE 3: EXECUTION QUALITY & SLIPPAGE
-          </span>
+          <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+            <AlertTriangle className="w-4 h-4 text-[#dfff00]" />
+            <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+              Zone 3: Execution Quality & Plan Slippage
+            </span>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Exit Reason Breakdown */}
-            <div className="md:col-span-4 bg-[#111624] border border-[#2d3748] p-4">
-              <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider block mb-3">
-                EXIT REASON PROFITABILITY
+            <div className="md:col-span-4 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block mb-4">
+                Exit Reason Profitability
               </span>
               <div className="space-y-3 font-mono text-xs">
                 {exitReasons.map((reason) => (
-                  <div key={reason.exit_reason} className="flex justify-between items-center border-b border-[#2d3748] pb-1">
-                    <span className="uppercase text-[#8b949e]">{reason.exit_reason.replace('_', ' ')}</span>
-                    <span className="text-white font-bold">{reason.win_rate_percent}% WIN</span>
-                    <span className={reason.total_pnl_currency >= 0 ? 'text-[#40e56c]' : 'text-[#ff6b6b]'}>
+                  <div key={reason.exit_reason} className="flex justify-between items-center border-b border-slate-800 pb-2">
+                    <span className="uppercase text-slate-400 font-semibold">{reason.exit_reason.replace('_', ' ')}</span>
+                    <span className="text-slate-200 font-bold">{reason.win_rate_percent}% Win</span>
+                    <span className={reason.total_pnl_currency >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
                       ${reason.total_pnl_currency}
                     </span>
                   </div>
@@ -293,17 +314,17 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Scatter plot: Grade vs Outcome */}
-            <div className="md:col-span-4 bg-[#111624] border border-[#2d3748] p-4">
-              <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider block mb-2">
-                GRADE VS OUTCOME SCATTER
+            <div className="md:col-span-4 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block mb-4">
+                Grade vs Outcome Scatter Plot
               </span>
-              <div className="h-48 w-full">
+              <div className="h-56 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <ScatterChart margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid stroke="#2d3748" />
-                    <XAxis dataKey="trade_grade" type="number" domain={[1, 5]} tick={{ fill: '#8b949e', fontSize: 10 }} />
-                    <YAxis dataKey="r_multiple" tick={{ fill: '#8b949e', fontSize: 10 }} />
-                    <Tooltip contentStyle={{ backgroundColor: '#111624', borderColor: '#2d3748' }} />
+                    <CartesianGrid stroke="#1e293b" />
+                    <XAxis dataKey="trade_grade" type="number" domain={[1, 5]} tick={{ fill: '#64748b', fontSize: 11 }} />
+                    <YAxis dataKey="r_multiple" tick={{ fill: '#64748b', fontSize: 11 }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#0d1322', borderColor: '#334155', borderRadius: '8px' }} />
                     <Scatter data={gradeVsOutcome?.data_points || []} fill="#dfff00" />
                   </ScatterChart>
                 </ResponsiveContainer>
@@ -311,22 +332,22 @@ export default function AnalyticsPage() {
             </div>
 
             {/* Plan Deviation Stats */}
-            <div className="md:col-span-4 bg-[#111624] border border-[#2d3748] p-4 flex flex-col justify-between font-mono text-xs">
-              <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider block mb-2">
-                PLAN DEVIATION & SLIPPAGE
+            <div className="md:col-span-4 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl flex flex-col justify-between font-mono text-xs">
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block mb-2">
+                Plan Slippage & Compliance
               </span>
               <div className="space-y-4">
-                <div className="flex justify-between items-center border-b border-[#2d3748] pb-2">
-                  <span className="text-[#8b949e]">AVG ENTRY SLIPPAGE</span>
-                  <span className="text-[#ff6b6b] font-bold">${planDev?.avg_entry_slippage || 0}</span>
+                <div className="flex justify-between items-center border-b border-slate-800 pb-2.5">
+                  <span className="text-slate-400">AVG ENTRY SLIPPAGE</span>
+                  <span className="text-rose-400 font-bold">${planDev?.avg_entry_slippage || 0}</span>
                 </div>
-                <div className="flex justify-between items-center border-b border-[#2d3748] pb-2">
-                  <span className="text-[#8b949e]">AVG EXIT SLIPPAGE</span>
-                  <span className="text-[#ff6b6b] font-bold">${planDev?.avg_exit_slippage || 0}</span>
+                <div className="flex justify-between items-center border-b border-slate-800 pb-2.5">
+                  <span className="text-slate-400">AVG EXIT SLIPPAGE</span>
+                  <span className="text-rose-400 font-bold">${planDev?.avg_exit_slippage || 0}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-[#8b949e]">PLAN COMPLIANCE %</span>
-                  <span className="text-[#40e56c] font-bold">{planDev?.plan_compliance_percent || 0}%</span>
+                  <span className="text-slate-400">PLAN COMPLIANCE %</span>
+                  <span className="text-emerald-400 font-bold">{planDev?.plan_compliance_percent || 0}%</span>
                 </div>
               </div>
             </div>
@@ -335,60 +356,63 @@ export default function AnalyticsPage() {
 
         {/* ZONE 4: BEHAVIORAL IMPACT */}
         <div className="space-y-4">
-          <span className="font-sans text-[11px] font-bold text-[#8b949e] uppercase tracking-wider block border-b border-[#2d3748] pb-2">
-            ZONE 4: BEHAVIORAL IMPACT & MISTAKE COST
-          </span>
+          <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+            <AlertTriangle className="w-4 h-4 text-rose-400" />
+            <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+              Zone 4: Behavioral Impact & Mistake Cost
+            </span>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Mistake Tag Frequency vs Cost Chart */}
-            <div className="md:col-span-7 bg-[#111624] border border-[#2d3748] p-4">
-              <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider block mb-3">
-                MISTAKE FREQUENCY VS AGGREGATE P&L COST
+            <div className="md:col-span-7 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block mb-4">
+                Mistake Frequency vs Aggregate Dollar Cost
               </span>
-              <div className="h-56 w-full">
+              <div className="h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={mistakes} layout="vertical" margin={{ top: 0, right: 10, left: 40, bottom: 0 }}>
-                    <CartesianGrid stroke="#2d3748" horizontal={false} />
-                    <XAxis type="number" tick={{ fill: '#8b949e', fontSize: 10 }} />
-                    <YAxis dataKey="tag_name" type="category" tick={{ fill: '#e5e7eb', fontSize: 11 }} />
-                    <Tooltip contentStyle={{ backgroundColor: '#111624', borderColor: '#2d3748' }} />
-                    <Bar dataKey="total_pnl_impact" fill="#ff6b6b" />
+                    <CartesianGrid stroke="#1e293b" horizontal={false} />
+                    <XAxis type="number" tick={{ fill: '#64748b', fontSize: 11 }} />
+                    <YAxis dataKey="tag_name" type="category" tick={{ fill: '#f8fafc', fontSize: 12 }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#0d1322', borderColor: '#334155', borderRadius: '8px' }} />
+                    <Bar dataKey="total_pnl_impact" fill="#f43f5e" radius={[0, 4, 4, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
             {/* P&L by Emotional State & Rule Compliance */}
-            <div className="md:col-span-5 space-y-4">
-              <div className="bg-[#111624] border border-[#2d3748] p-4">
-                <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider block mb-3">
-                  P&L BY EMOTIONAL STATE
+            <div className="md:col-span-5 space-y-6">
+              <div className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block mb-3">
+                  P&L by Emotional State
                 </span>
                 <div className="h-28 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={pnlEmotion} margin={{ top: 0, right: 10, left: -20, bottom: 0 }}>
-                      <CartesianGrid stroke="#2d3748" vertical={false} />
-                      <XAxis dataKey="emotional_state" tick={{ fill: '#8b949e', fontSize: 10 }} />
-                      <YAxis tick={{ fill: '#8b949e', fontSize: 10 }} />
-                      <Tooltip contentStyle={{ backgroundColor: '#111624', borderColor: '#2d3748' }} />
-                      <Bar dataKey="total_pnl_currency" fill="#dfff00" />
+                      <CartesianGrid stroke="#1e293b" vertical={false} />
+                      <XAxis dataKey="emotional_state" tick={{ fill: '#64748b', fontSize: 11 }} />
+                      <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
+                      <Tooltip contentStyle={{ backgroundColor: '#0d1322', borderColor: '#334155', borderRadius: '8px' }} />
+                      <Bar dataKey="total_pnl_currency" fill="#dfff00" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
               </div>
 
-              <div className="bg-[#111624] border border-[#2d3748] p-4">
-                <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider block mb-3">
-                  RULE COMPLIANCE % OVER TIME
+              <div className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl">
+                <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block mb-3">
+                  Rule Compliance % Over Time
                 </span>
                 <div className="h-28 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={ruleCompliance} margin={{ top: 0, right: 10, left: -20, bottom: 0 }}>
-                      <CartesianGrid stroke="#2d3748" vertical={false} />
-                      <XAxis dataKey="month" tick={{ fill: '#8b949e', fontSize: 10 }} />
-                      <YAxis tick={{ fill: '#8b949e', fontSize: 10 }} domain={[0, 100]} />
-                      <Tooltip contentStyle={{ backgroundColor: '#111624', borderColor: '#2d3748' }} />
-                      <Line type="monotone" dataKey="compliance_percent" stroke="#40e56c" strokeWidth={2} dot={false} />
+                      <CartesianGrid stroke="#1e293b" vertical={false} />
+                      <XAxis dataKey="month" tick={{ fill: '#64748b', fontSize: 11 }} />
+                      <YAxis tick={{ fill: '#64748b', fontSize: 11 }} domain={[0, 100]} />
+                      <Tooltip contentStyle={{ backgroundColor: '#0d1322', borderColor: '#334155', borderRadius: '8px' }} />
+                      <Line type="monotone" dataKey="compliance_percent" stroke="#10b981" strokeWidth={2.5} dot={false} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -399,39 +423,42 @@ export default function AnalyticsPage() {
 
         {/* ZONE 5: EXPOSURE & CONTEXT */}
         <div className="space-y-4">
-          <span className="font-sans text-[11px] font-bold text-[#8b949e] uppercase tracking-wider block border-b border-[#2d3748] pb-2">
-            ZONE 5: EXPOSURE & CALENDAR DENSITY
-          </span>
+          <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+            <CalendarIcon className="w-4 h-4 text-[#dfff00]" />
+            <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+              Zone 5: Exposure & Calendar Density
+            </span>
+          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {/* Calendar Heatmap Grid */}
             <div className="md:col-span-8">
               <CalendarHeatmap data={heatmap} onDayClick={handleHeatmapDayClick} />
             </div>
 
             {/* Correlated vs Isolated Trade P&L */}
-            <div className="md:col-span-4 bg-[#111624] border border-[#2d3748] p-4 flex flex-col justify-between font-mono text-xs">
-              <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider block mb-2">
-                CORRELATED VS ISOLATED P&L
+            <div className="md:col-span-4 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl flex flex-col justify-between font-mono text-xs">
+              <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block mb-4">
+                Correlated vs Isolated Trade P&L
               </span>
 
               <div className="space-y-4">
-                <div className="border border-[#2d3748] p-3 bg-[#1a1f2f]">
-                  <div className="flex justify-between text-[#8b949e] mb-1">
+                <div className="border border-slate-800 p-4 rounded-xl bg-slate-900/60">
+                  <div className="flex justify-between text-slate-400 mb-1.5">
                     <span>CORRELATED POSITIONS</span>
                     <span>{correlated?.correlated?.total_trades || 0} TRADES</span>
                   </div>
-                  <div className="text-lg font-bold text-[#dfff00]">
+                  <div className="text-xl font-bold text-[#dfff00]">
                     ${correlated?.correlated?.total_pnl_currency || 0}
                   </div>
                 </div>
 
-                <div className="border border-[#2d3748] p-3 bg-[#1a1f2f]">
-                  <div className="flex justify-between text-[#8b949e] mb-1">
+                <div className="border border-slate-800 p-4 rounded-xl bg-slate-900/60">
+                  <div className="flex justify-between text-slate-400 mb-1.5">
                     <span>ISOLATED POSITIONS</span>
                     <span>{correlated?.isolated?.total_trades || 0} TRADES</span>
                   </div>
-                  <div className="text-lg font-bold text-[#40e56c]">
+                  <div className="text-xl font-bold text-emerald-400">
                     ${correlated?.isolated?.total_pnl_currency || 0}
                   </div>
                 </div>

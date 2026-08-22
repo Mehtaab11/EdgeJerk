@@ -1,31 +1,46 @@
 'use client';
 
 import React from 'react';
+import { LucideIcon } from 'lucide-react';
 
 interface StatReadoutProps {
   label: string;
   value: string | number;
   subValue?: string;
   type?: 'positive' | 'negative' | 'neutral' | 'accent';
+  icon?: LucideIcon;
 }
 
-export function StatReadout({ label, value, subValue, type = 'neutral' }: StatReadoutProps) {
-  let valueColor = 'text-[#e5e7eb]';
-  if (type === 'positive') valueColor = 'text-[#40e56c]';
-  if (type === 'negative') valueColor = 'text-[#ff6b6b]';
-  if (type === 'accent') valueColor = 'text-[#dfff00]';
+export function StatReadout({ label, value, subValue, type = 'neutral', icon: Icon }: StatReadoutProps) {
+  let valueColor = 'text-slate-100';
+  let badgeBg = 'bg-slate-800/40 border-slate-700/50';
+
+  if (type === 'positive') {
+    valueColor = 'text-emerald-400';
+    badgeBg = 'bg-emerald-500/10 border-emerald-500/30';
+  } else if (type === 'negative') {
+    valueColor = 'text-rose-400';
+    badgeBg = 'bg-rose-500/10 border-rose-500/30';
+  } else if (type === 'accent') {
+    valueColor = 'text-[#dfff00]';
+    badgeBg = 'bg-[#dfff00]/10 border-[#dfff00]/30';
+  }
 
   return (
-    <div className="bg-[#111624] border border-[#2d3748] p-3 flex flex-col justify-between">
-      <span className="font-sans text-[10px] font-bold text-[#8b949e] uppercase tracking-wider mb-1">
-        {label}
-      </span>
+    <div className={`p-4 rounded-xl border ${badgeBg} backdrop-blur-sm transition-all hover:border-slate-600 flex flex-col justify-between shadow-lg`}>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+          {label}
+        </span>
+        {Icon && <Icon className={`w-4 h-4 ${valueColor} opacity-80`} />}
+      </div>
+
       <div className="flex items-baseline justify-between gap-2">
-        <span className={`font-mono text-lg font-bold tabular-nums ${valueColor}`}>
+        <span className={`font-mono text-xl md:text-2xl font-bold tracking-tight tabular-nums ${valueColor}`}>
           {value}
         </span>
         {subValue && (
-          <span className="font-mono text-xs text-[#8b949e] tabular-nums">
+          <span className="font-mono text-xs text-slate-400 tabular-nums">
             {subValue}
           </span>
         )}

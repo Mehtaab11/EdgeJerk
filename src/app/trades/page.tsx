@@ -6,6 +6,7 @@ import { NavigationHeader } from '@/components/layout/NavigationHeader';
 import { DenseDataTable, ColumnDef } from '@/components/ui/DenseDataTable';
 import { useTradeFilterStore } from '@/stores/tradeFilterStore';
 import { fetchApi, buildTradeQueryString } from '@/lib/api-client';
+import { Filter, RotateCcw, ArrowUpRight, ArrowDownRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export default function TradeLogPage() {
   const router = useRouter();
@@ -44,25 +45,36 @@ export default function TradeLogPage() {
     {
       key: 'entry_time',
       header: 'DATE / TIME',
-      render: (row) => row.entry_time.replace('T', ' ').slice(0, 16),
+      render: (row) => (
+        <span className="text-slate-400 font-mono">
+          {row.entry_time.replace('T', ' ').slice(0, 16)}
+        </span>
+      ),
     },
-    { key: 'asset', header: 'ASSET', render: (row) => <span className="font-bold">{row.asset}</span> },
+    {
+      key: 'asset',
+      header: 'ASSET',
+      render: (row) => <span className="font-bold font-mono text-white text-sm">{row.asset}</span>,
+    },
     {
       key: 'direction',
       header: 'SIDE',
       render: (row) => (
         <span
-          className={`font-bold uppercase ${
-            row.direction === 'long' ? 'text-[#40e56c]' : 'text-[#ff6b6b]'
+          className={`inline-flex items-center gap-1 font-mono text-xs font-bold uppercase px-2 py-0.5 rounded ${
+            row.direction === 'long'
+              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+              : 'bg-rose-500/10 text-rose-400 border border-rose-500/30'
           }`}
         >
+          {row.direction === 'long' ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
           {row.direction}
         </span>
       ),
     },
-    { key: 'position_size', header: 'SIZE' },
-    { key: 'entry_price', header: 'ENTRY', render: (row) => `$${row.entry_price}` },
-    { key: 'exit_price', header: 'EXIT', render: (row) => `$${row.exit_price}` },
+    { key: 'position_size', header: 'SIZE', render: (row) => <span className="font-mono text-slate-300">{row.position_size}</span> },
+    { key: 'entry_price', header: 'ENTRY', render: (row) => <span className="font-mono text-slate-300">${row.entry_price}</span> },
+    { key: 'exit_price', header: 'EXIT', render: (row) => <span className="font-mono text-slate-300">${row.exit_price}</span> },
     {
       key: 'pnl_currency',
       header: 'P&L ($)',
@@ -70,8 +82,10 @@ export default function TradeLogPage() {
         const pnl = Number(row.pnl_currency);
         return (
           <span
-            className={`font-bold ${
-              pnl >= 0 ? 'text-[#40e56c] bg-[#40e56c]/10 px-2 py-0.5' : 'text-[#ff6b6b] bg-[#ff6b6b]/10 px-2 py-0.5'
+            className={`font-mono font-bold text-xs px-2.5 py-1 rounded-md border ${
+              pnl >= 0
+                ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30'
+                : 'text-rose-400 bg-rose-500/10 border-rose-500/30'
             }`}
           >
             {pnl >= 0 ? `+$${pnl.toFixed(2)}` : `-$${Math.abs(pnl).toFixed(2)}`}
@@ -82,42 +96,62 @@ export default function TradeLogPage() {
     {
       key: 'r_multiple',
       header: 'R-MULT',
-      render: (row) => `${Number(row.r_multiple).toFixed(2)}R`,
+      render: (row) => (
+        <span className="font-mono text-xs text-[#dfff00]">
+          {Number(row.r_multiple).toFixed(2)}R
+        </span>
+      ),
     },
-    { key: 'setup_name', header: 'STRATEGY' },
-    { key: 'emotional_state', header: 'EMOTION' },
+    {
+      key: 'setup_name',
+      header: 'STRATEGY',
+      render: (row) => (
+        <span className="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300 text-xs">
+          {row.setup_name}
+        </span>
+      ),
+    },
+    { key: 'emotional_state', header: 'EMOTION', render: (row) => <span className="text-slate-400 text-xs">{row.emotional_state}</span> },
     {
       key: 'followed_plan',
       header: 'COMPLIANCE',
       render: (row) => (
-        <span className={row.followed_plan ? 'text-[#40e56c]' : 'text-[#ff6b6b]'}>
-          {row.followed_plan ? 'FOLLOWED' : 'BROKE'}
+        <span
+          className={`font-mono text-xs font-semibold ${
+            row.followed_plan ? 'text-emerald-400' : 'text-rose-400'
+          }`}
+        >
+          {row.followed_plan ? '✓ FOLLOWED' : '✗ BROKE'}
         </span>
       ),
     },
   ];
 
   return (
-    <div className="flex-1 flex flex-col min-h-screen">
+    <div className="flex-1 flex flex-col min-h-screen bg-[#070a12]">
       <NavigationHeader />
 
-      <main className="flex-1 p-4 md:p-6 max-w-7xl mx-auto w-full space-y-4">
+      <main className="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6">
         <div className="flex justify-between items-center">
-          <span className="font-sans text-[11px] font-bold text-[#8b949e] uppercase tracking-wider">
-            TRADE LOG & HISTORY — {meta ? `${meta.total} RECORDS` : '0 RECORDS'}
-          </span>
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-[#dfff00]" />
+            <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
+              Trade Execution Log — {meta ? `${meta.total} Total Records` : '0 Records'}
+            </span>
+          </div>
           <button
             onClick={() => filterStore.resetFilters()}
-            className="font-mono text-xs text-[#dfff00] hover:underline"
+            className="flex items-center gap-1.5 font-mono text-xs text-[#dfff00] hover:underline"
           >
-            RESET FILTERS
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Reset Filters</span>
           </button>
         </div>
 
         {/* DENSE FILTER BAR */}
-        <div className="bg-[#111624] border border-[#2d3748] p-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+        <div className="bg-[#0d1322] border border-slate-800/80 rounded-xl p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 shadow-xl">
           <div>
-            <label className="form-label">ASSET SEARCH</label>
+            <label className="form-label">Asset Ticker</label>
             <input
               type="text"
               value={filterStore.asset || ''}
@@ -127,7 +161,7 @@ export default function TradeLogPage() {
             />
           </div>
           <div>
-            <label className="form-label">STRATEGY</label>
+            <label className="form-label">Strategy</label>
             <input
               type="text"
               value={filterStore.setupName || ''}
@@ -137,11 +171,11 @@ export default function TradeLogPage() {
             />
           </div>
           <div>
-            <label className="form-label">DIRECTION</label>
+            <label className="form-label">Direction</label>
             <select
               value={filterStore.direction || ''}
               onChange={(e) => filterStore.setFilter('direction', e.target.value || undefined)}
-              className="form-input text-xs bg-[#111624]"
+              className="form-input text-xs bg-slate-900"
             >
               <option value="">ALL SIDES</option>
               <option value="long">LONG</option>
@@ -149,11 +183,11 @@ export default function TradeLogPage() {
             </select>
           </div>
           <div>
-            <label className="form-label">EMOTION</label>
+            <label className="form-label">Emotion</label>
             <select
               value={filterStore.emotionalState || ''}
               onChange={(e) => filterStore.setFilter('emotionalState', e.target.value || undefined)}
-              className="form-input text-xs bg-[#111624]"
+              className="form-input text-xs bg-slate-900"
             >
               <option value="">ALL EMOTIONS</option>
               <option value="Confident">Confident</option>
@@ -166,7 +200,7 @@ export default function TradeLogPage() {
             </select>
           </div>
           <div>
-            <label className="form-label">START DATE</label>
+            <label className="form-label">Start Date</label>
             <input
               type="date"
               value={filterStore.startDate || ''}
@@ -175,7 +209,7 @@ export default function TradeLogPage() {
             />
           </div>
           <div>
-            <label className="form-label">END DATE</label>
+            <label className="form-label">End Date</label>
             <input
               type="date"
               value={filterStore.endDate || ''}
@@ -195,7 +229,7 @@ export default function TradeLogPage() {
 
         {/* PAGINATION CONTROLS */}
         {meta && meta.totalPages > 1 && (
-          <div className="flex justify-between items-center font-mono text-xs text-[#8b949e] pt-2">
+          <div className="flex justify-between items-center font-mono text-xs text-slate-400 pt-2">
             <span>
               PAGE {meta.page} OF {meta.totalPages} ({meta.total} TRADES)
             </span>
@@ -203,16 +237,18 @@ export default function TradeLogPage() {
               <button
                 disabled={meta.page <= 1}
                 onClick={() => filterStore.setFilter('page', meta.page - 1)}
-                className="px-3 py-1 border border-[#2d3748] disabled:opacity-30 hover:border-white"
+                className="px-3 py-1.5 rounded-lg border border-slate-800 bg-[#0d1322] disabled:opacity-30 hover:border-slate-700 flex items-center gap-1"
               >
-                PREV
+                <ChevronLeft className="w-4 h-4" />
+                <span>PREV</span>
               </button>
               <button
                 disabled={meta.page >= meta.totalPages}
                 onClick={() => filterStore.setFilter('page', meta.page + 1)}
-                className="px-3 py-1 border border-[#2d3748] disabled:opacity-30 hover:border-white"
+                className="px-3 py-1.5 rounded-lg border border-slate-800 bg-[#0d1322] disabled:opacity-30 hover:border-slate-700 flex items-center gap-1"
               >
-                NEXT
+                <span>NEXT</span>
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           </div>

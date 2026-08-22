@@ -15,7 +15,7 @@ export function TagChipSelect({
   selectedTags,
   onChange,
   allowCustom = true,
-  placeholder = 'Add new tag...',
+  placeholder = '+ Add custom tag (press Enter)',
 }: TagChipSelectProps) {
   const [customInput, setCustomInput] = useState('');
 
@@ -39,7 +39,7 @@ export function TagChipSelect({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       <div className="flex flex-wrap gap-2">
         {availableTags.map((tag) => {
           const isSelected = selectedTags.includes(tag);
@@ -48,10 +48,10 @@ export function TagChipSelect({
               key={tag}
               type="button"
               onClick={() => toggleTag(tag)}
-              className={`px-3 py-1 border font-mono text-xs transition-colors ${
+              className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
                 isSelected
-                  ? 'bg-[#1a1f2f] border-[#dfff00] text-[#ffffff] font-bold'
-                  : 'bg-[#111624] border-[#2d3748] text-[#8b949e] hover:border-[#8b949e]'
+                  ? 'bg-slate-800 border-[#dfff00] text-[#dfff00] font-semibold shadow-sm'
+                  : 'bg-[#0d1322] border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
               }`}
             >
               {tag}
@@ -65,9 +65,9 @@ export function TagChipSelect({
               key={customTag}
               type="button"
               onClick={() => toggleTag(customTag)}
-              className="px-3 py-1 border bg-[#1a1f2f] border-[#dfff00] text-[#ffffff] font-mono text-xs font-bold"
+              className="px-3 py-1.5 rounded-lg border bg-slate-800 border-[#dfff00] text-[#dfff00] text-xs font-semibold"
             >
-              {customTag} [x]
+              {customTag} &times;
             </button>
           ))}
       </div>
