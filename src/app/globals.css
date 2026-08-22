@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,74 +6,74 @@
 
 @layer base {
   :root {
-    --bg-dark: #070a12;
-    --card-dark: #0d1322;
-    --border-dark: #1e293b;
+    --bg-dark: #070a14;
+    --sidebar-dark: #090d1a;
+    --card-dark: #0f1526;
+    --border-dark: #1d2640;
     --accent-lime: #dfff00;
   }
 
   body {
     background-color: var(--bg-dark);
-    color: #f1f5f9;
-    font-family: 'Inter', sans-serif;
+    color: #e2e8f0;
+    font-family: 'JetBrains Mono', monospace;
     min-height: 100vh;
     overflow-x: hidden;
   }
 }
 
-/* Monospace & Tabular Figures Utility */
+/* Monospace & Tabular Figures */
 .font-mono,
 .tabular-nums {
   font-family: 'JetBrains Mono', monospace;
   font-variant-numeric: tabular-nums;
 }
 
-/* Custom Sleek Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #070a12;
-}
-::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #dfff00;
+/* Subtle Grid Background Pattern */
+.grid-bg {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(29, 38, 64, 0.25) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(29, 38, 64, 0.25) 1px, transparent 1px);
 }
 
-/* Glassmorphism & Gradient Cards */
-.glass-card {
-  background: rgba(13, 19, 34, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid #1e293b;
-  border-radius: 12px;
+/* Cyber Corner Brackets */
+.corner-brackets {
+  position: relative;
+}
+.corner-brackets::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid #dfff00;
+  border-left: 2px solid #dfff00;
+}
+.corner-brackets::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-bottom: 2px solid #dfff00;
+  border-right: 2px solid #dfff00;
 }
 
-.glass-card:hover {
-  border-color: #334155;
-}
-
-/* Cyber Glow Borders */
-.cyber-glow-border {
-  border: 1px solid rgba(223, 255, 0, 0.3);
-  box-shadow: 0 0 15px rgba(223, 255, 0, 0.1);
-}
-
-/* Form Input Styling */
+/* Terminal Form Inputs */
 .form-input {
-  background-color: #0d1322;
-  border: 1px solid #1e293b;
+  background-color: #0b0f1d;
+  border: 1px solid #1d2640;
   color: #ffffff;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
+  font-size: 12px;
   padding: 10px 14px;
   width: 100%;
-  border-radius: 8px;
+  border-radius: 2px;
   outline: none;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .form-input:focus {
@@ -83,35 +83,38 @@
 
 .form-label {
   display: block;
-  font-family: 'Inter', sans-serif;
-  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: #8b9bb4;
   margin-bottom: 6px;
 }
 
 .panel-title {
-  padding: 12px 0;
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
+  padding: 10px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #f8fafc;
-  border-bottom: 1px solid #1e293b;
-  margin-bottom: 18px;
+  border-bottom: 1px solid #1d2640;
+  margin-bottom: 16px;
 }
 
-/* Recharts Custom Tooltip Styling */
-.custom-recharts-tooltip {
-  background-color: #0d1322 !important;
-  border: 1px solid #334155 !important;
-  border-radius: 8px !important;
-  padding: 10px 14px !important;
-  font-family: 'JetBrains Mono', monospace !important;
-  font-size: 12px !important;
-  color: #f8fafc !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #070a14;
+}
+::-webkit-scrollbar-thumb {
+  background: #1d2640;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #dfff00;
 }
