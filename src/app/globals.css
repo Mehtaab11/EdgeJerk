@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&display=swap');
+
+:root {
+  --bg-surface: #0a0f1e;
+  --bg-low: #111624;
+  --bg-high: #1a1f2f;
+  --border: #2d3748;
+  --accent: #dfff00;
+  --profit: #40e56c;
+  --loss: #ff6b6b;
+  --text-main: #e5e7eb;
+  --text-muted: #8b949e;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-radius: 0 !important; /* Strict sharp corners throughout */
+}
+
+body {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Monospace & Tabular Figures Utility */
+.font-mono,
+.tabular-nums {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Grid Overlay Utility */
+.grid-bg {
+  background-size: 20px 20px;
+  background-image: 
+    linear-gradient(to right, rgba(45, 55, 72, 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(45, 55, 72, 0.15) 1px, transparent 1px);
+}
+
+/* Custom Minimal Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0f1e;
+}
+::-webkit-scrollbar-thumb {
+  background: #2d3748;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #dfff00;
+}
+
+/* Form Input Styling */
+.form-input {
+  background-color: var(--bg-low);
+  border: 1px solid var(--border);
+  color: #ffffff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  padding: 8px 12px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.form-input:focus {
+  border-color: var(--accent);
+}
+
+.form-label {
+  display: block;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+/* Section Header Titles */
+.panel-title {
+  padding: 10px 0;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-main);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+/* Recharts Custom Tooltip Styling */
+.custom-recharts-tooltip {
+  background-color: #111624 !important;
+  border: 1px solid #2d3748 !important;
+  padding: 8px 12px !important;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px !important;
+  color: #e5e7eb !important;
+  box-shadow: none !important;
+}
