@@ -30,25 +30,25 @@ export function BottomFooterBar() {
   }, []);
 
   return (
-    <footer className="fixed bottom-0 left-0 w-full h-8 bg-[#070a14] border-t border-slate-800/80 px-6 flex items-center justify-between font-mono text-xs z-40 text-slate-400">
+    <footer className="fixed bottom-0 left-0 w-full h-8 bg-white dark:bg-[#0d1322] border-t border-slate-200 dark:border-slate-800/80 px-4 sm:px-6 flex items-center justify-between font-mono text-xs z-30 text-slate-500 dark:text-slate-400">
       <div>System Online</div>
 
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4 sm:gap-6">
         <span>
           Net P&L:{' '}
-          <strong className={stats.totalPnl >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
+          <strong className={stats.totalPnl >= 0 ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-rose-600 dark:text-rose-400 font-bold'}>
             {stats.totalPnl >= 0 ? `+$${stats.totalPnl.toLocaleString('en-US', { minimumFractionDigits: 2 })}` : `-$${Math.abs(stats.totalPnl).toLocaleString('en-US', { minimumFractionDigits: 2 })}`}
           </strong>
         </span>
         <span>
           Win Rate:{' '}
-          <strong className="text-[#dfff00] font-bold">
+          <strong className="text-[#2962ff] dark:text-[#dfff00] font-bold">
             {stats.winRate}%
           </strong>
         </span>
         <span>
           Today:{' '}
-          <strong className="text-emerald-400 font-bold">
+          <strong className="text-emerald-600 dark:text-emerald-400 font-bold">
             +{stats.dailyPnlPct}%
           </strong>
         </span>

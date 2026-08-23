@@ -24,7 +24,7 @@ export function ScreenshotDropzone({ label, existingUrl, onFileSelect }: Screens
   return (
     <div
       onClick={() => fileInputRef.current?.click()}
-      className="border-2 border-dashed border-slate-800 bg-[#0d1322] hover:border-[#dfff00]/60 transition-all rounded-xl h-36 flex flex-col items-center justify-center cursor-pointer relative overflow-hidden group p-3 shadow-inner"
+      className="border-2 border-dashed border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0d1322] hover:border-[#2962ff] dark:hover:border-[#dfff00] transition-all rounded-xl h-36 flex flex-col items-center justify-center cursor-pointer relative overflow-hidden group p-3"
     >
       <input
         ref={fileInputRef}
@@ -37,22 +37,22 @@ export function ScreenshotDropzone({ label, existingUrl, onFileSelect }: Screens
       {previewUrl ? (
         <div className="w-full h-full relative flex flex-col items-center justify-center rounded-lg overflow-hidden">
           <img src={previewUrl} alt={`${label} Screenshot`} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-[#070a12]/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1">
-            <UploadCloud className="w-5 h-5 text-[#dfff00]" />
-            <span className="font-mono text-xs font-bold text-[#dfff00] uppercase tracking-wider">
+          <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-1">
+            <UploadCloud className="w-5 h-5 text-white" />
+            <span className="font-mono text-xs font-bold text-white uppercase tracking-wider">
               Change {label} Chart
             </span>
           </div>
         </div>
       ) : (
         <div className="flex flex-col items-center text-center gap-1.5">
-          <div className="w-9 h-9 rounded-full bg-slate-800/60 border border-slate-700 flex items-center justify-center text-slate-400 group-hover:text-[#dfff00] group-hover:border-[#dfff00]/40 transition-colors">
+          <div className="w-9 h-9 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 group-hover:text-[#2962ff] dark:group-hover:text-[#dfff00] transition-colors">
             <ImageIcon className="w-4 h-4" />
           </div>
-          <span className="font-sans text-xs font-medium text-slate-300 group-hover:text-[#dfff00] transition-colors">
+          <span className="font-sans text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-[#2962ff] dark:group-hover:text-[#dfff00] transition-colors">
             Upload {label} Chart
           </span>
-          <span className="font-mono text-[10px] text-slate-500">
+          <span className="font-mono text-[10px] text-slate-400">
             PNG, JPG up to 10MB
           </span>
         </div>

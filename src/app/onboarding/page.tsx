@@ -4,12 +4,14 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { fetchApi } from '@/lib/api-client';
 import { useAuthStore } from '@/stores/authStore';
-import { Terminal, User, DollarSign, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { useThemeStore } from '@/stores/themeStore';
+import { Terminal, User, DollarSign, ArrowRight, CheckCircle2, Sun, Moon } from 'lucide-react';
 import { BottomFooterBar } from '@/components/layout/BottomFooterBar';
 
 export default function OnboardingPage() {
   const router = useRouter();
   const { checkSession, isAuthenticated, isLoading: authLoading } = useAuthStore();
+  const { theme, toggleTheme } = useThemeStore();
   const [displayName, setDisplayName] = useState('');
   const [accountSize, setAccountSize] = useState('10000');
   const [loading, setLoading] = useState(false);
@@ -50,50 +52,61 @@ export default function OnboardingPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-[#070a14] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f0f3fa] dark:bg-[#070a14] flex items-center justify-center">
         <div className="text-slate-400 font-mono text-xs animate-pulse">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#070a14] flex flex-col justify-center items-center px-4 py-12 relative font-sans">
+    <div className="min-h-screen bg-[#f0f3fa] dark:bg-[#070a14] flex flex-col justify-center items-center px-4 py-12 relative font-sans text-slate-900 dark:text-slate-200">
+      {/* THEME SWITCHER */}
+      <div className="absolute top-4 right-4">
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+        >
+          {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
+        </button>
+      </div>
+
       {/* LOGO */}
-      <div className="text-center mb-8 flex flex-col items-center">
-        <div className="w-12 h-12 rounded-2xl bg-[#dfff00] flex items-center justify-center text-black font-bold shadow-[0_0_20px_rgba(223,255,0,0.3)] mb-3">
+      <div className="text-center mb-6 flex flex-col items-center">
+        <div className="w-11 h-11 rounded-xl bg-[#2962ff] dark:bg-[#dfff00] flex items-center justify-center text-white dark:text-black font-bold mb-3 shadow-xs">
           <Terminal className="w-6 h-6 stroke-[2.5]" />
         </div>
-        <h1 className="text-2xl font-black text-white tracking-wider uppercase font-mono">
+        <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-wider uppercase font-mono">
           EdgeJerk
         </h1>
-        <p className="text-xs font-semibold text-slate-400 tracking-widest mt-1 uppercase font-mono">
+        <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 tracking-wider mt-0.5 uppercase font-mono">
           Quick Setup
         </p>
       </div>
 
       {/* CARD */}
-      <div className="w-full max-w-md bg-[#0d1322] border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
-        <div className="text-sm font-bold text-white tracking-wider pb-3 border-b border-slate-800 mb-5 uppercase font-mono">
+      <div className="w-full max-w-md bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800 rounded-xl p-6 sm:p-8 shadow-sm">
+        <div className="text-sm font-bold text-slate-900 dark:text-white tracking-wider pb-3 border-b border-slate-100 dark:border-slate-800 mb-5 uppercase font-mono">
           Finish Your Profile
         </div>
 
         {/* SUCCESS MESSAGE */}
-        <div className="mb-5 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono flex items-start gap-2.5">
+        <div className="mb-5 p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-700 dark:text-emerald-400 text-xs font-mono flex items-start gap-2.5">
           <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
           <span>Account created! Two quick things before you start.</span>
         </div>
 
         {errorMsg && (
-          <div className="mb-5 p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono">
+          <div className="mb-5 p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-mono">
             {errorMsg}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="form-label">Your Name</label>
             <div className="relative">
-              <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={displayName}
@@ -103,13 +116,13 @@ export default function OnboardingPage() {
                 className="form-input pl-10 text-xs"
               />
             </div>
-            <p className="text-[10px] text-slate-500 mt-1.5">Shown in your sidebar</p>
+            <p className="text-[10px] text-slate-400 mt-1">Shown in your navigation menu</p>
           </div>
 
           <div>
             <label className="form-label">Account Size ($)</label>
             <div className="relative">
-              <DollarSign className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <DollarSign className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="number"
                 value={accountSize}
@@ -121,27 +134,18 @@ export default function OnboardingPage() {
                 className="form-input pl-10 text-xs"
               />
             </div>
-            <p className="text-[10px] text-slate-500 mt-1.5">Your total trading capital, used for risk % math</p>
+            <p className="text-[10px] text-slate-400 mt-1">Your total trading capital, used for risk % math</p>
           </div>
 
           <button
             type="submit"
             disabled={loading || !displayName.trim()}
-            className="w-full py-3 rounded-xl bg-[#dfff00] text-black font-extrabold text-xs uppercase tracking-wider hover:bg-[#c8e600] transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(223,255,0,0.2)] disabled:opacity-50 mt-2 cursor-pointer"
+            className="w-full py-2.5 rounded-lg bg-[#2962ff] dark:bg-[#dfff00] text-white dark:text-black font-extrabold text-xs uppercase tracking-wider hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-50 mt-2 cursor-pointer"
           >
             <span>{loading ? 'Saving...' : 'Get Started'}</span>
             {!loading && <ArrowRight className="w-4 h-4 stroke-[3]" />}
           </button>
         </form>
-      </div>
-
-      {/* STATUS */}
-      <div className="w-full max-w-md flex justify-between items-center mt-4 text-xs font-mono text-slate-400">
-        <span className="flex items-center gap-1.5 text-emerald-400 font-bold">
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          Online
-        </span>
-        <span className="text-slate-500">v2.4.1</span>
       </div>
 
       <BottomFooterBar />

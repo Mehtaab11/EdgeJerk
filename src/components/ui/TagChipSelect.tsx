@@ -48,10 +48,10 @@ export function TagChipSelect({
               key={tag}
               type="button"
               onClick={() => toggleTag(tag)}
-              className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-slate-800 border-[#dfff00] text-[#dfff00] font-semibold shadow-sm'
-                  : 'bg-[#0d1322] border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                  ? 'bg-slate-100 dark:bg-slate-800 border-[#2962ff] dark:border-[#dfff00] text-[#2962ff] dark:text-[#dfff00] font-semibold'
+                  : 'bg-white dark:bg-[#0d1322] border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700'
               }`}
             >
               {tag}
@@ -65,7 +65,7 @@ export function TagChipSelect({
               key={customTag}
               type="button"
               onClick={() => toggleTag(customTag)}
-              className="px-3 py-1.5 rounded-lg border bg-slate-800 border-[#dfff00] text-[#dfff00] text-xs font-semibold"
+              className="px-3 py-1.5 rounded-lg border bg-slate-100 dark:bg-slate-800 border-[#2962ff] dark:border-[#dfff00] text-[#2962ff] dark:text-[#dfff00] text-xs font-semibold cursor-pointer"
             >
               {customTag} &times;
             </button>

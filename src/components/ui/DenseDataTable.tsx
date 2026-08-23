@@ -22,13 +22,13 @@ export function DenseDataTable<T extends { id: string }>({
   data,
   onRowClick,
   isLoading,
-  emptyText = 'No trade records logged yet',
+  emptyText = 'No trades logged yet',
 }: DenseDataTableProps<T>) {
   return (
-    <div className="w-full overflow-x-auto border border-slate-800/80 bg-[#0d1322] rounded-xl shadow-xl">
+    <div className="w-full overflow-x-auto border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-[#0d1322] rounded-xl shadow-xs">
       <table className="w-full text-left border-collapse text-xs">
         <thead>
-          <tr className="bg-[#090e1a] border-b border-slate-800 text-slate-400">
+          <tr className="bg-slate-50 dark:bg-[#090e1a] border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400">
             {columns.map((col) => (
               <th
                 key={col.key}
@@ -39,19 +39,16 @@ export function DenseDataTable<T extends { id: string }>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-800/60 font-mono">
+        <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-mono">
           {isLoading ? (
             <tr>
-              <td colSpan={columns.length} className="py-12 text-center text-slate-500 font-sans text-xs">
-                <div className="flex items-center justify-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#dfff00] animate-ping"></span>
-                  <span>Fetching trade records...</span>
-                </div>
+              <td colSpan={columns.length} className="py-12 text-center text-slate-400 font-sans text-xs">
+                Loading trades...
               </td>
             </tr>
           ) : data.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="py-12 text-center text-slate-500 font-sans text-xs uppercase tracking-wider">
+              <td colSpan={columns.length} className="py-12 text-center text-slate-400 font-sans text-xs">
                 {emptyText}
               </td>
             </tr>
@@ -60,12 +57,12 @@ export function DenseDataTable<T extends { id: string }>({
               <tr
                 key={row.id}
                 onClick={() => onRowClick && onRowClick(row)}
-                className={`hover:bg-slate-800/40 transition-colors ${
+                className={`hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors ${
                   onRowClick ? 'cursor-pointer' : ''
                 }`}
               >
                 {columns.map((col) => (
-                  <td key={col.key} className="py-3 px-4 text-slate-200 whitespace-nowrap">
+                  <td key={col.key} className="py-3 px-4 text-slate-800 dark:text-slate-200 whitespace-nowrap">
                     {col.render ? col.render(row) : (row as any)[col.key]}
                   </td>
                 ))}

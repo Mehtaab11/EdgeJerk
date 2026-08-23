@@ -17,10 +17,10 @@ export function TradeGradeDial({ value, onChange }: TradeGradeDialProps) {
             key={grade}
             type="button"
             onClick={() => onChange(grade)}
-            className={`flex-1 rounded-lg border font-mono text-sm font-bold transition-all flex items-center justify-center ${
+            className={`flex-1 rounded-lg border font-mono text-sm font-bold transition-all flex items-center justify-center cursor-pointer ${
               isFilled
-                ? 'bg-[#dfff00] border-[#dfff00] text-black shadow-[0_0_10px_rgba(223,255,0,0.2)]'
-                : 'bg-[#0d1322] border-slate-800 text-slate-500 hover:border-slate-700 hover:text-slate-300'
+                ? 'bg-[#2962ff] dark:bg-[#dfff00] border-transparent text-white dark:text-black font-bold'
+                : 'bg-white dark:bg-[#0d1322] border-slate-200 dark:border-slate-800 text-slate-400 hover:border-slate-400 dark:hover:border-slate-700'
             }`}
           >
             {grade}

@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { ThemeProvider } from '@/components/layout/ThemeProvider';
 
 export const metadata: Metadata = {
-  title: 'EdgeJerk — Professional Quant Trading Journal',
-  description: 'High-density, professional personal trading journal & quantitative performance analytics terminal.',
+  title: 'EdgeJerk — Trading Journal',
+  description: 'Clean personal trading journal & performance analytics.',
 };
 
 export default function RootLayout({
@@ -13,8 +14,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-[#070a12] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-[#dfff00] selection:text-black">
-        {children}
+      <body className="bg-[#f0f3fa] dark:bg-[#070a14] text-slate-900 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
