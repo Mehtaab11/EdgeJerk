@@ -23,19 +23,24 @@ export const baseTradeSchema = z.object({
   market_conditions: z.array(z.string()).optional().default([]),
   correlated_positions: z.array(z.string()).optional().default([]),
   news_event_tag: z.string().nullable().optional(),
-  emotional_state: z.enum(['Confident', 'Calm', 'Anxious', 'FOMO', 'Revenge', 'Bored', 'Hesitant']),
+  emotional_state: z.union([
+    z.string(),
+    z.array(z.string()).transform((arr) => arr.join(', ')),
+  ]),
   followed_plan: z.boolean().default(true),
   lessons_learned: z.string().optional().default(''),
   mistake_tag_names: z.array(z.string()).optional().default([]),
 });
 
-export const createTradeSchema = baseTradeSchema.refine((data) => new Date(data.exit_time) >= new Date(data.entry_time), {
-  message: 'Exit time cannot be earlier than entry time',
-  path: ['exit_time'],
-});
+export const createTradeSchema = baseTradeSchema.refine(
+  (data) => new Date(data.exit_time) >= new Date(data.entry_time),
+  {
+    message: 'Exit time cannot be earlier than entry time',
+    path: ['exit_time'],
+  }
+);
 
 export const updateTradeSchema = baseTradeSchema.partial();
 
 export type CreateTradeInput = z.infer<typeof createTradeSchema>;
 export type UpdateTradeInput = z.infer<typeof updateTradeSchema>;
-

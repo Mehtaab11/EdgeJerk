@@ -47,7 +47,7 @@ export default function TradeLogPage() {
       <TopHeaderBar />
       <SidebarNav />
 
-      <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full space-y-6 pb-16">
+      <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full space-y-6 pb-32">
         {/* FILTER BAR */}
         <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 p-4 rounded-xl shadow-xs">
           <div className="flex flex-wrap items-center gap-3">

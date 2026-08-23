@@ -23,11 +23,12 @@
 .form-input {
   font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
-  padding: 10px 14px;
+  padding: 9px 12px;
   width: 100%;
   border-radius: 8px;
   outline: none;
-  transition: border-color 0.15s ease;
+  transition: all 0.15s ease;
+  height: 40px;
 }
 
 .dark .form-input {
@@ -41,12 +42,13 @@
 }
 
 html:not(.dark) .form-input {
-  background-color: #ffffff;
+  background-color: #f8fafc;
   border: 1px solid #cbd5e1;
   color: #0f172a;
 }
 
 html:not(.dark) .form-input:focus {
+  background-color: #ffffff;
   border-color: #2962ff;
 }
 
@@ -57,7 +59,7 @@ html:not(.dark) .form-input:focus {
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
 }
 
 .dark .form-label {
@@ -65,7 +67,7 @@ html:not(.dark) .form-input:focus {
 }
 
 html:not(.dark) .form-label {
-  color: #475569;
+  color: #334155;
 }
 
 /* Custom Sleek Scrollbar */

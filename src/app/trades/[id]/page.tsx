@@ -80,8 +80,15 @@ export default function TradeDetailPage({ params }: Params) {
   const pnl = Number(trade.pnl_currency);
   const isWin = pnl >= 0;
 
+  // Parse multi-emotion states
+  const emotionList: string[] = Array.isArray(trade.emotional_state)
+    ? trade.emotional_state
+    : typeof trade.emotional_state === 'string'
+    ? trade.emotional_state.split(',').map((s: string) => s.trim()).filter(Boolean)
+    : [];
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#f0f3fa] dark:bg-[#070a14] text-slate-900 dark:text-slate-200 pb-16 font-sans">
+    <div className="min-h-screen flex flex-col bg-[#f0f3fa] dark:bg-[#070a14] text-slate-900 dark:text-slate-200 pb-36 font-sans">
       <TopHeaderBar />
       <SidebarNav />
 
@@ -207,8 +214,18 @@ export default function TradeDetailPage({ params }: Params) {
               <span className="text-[#2962ff] dark:text-[#388bfd] font-bold text-sm">{trade.trade_grade} / 5</span>
             </div>
             <div>
-              <span className="form-label">Mood</span>
-              <span className="text-slate-900 dark:text-white font-bold text-sm">{trade.emotional_state}</span>
+              <span className="form-label">Mindset / Emotions</span>
+              <div className="flex flex-wrap gap-1.5 mt-1">
+                {emotionList.length > 0 ? (
+                  emotionList.map((em) => (
+                    <span key={em} className="px-2.5 py-1 rounded-md bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-[#2962ff] dark:text-[#388bfd] font-semibold text-xs">
+                      {em}
+                    </span>
+                  ))
+                ) : (
+                  <span className="text-slate-500 font-sans">None recorded</span>
+                )}
+              </div>
             </div>
             <div>
               <span className="form-label">Followed Plan?</span>

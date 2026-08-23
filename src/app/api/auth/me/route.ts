@@ -33,10 +33,28 @@ export async function GET() {
       user.user_metadata?.name ||
       null;
 
-    const defaultAccountSize =
+    const defaultAccountSize = Number(
       profile?.default_account_size ||
       user.user_metadata?.default_account_size ||
-      10000;
+      10000
+    );
+
+    // Calculate running balance based on total trade P&L
+    let totalPnl = 0;
+    try {
+      const { data: trades } = await (supabase as any)
+        .from('trades')
+        .select('pnl_currency')
+        .eq('user_id', user.id);
+
+      if (trades && trades.length > 0) {
+        totalPnl = trades.reduce((sum: number, t: any) => sum + (Number(t.pnl_currency) || 0), 0);
+      }
+    } catch {
+      // Ignored
+    }
+
+    const currentAccountBalance = Number((defaultAccountSize + totalPnl).toFixed(2));
 
     return successResponse({
       user,
@@ -46,6 +64,7 @@ export async function GET() {
         email: user.email,
         display_name: displayName,
         default_account_size: defaultAccountSize,
+        current_account_balance: currentAccountBalance,
       },
     });
   } catch (err: any) {
