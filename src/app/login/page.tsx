@@ -155,72 +155,74 @@ function LoginContent() {
           {isSignUp && (
             <>
               <div>
-                <label className="form-label">Your Name</label>
-                <div className="relative">
-                  <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    placeholder="e.g. Sahil"
-                    className="form-input pl-10 text-xs"
-                  />
-                </div>
+                <label className="form-label flex items-center gap-1.5 mb-1.5">
+                  <User className="w-3.5 h-3.5 text-slate-400" />
+                  <span>Your Name</span>
+                </label>
+                <input
+                  type="text"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder="e.g. Sahil"
+                  className="form-input text-xs"
+                />
               </div>
 
               <div>
-                <label className="form-label">Account Size ($)</label>
-                <p className="text-[10px] text-slate-400 mb-1.5">Your total trading capital</p>
-                <div className="relative">
-                  <DollarSign className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="number"
-                    value={accountSize}
-                    onChange={(e) => setAccountSize(e.target.value)}
-                    placeholder="10000"
-                    min="1"
-                    step="0.01"
-                    className="form-input pl-10 text-xs"
-                  />
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="form-label flex items-center gap-1.5 mb-0">
+                    <DollarSign className="w-3.5 h-3.5 text-slate-400" />
+                    <span>Account Size ($)</span>
+                  </label>
+                  <span className="text-[10px] text-slate-400 font-mono">Your total capital</span>
                 </div>
+                <input
+                  type="number"
+                  value={accountSize}
+                  onChange={(e) => setAccountSize(e.target.value)}
+                  placeholder="10000"
+                  min="1"
+                  step="0.01"
+                  className="form-input text-xs"
+                />
               </div>
             </>
           )}
 
           <div>
-            <label className="form-label">Email</label>
-            <div className="relative">
-              <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@email.com"
-                required
-                className="form-input pl-10 text-xs"
-              />
-            </div>
+            <label className="form-label flex items-center gap-1.5 mb-1.5">
+              <Mail className="w-3.5 h-3.5 text-slate-400" />
+              <span>Email</span>
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@email.com"
+              required
+              className="form-input text-xs"
+            />
           </div>
 
           <div>
-            <label className="form-label">Password</label>
-            <div className="relative">
-              <Key className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-                className="form-input pl-10 text-xs"
-              />
-            </div>
+            <label className="form-label flex items-center gap-1.5 mb-1.5">
+              <Key className="w-3.5 h-3.5 text-slate-400" />
+              <span>Password</span>
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              required
+              className="form-input text-xs"
+            />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-lg bg-[#2962ff] hover:bg-[#1e4bd8] text-white font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 disabled:opacity-50 mt-2 cursor-pointer"
+            className="w-full py-2.5 rounded-lg bg-[#2962ff] hover:bg-[#1e4bd8] text-white font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 disabled:opacity-50 mt-3 cursor-pointer"
           >
             <span>{loading ? 'Loading...' : isSignUp ? 'Create Account' : 'Sign In'}</span>
             {!loading && <ArrowRight className="w-4 h-4 stroke-[3]" />}

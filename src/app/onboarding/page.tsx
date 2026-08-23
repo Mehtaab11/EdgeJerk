@@ -104,43 +104,46 @@ export default function OnboardingPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="form-label">Your Name</label>
-            <div className="relative">
-              <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="e.g. Sahil"
-                required
-                className="form-input pl-10 text-xs"
-              />
-            </div>
+            <label className="form-label flex items-center gap-1.5 mb-1.5">
+              <User className="w-3.5 h-3.5 text-slate-400" />
+              <span>Your Name</span>
+            </label>
+            <input
+              type="text"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              placeholder="e.g. Sahil"
+              required
+              className="form-input text-xs"
+            />
             <p className="text-[10px] text-slate-400 mt-1">Shown in your navigation menu</p>
           </div>
 
           <div>
-            <label className="form-label">Account Size ($)</label>
-            <div className="relative">
-              <DollarSign className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="number"
-                value={accountSize}
-                onChange={(e) => setAccountSize(e.target.value)}
-                placeholder="10000"
-                min="1"
-                step="0.01"
-                required
-                className="form-input pl-10 text-xs"
-              />
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="form-label flex items-center gap-1.5 mb-0">
+                <DollarSign className="w-3.5 h-3.5 text-slate-400" />
+                <span>Account Size ($)</span>
+              </label>
+              <span className="text-[10px] text-slate-400 font-mono">Your total capital</span>
             </div>
-            <p className="text-[10px] text-slate-400 mt-1">Your total trading capital, used for risk % math</p>
+            <input
+              type="number"
+              value={accountSize}
+              onChange={(e) => setAccountSize(e.target.value)}
+              placeholder="10000"
+              min="1"
+              step="0.01"
+              required
+              className="form-input text-xs"
+            />
+            <p className="text-[10px] text-slate-400 mt-1">Used for risk % calculations</p>
           </div>
 
           <button
             type="submit"
             disabled={loading || !displayName.trim()}
-            className="w-full py-2.5 rounded-lg bg-[#2962ff] hover:bg-[#1e4bd8] text-white font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 disabled:opacity-50 mt-2 cursor-pointer"
+            className="w-full py-2.5 rounded-lg bg-[#2962ff] hover:bg-[#1e4bd8] text-white font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 disabled:opacity-50 mt-3 cursor-pointer"
           >
             <span>{loading ? 'Saving...' : 'Get Started'}</span>
             {!loading && <ArrowRight className="w-4 h-4 stroke-[3]" />}
