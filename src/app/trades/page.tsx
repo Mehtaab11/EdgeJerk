@@ -7,7 +7,7 @@ import { TopHeaderBar } from '@/components/layout/TopHeaderBar';
 import { BottomFooterBar } from '@/components/layout/BottomFooterBar';
 import { useTradeFilterStore } from '@/stores/tradeFilterStore';
 import { fetchApi, buildTradeQueryString } from '@/lib/api-client';
-import { Download, CheckCircle2, AlertTriangle, ArrowUpRight, ArrowDownRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Download, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 export default function TradeLogPage() {
   const router = useRouter();
@@ -50,102 +50,97 @@ export default function TradeLogPage() {
         <SidebarNav />
 
         <main className="flex-1 p-6 md:p-8 overflow-y-auto space-y-6">
-          {/* FILTER ROW CHIPS */}
+          {/* FILTERS */}
           <div className="flex flex-wrap items-center justify-between gap-4 bg-[#0d1322] border border-slate-800/80 p-4 rounded-2xl shadow-xl">
             <div className="flex flex-wrap items-center gap-3">
-              {/* Date Filter */}
               <select
                 value={filterStore.startDate || ''}
                 onChange={(e) => filterStore.setFilter('startDate', e.target.value)}
                 className="bg-[#070a14] border border-slate-800 text-xs font-mono text-slate-300 px-3.5 py-2 rounded-xl cursor-pointer hover:border-slate-700 focus:outline-none focus:border-[#dfff00]"
               >
-                <option value="">📅 ALL TIME ▾</option>
-                <option value="2026-08-01">THIS MONTH</option>
-                <option value="2026-01-01">THIS YEAR</option>
+                <option value="">All Time</option>
+                <option value="2026-08-01">This Month</option>
+                <option value="2026-01-01">This Year</option>
               </select>
 
-              {/* Asset Filter */}
               <input
                 type="text"
                 value={filterStore.asset || ''}
                 onChange={(e) => filterStore.setFilter('asset', e.target.value.toUpperCase())}
-                placeholder="📊 ALL ASSETS ▾"
-                className="bg-[#070a14] border border-slate-800 text-xs font-mono text-slate-300 px-3.5 py-2 rounded-xl w-36 uppercase placeholder-slate-400 focus:outline-none focus:border-[#dfff00]"
+                placeholder="Ticker"
+                className="bg-[#070a14] border border-slate-800 text-xs font-mono text-slate-300 px-3.5 py-2 rounded-xl w-28 uppercase placeholder-slate-400 focus:outline-none focus:border-[#dfff00]"
               />
 
-              {/* Strategy Filter */}
               <input
                 type="text"
                 value={filterStore.setupName || ''}
                 onChange={(e) => filterStore.setFilter('setupName', e.target.value)}
-                placeholder="♟ ALL STRATEGIES ▾"
-                className="bg-[#070a14] border border-slate-800 text-xs font-mono text-slate-300 px-3.5 py-2 rounded-xl w-44 placeholder-slate-400 focus:outline-none focus:border-[#dfff00]"
+                placeholder="Strategy"
+                className="bg-[#070a14] border border-slate-800 text-xs font-mono text-slate-300 px-3.5 py-2 rounded-xl w-32 placeholder-slate-400 focus:outline-none focus:border-[#dfff00]"
               />
 
-              {/* Side Filter */}
               <select
                 value={filterStore.direction || ''}
                 onChange={(e) => filterStore.setFilter('direction', e.target.value || undefined)}
                 className="bg-[#070a14] border border-slate-800 text-xs font-mono text-slate-300 px-3.5 py-2 rounded-xl cursor-pointer hover:border-slate-700 focus:outline-none focus:border-[#dfff00]"
               >
-                <option value="">SIDE: ALL ▾</option>
-                <option value="long">SIDE: LONG</option>
-                <option value="short">SIDE: SHORT</option>
+                <option value="">Any Side</option>
+                <option value="long">Long Only</option>
+                <option value="short">Short Only</option>
               </select>
 
-              {/* Emotion Filter */}
               <select
                 value={filterStore.emotionalState || ''}
                 onChange={(e) => filterStore.setFilter('emotionalState', e.target.value || undefined)}
                 className="bg-[#070a14] border border-slate-800 text-xs font-mono text-slate-300 px-3.5 py-2 rounded-xl cursor-pointer hover:border-slate-700 focus:outline-none focus:border-[#dfff00]"
               >
-                <option value="">🧠 EMOTION: ALL ▾</option>
-                <option value="Confident">CONFIDENT</option>
-                <option value="Calm">CALM</option>
-                <option value="Bored">BORED</option>
-                <option value="Hesitant">HESITANT</option>
-                <option value="Anxious">ANXIOUS</option>
+                <option value="">Any Mood</option>
+                <option value="Confident">Confident</option>
+                <option value="Calm">Calm</option>
+                <option value="Bored">Bored</option>
+                <option value="Hesitant">Hesitant</option>
+                <option value="Anxious">Anxious</option>
                 <option value="FOMO">FOMO</option>
-                <option value="Revenge">REVENGE</option>
+                <option value="Revenge">Revenge</option>
               </select>
             </div>
 
             <div className="flex items-center gap-3 text-xs text-slate-400 font-mono">
-              <span>{meta ? `${meta.total.toLocaleString()} RECORDS` : '0 RECORDS'}</span>
-              <button title="Export Data" className="p-2 rounded-xl bg-[#070a14] border border-slate-800 hover:text-[#dfff00]">
+              <span>{meta ? `${meta.total.toLocaleString()} trades` : '0 trades'}</span>
+              <button title="Export" className="p-2 rounded-xl bg-[#070a14] border border-slate-800 hover:text-[#dfff00]">
                 <Download className="w-4 h-4" />
               </button>
             </div>
           </div>
 
-          {/* DENSE TRADE LOG TABLE WITH SOFT ROUNDED CONTAINER */}
+          {/* TABLE */}
           <div className="w-full overflow-x-auto border border-slate-800/80 bg-[#0d1322] rounded-2xl shadow-xl">
             <table className="w-full text-left border-collapse text-xs font-mono">
               <thead>
                 <tr className="bg-[#090d1a] border-b border-slate-800/80 text-slate-400">
-                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">DATE / TIME</th>
-                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">ASSET</th>
-                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">SIDE</th>
-                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase text-right">SIZE</th>
-                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase text-right">ENTRY</th>
-                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase text-right">EXIT</th>
-                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase text-right">P&L ($)</th>
-                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">STRATEGY</th>
-                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">EMOTION</th>
-                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase text-center">COMPLIANCE</th>
+                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">Date</th>
+                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">Ticker</th>
+                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">Side</th>
+                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase text-right">Size</th>
+                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase text-right">Entry</th>
+                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase text-right">Exit</th>
+                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase text-right">P&L</th>
+                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">Strategy</th>
+                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">Mood</th>
+                  <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase text-center">Plan?</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
                 {isLoading ? (
                   <tr>
                     <td colSpan={10} className="py-12 text-center text-slate-500 font-sans text-xs">
-                      Fetching trade log records...
+                      Loading trades...
                     </td>
                   </tr>
                 ) : trades.length === 0 ? (
                   <tr>
-                    <td colSpan={10} className="py-12 text-center text-slate-500 font-sans text-xs uppercase">
-                      No trade log records found matching filters
+                    <td colSpan={10} className="py-12 text-center text-slate-500 font-sans text-xs">
+                      No trades match these filters
                     </td>
                   </tr>
                 ) : (
@@ -220,13 +215,13 @@ export default function TradeLogPage() {
             </table>
           </div>
 
-          {/* LOAD MORE BUTTON */}
+          {/* LOAD MORE */}
           <div className="flex justify-center pt-2">
             <button
               onClick={() => filterStore.setFilter('page', (filterStore.page || 1) + 1)}
               className="px-6 py-2.5 bg-[#0d1322] border border-slate-800 rounded-xl text-xs font-mono font-bold text-slate-300 hover:border-slate-600 hover:text-white uppercase tracking-wider transition-all shadow-md"
             >
-              Load More Records
+              Load More
             </button>
           </div>
         </main>

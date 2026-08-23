@@ -1,12 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutGrid, Database, TrendingUp, Settings, Terminal, Activity } from 'lucide-react';
+import { useAuthStore } from '@/stores/authStore';
 
 export function SidebarNav() {
   const pathname = usePathname();
+  const { displayName, user, checkSession } = useAuthStore();
+
+  useEffect(() => {
+    checkSession();
+  }, [checkSession]);
 
   const navItems = [
     { href: '/', label: 'DASHBOARD', icon: LayoutGrid },
@@ -14,6 +20,13 @@ export function SidebarNav() {
     { href: '/analytics', label: 'ANALYTICS', icon: TrendingUp },
     { href: '/settings', label: 'SETTINGS', icon: Settings },
   ];
+
+  // Show display_name if available, otherwise first part of email, otherwise TERMINAL_01
+  const terminalName = displayName
+    ? displayName.toUpperCase()
+    : user?.email
+    ? user.email.split('@')[0].toUpperCase()
+    : 'TERMINAL_01';
 
   return (
     <aside className="w-56 bg-[#0a0e1a] border-r border-slate-800/80 flex flex-col justify-between shrink-0 min-h-screen">
@@ -24,8 +37,10 @@ export function SidebarNav() {
             <div className="w-9 h-9 rounded-xl bg-[#dfff00] flex items-center justify-center text-black font-bold shadow-[0_0_15px_rgba(223,255,0,0.25)]">
               <Terminal className="w-5 h-5 stroke-[2.5]" />
             </div>
-            <div className="flex flex-col">
-              <span className="font-mono text-xs font-bold text-white tracking-wider">TERMINAL_01</span>
+            <div className="flex flex-col min-w-0">
+              <span className="font-mono text-xs font-bold text-white tracking-wider truncate">
+                {terminalName}
+              </span>
               <span className="font-mono text-[10px] text-emerald-400 font-bold flex items-center gap-1.5 mt-0.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 CONNECTED
@@ -61,10 +76,10 @@ export function SidebarNav() {
       {/* SYSTEM STATUS FOOTER IN SIDEBAR */}
       <div className="p-4 border-t border-slate-800/80 font-mono text-[10px] text-slate-400">
         <div className="flex items-center justify-between">
-          <span>ENGINE: ONLINE</span>
+          <span>System: Online</span>
           <Activity className="w-3 h-3 text-emerald-400" />
         </div>
-        <div className="text-emerald-400 font-bold mt-1">0.4ms LATENCY</div>
+        <div className="text-emerald-400 font-bold mt-1">Fast</div>
       </div>
     </aside>
   );

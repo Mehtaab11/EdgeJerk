@@ -72,64 +72,65 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#070a14] grid-bg flex flex-col font-mono text-slate-200">
+    <div className="min-h-screen bg-[#070a14] flex flex-col font-sans text-slate-200">
       <TopHeaderBar />
 
       <div className="flex flex-1 overflow-hidden pb-10">
         <SidebarNav />
 
         <main className="flex-1 p-6 overflow-y-auto space-y-6">
-          {/* STAT STRIP */}
+          {/* STATS ROW */}
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-            <div className="bg-[#0b0f1d] border border-[#1d2640] p-3.5">
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">NET P&L</span>
+            <div className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-4">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Net P&L</span>
               <span className={`text-xl font-bold ${netPnl >= 0 ? 'text-emerald-400' : 'text-rose-500'}`}>
                 {netPnl >= 0 ? `+$${netPnl.toFixed(2)}` : `-$${Math.abs(netPnl).toFixed(2)}`}
               </span>
             </div>
-            <div className="bg-[#0b0f1d] border border-[#1d2640] p-3.5">
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">WIN RATE</span>
+            <div className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-4">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Win Rate</span>
               <span className="text-xl font-bold text-[#dfff00]">
-                {winRate}% <span className="text-xs text-slate-500 font-normal">({wins}/{totalTrades} W)</span>
+                {winRate}% <span className="text-xs text-slate-500 font-normal">({wins}/{totalTrades})</span>
               </span>
             </div>
-            <div className="bg-[#0b0f1d] border border-[#1d2640] p-3.5">
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">AVG R-MULTIPLE</span>
+            <div className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-4">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Avg R</span>
               <span className="text-xl font-bold text-slate-200">{avgR}R</span>
+              <span className="text-[9px] text-slate-500 block">Risk-reward ratio</span>
             </div>
-            <div className="bg-[#0b0f1d] border border-[#1d2640] p-3.5">
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">TOTAL TRADES</span>
+            <div className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-4">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Trades</span>
               <span className="text-xl font-bold text-slate-200">{totalTrades}</span>
             </div>
-            <div className="bg-[#0b0f1d] border border-[#1d2640] p-3.5">
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">STREAK</span>
+            <div className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-4">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-1">Streak</span>
               <span className={`text-xl font-bold ${streak >= 0 ? 'text-emerald-400' : 'text-rose-500'}`}>
                 {streak >= 0 ? `+${streak} W` : `${streak} L`}
               </span>
             </div>
           </div>
 
-          {/* EQUITY CURVE */}
-          <div className="bg-[#0b0f1d] border border-[#1d2640] p-4 space-y-3">
-            <div className="flex justify-between items-center border-b border-[#1d2640] pb-2">
+          {/* P&L CHART */}
+          <div className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-5 space-y-3">
+            <div className="flex justify-between items-center border-b border-slate-800 pb-2">
               <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-                PERFORMANCE DYNAMICS — CUMULATIVE P&L & DRAWDOWN
+                P&L Over Time
               </span>
-              <span className="text-[10px] text-[#dfff00] font-bold">LIVE_DATA</span>
+              <span className="text-[10px] text-[#dfff00] font-bold">LIVE</span>
             </div>
 
             <div className="h-60 w-full">
               {equityCurve.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-xs text-slate-500 uppercase">
-                  NO TRADE HISTORY LOGGED YET
+                <div className="h-full flex items-center justify-center text-xs text-slate-500">
+                  No trades yet. Log your first trade to see this chart.
                 </div>
               ) : (
                 <ResponsiveContainer width="100%" height="100%">
                   <ComposedChart data={equityCurve} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <CartesianGrid stroke="#1d2640" strokeDasharray="3 3" vertical={false} />
+                    <CartesianGrid stroke="#1e293b" strokeDasharray="3 3" vertical={false} />
                     <XAxis dataKey="entry_time" tick={{ fill: '#64748b', fontSize: 10 }} tickFormatter={(s) => s.slice(5, 10)} />
                     <YAxis tick={{ fill: '#64748b', fontSize: 10 }} />
-                    <Tooltip contentStyle={{ backgroundColor: '#0b0f1d', borderColor: '#1d2640' }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#0d1322', borderColor: '#334155', borderRadius: '8px' }} />
                     <Line type="monotone" dataKey="cumulative_pnl" stroke="#dfff00" strokeWidth={2.5} dot={false} />
                   </ComposedChart>
                 </ResponsiveContainer>
@@ -138,37 +139,37 @@ export default function DashboardPage() {
           </div>
 
           {/* RECENT TRADES */}
-          <div className="bg-[#0b0f1d] border border-[#1d2640] p-4 space-y-3">
-            <div className="flex justify-between items-center border-b border-[#1d2640] pb-2">
+          <div className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-5 space-y-3">
+            <div className="flex justify-between items-center border-b border-slate-800 pb-2">
               <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-                RECENT EXECUTION LOG
+                Recent Trades
               </span>
-              <Link href="/trades" className="text-xs text-[#dfff00] hover:underline uppercase">
-                VIEW FULL TRADE LOG →
+              <Link href="/trades" className="text-xs text-[#dfff00] hover:underline">
+                View All →
               </Link>
             </div>
 
             <div className="w-full overflow-x-auto">
               <table className="w-full text-left font-mono text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-[#1d2640] text-slate-400">
-                    <th className="py-2">DATE / TIME</th>
-                    <th className="py-2">ASSET</th>
-                    <th className="py-2">SIDE</th>
-                    <th className="py-2 text-right">SIZE</th>
-                    <th className="py-2 text-right">ENTRY</th>
-                    <th className="py-2 text-right">EXIT</th>
-                    <th className="py-2 text-right">P&L ($)</th>
-                    <th className="py-2">STRATEGY</th>
-                    <th className="py-2">EMOTION</th>
-                    <th className="py-2 text-center">PLAN</th>
+                  <tr className="border-b border-slate-800 text-slate-400">
+                    <th className="py-2">Date</th>
+                    <th className="py-2">Ticker</th>
+                    <th className="py-2">Side</th>
+                    <th className="py-2 text-right">Size</th>
+                    <th className="py-2 text-right">Entry</th>
+                    <th className="py-2 text-right">Exit</th>
+                    <th className="py-2 text-right">P&L</th>
+                    <th className="py-2">Strategy</th>
+                    <th className="py-2">Mood</th>
+                    <th className="py-2 text-center">Plan?</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-[#1d2640]">
+                <tbody className="divide-y divide-slate-800/60">
                   {trades.length === 0 ? (
                     <tr>
-                      <td colSpan={10} className="py-8 text-center text-slate-500 uppercase">
-                        FETCHING LOG DATA...
+                      <td colSpan={10} className="py-8 text-center text-slate-500">
+                        No trades yet
                       </td>
                     </tr>
                   ) : (
@@ -176,7 +177,7 @@ export default function DashboardPage() {
                       const pnl = Number(row.pnl_currency);
                       const isWin = pnl >= 0;
                       return (
-                        <tr key={row.id} onClick={() => router.push(`/trades/${row.id}`)} className="hover:bg-[#13192b] cursor-pointer">
+                        <tr key={row.id} onClick={() => router.push(`/trades/${row.id}`)} className="hover:bg-slate-800/40 cursor-pointer transition-colors">
                           <td className="py-2.5 text-slate-400">{row.entry_time?.slice(2, 16).replace('T', ' ')}</td>
                           <td className="py-2.5 font-bold text-white">{row.asset}</td>
                           <td className={`py-2.5 font-bold uppercase ${row.direction === 'long' ? 'text-emerald-400' : 'text-rose-500'}`}>
@@ -186,7 +187,7 @@ export default function DashboardPage() {
                           <td className="py-2.5 text-right">{row.entry_price}</td>
                           <td className="py-2.5 text-right">{row.exit_price}</td>
                           <td className="py-2.5 text-right">
-                            <span className={`px-2 py-0.5 font-bold ${isWin ? 'bg-[#0a3a2a] text-[#10b981]' : 'bg-[#3a0a0a] text-[#f43f5e]'}`}>
+                            <span className={`px-2.5 py-0.5 font-bold rounded-lg text-xs ${isWin ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/15 text-rose-400 border border-rose-500/30'}`}>
                               {isWin ? `+${pnl.toFixed(2)}` : `-${Math.abs(pnl).toFixed(2)}`}
                             </span>
                           </td>

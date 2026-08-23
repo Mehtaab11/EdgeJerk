@@ -31,11 +31,11 @@ export function BottomFooterBar() {
 
   return (
     <footer className="fixed bottom-0 left-0 w-full h-8 bg-[#070a14] border-t border-slate-800/80 px-6 flex items-center justify-between font-mono text-xs z-40 text-slate-400">
-      <div>SYSTEM_STABLE_V2.4</div>
+      <div>System Online</div>
 
       <div className="flex items-center gap-6">
         <span>
-          Total P&L:{' '}
+          Net P&L:{' '}
           <strong className={stats.totalPnl >= 0 ? 'text-emerald-400 font-bold' : 'text-rose-400 font-bold'}>
             {stats.totalPnl >= 0 ? `+$${stats.totalPnl.toLocaleString('en-US', { minimumFractionDigits: 2 })}` : `-$${Math.abs(stats.totalPnl).toLocaleString('en-US', { minimumFractionDigits: 2 })}`}
           </strong>
@@ -47,7 +47,7 @@ export function BottomFooterBar() {
           </strong>
         </span>
         <span>
-          Daily:{' '}
+          Today:{' '}
           <strong className="text-emerald-400 font-bold">
             +{stats.dailyPnlPct}%
           </strong>

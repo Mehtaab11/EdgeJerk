@@ -19,16 +19,22 @@ export interface Database {
         Row: {
           id: string;
           email: string;
+          display_name: string | null;
+          default_account_size: number | null;
           created_at: string;
         };
         Insert: {
           id: string;
           email: string;
+          display_name?: string | null;
+          default_account_size?: number | null;
           created_at?: string;
         };
         Update: {
           id?: string;
           email?: string;
+          display_name?: string | null;
+          default_account_size?: number | null;
           created_at?: string;
         };
       };

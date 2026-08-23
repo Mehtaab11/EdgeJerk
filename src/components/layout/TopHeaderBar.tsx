@@ -24,7 +24,7 @@ export function TopHeaderBar() {
       {/* BRAND & SEARCH BAR */}
       <div className="flex items-center gap-6">
         <Link href="/" className="font-mono text-base font-extrabold text-[#dfff00] tracking-wider hover:opacity-90">
-          TRADER_LOG_V1
+          EdgeJerk
         </Link>
 
         <form onSubmit={handleSearchSubmit} className="relative">
@@ -33,8 +33,8 @@ export function TopHeaderBar() {
             type="text"
             value={searchVal}
             onChange={(e) => setSearchVal(e.target.value)}
-            placeholder="Search Ticker / ID..."
-            className="bg-[#0d1322] border border-slate-800 rounded-xl text-xs font-mono text-white placeholder-slate-500 pl-9 pr-4 py-2 w-52 focus:outline-none focus:border-[#dfff00] uppercase"
+            placeholder="Search ticker..."
+            className="bg-[#0d1322] border border-slate-800 rounded-xl text-xs font-mono text-white placeholder-slate-500 pl-9 pr-4 py-2 w-48 focus:outline-none focus:border-[#dfff00] uppercase"
           />
         </form>
       </div>
@@ -43,7 +43,7 @@ export function TopHeaderBar() {
       <div className="flex items-center gap-3">
         <div className="px-3.5 py-1.5 rounded-xl bg-[#0d1322] border border-slate-800 text-xs font-mono font-bold text-slate-300 flex items-center gap-2">
           <Radio className="w-3.5 h-3.5 text-[#dfff00] animate-pulse" />
-          <span>LIVE_STATUS</span>
+          <span>Live</span>
         </div>
 
         <Link
@@ -51,7 +51,7 @@ export function TopHeaderBar() {
           className="px-4 py-2 rounded-xl bg-[#dfff00] text-black font-sans font-bold text-xs tracking-wider hover:bg-[#c8e600] transition-all shadow-[0_0_15px_rgba(223,255,0,0.2)] flex items-center gap-1.5"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
-          <span>LOG TRADE</span>
+          <span>Log Trade</span>
         </Link>
       </div>
     </header>

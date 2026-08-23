@@ -125,11 +125,11 @@ export default function AnalyticsPage() {
               <div className="flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-[#dfff00]" />
                 <h1 className="font-mono text-base font-bold text-white tracking-tight">
-                  SYS_ANALYTICS // DEEP REVIEW
+                  Analytics
                 </h1>
               </div>
               <p className="text-xs text-slate-400 mt-1">
-                Multi-Zone Quantitative Performance & Behavioral Analysis
+                How your trading is going, broken down
               </p>
             </div>
 
@@ -161,7 +161,7 @@ export default function AnalyticsPage() {
             <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
               <TrendingUp className="w-4 h-4 text-[#dfff00]" />
               <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
-                Zone 1: Performance Dynamics
+                Performance
               </span>
             </div>
 
@@ -169,7 +169,7 @@ export default function AnalyticsPage() {
               {/* Cumulative Equity Curve */}
               <div className="md:col-span-8 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-4">
                 <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider block">
-                  Cumulative P&L Curve Over Time
+                  Total P&L Over Time
                 </span>
                 <div className="h-64 w-full">
                   <ResponsiveContainer width="100%" height="100%">
@@ -195,7 +195,7 @@ export default function AnalyticsPage() {
               <div className="md:col-span-4 bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
                 <div className="flex justify-between items-center mb-2">
                   <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
-                    Risk Consistency (%/Trade)
+                    Risk Per Trade
                   </span>
                   <span className="font-mono text-xs text-[#dfff00]">
                     Avg: {riskTime?.average_risk_percent || 0}%
@@ -222,18 +222,18 @@ export default function AnalyticsPage() {
               <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
                 <ShieldCheck className="w-4 h-4 text-[#dfff00]" />
                 <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  Zone 2: Strategy Edge
+                  Which Strategies Work?
                 </span>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left font-mono text-xs">
                   <thead>
                     <tr className="border-b border-slate-800 text-slate-400">
-                      <th className="py-2.5">STRATEGY</th>
-                      <th className="py-2.5 text-right">WIN %</th>
-                      <th className="py-2.5 text-right">AVG R</th>
-                      <th className="py-2.5 text-right">EV ($)</th>
-                      <th className="py-2.5 text-right">NET P&L</th>
+                      <th className="py-2.5">Strategy</th>
+                      <th className="py-2.5 text-right">Win %</th>
+                      <th className="py-2.5 text-right">Avg R</th>
+                      <th className="py-2.5 text-right">Expected $</th>
+                      <th className="py-2.5 text-right">Net P&L</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/60">
@@ -257,7 +257,7 @@ export default function AnalyticsPage() {
               <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
                 <AlertTriangle className="w-4 h-4 text-rose-400" />
                 <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  Zone 3: Execution Quality
+                  Exit Breakdown
                 </span>
               </div>
               <div className="space-y-3 font-mono text-xs">
@@ -279,7 +279,7 @@ export default function AnalyticsPage() {
             <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
               <CalendarIcon className="w-4 h-4 text-[#dfff00]" />
               <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
-                Zone 5: Exposure & Calendar Density
+                Trading Calendar
               </span>
             </div>
             <CalendarHeatmap data={heatmap} onDayClick={handleHeatmapDayClick} />

@@ -6,6 +6,8 @@ interface AuthState {
   profile: any | null;
   isLoading: boolean;
   isAuthenticated: boolean;
+  displayName: string | null;
+  defaultAccountSize: number | null;
   checkSession: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -15,6 +17,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   profile: null,
   isLoading: true,
   isAuthenticated: false,
+  displayName: null,
+  defaultAccountSize: null,
 
   checkSession: async () => {
     set({ isLoading: true });
@@ -25,6 +29,8 @@ export const useAuthStore = create<AuthState>((set) => ({
         profile: res.data.profile,
         isAuthenticated: true,
         isLoading: false,
+        displayName: res.data.profile?.display_name || null,
+        defaultAccountSize: res.data.profile?.default_account_size || null,
       });
     } else {
       set({
@@ -32,6 +38,8 @@ export const useAuthStore = create<AuthState>((set) => ({
         profile: null,
         isAuthenticated: false,
         isLoading: false,
+        displayName: null,
+        defaultAccountSize: null,
       });
     }
   },
@@ -43,6 +51,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       profile: null,
       isAuthenticated: false,
       isLoading: false,
+      displayName: null,
+      defaultAccountSize: null,
     });
   },
 }));

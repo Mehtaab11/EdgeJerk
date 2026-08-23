@@ -28,28 +28,28 @@ export default function NewTradePage() {
   const [planThesis, setPlanThesis] = useState('');
 
   // Section 1: Trade Basics
-  const [asset, setAsset] = useState('AAPL');
+  const [asset, setAsset] = useState('');
   const [direction, setDirection] = useState<TradeDirection>('long');
-  const [positionSize, setPositionSize] = useState('100');
+  const [positionSize, setPositionSize] = useState('');
   const [positionUnit, setPositionUnit] = useState('shares');
-  const [entryTime, setEntryTime] = useState('2026-08-22T14:30');
-  const [exitTime, setExitTime] = useState('2026-08-22T15:45');
-  const [brokerPlatform, setBrokerPlatform] = useState('Interactive Brokers');
+  const [entryTime, setEntryTime] = useState('');
+  const [exitTime, setExitTime] = useState('');
+  const [brokerPlatform, setBrokerPlatform] = useState('');
   const [manualSession, setManualSession] = useState<TradeSession | ''>('');
 
   // Section 2: Price & Risk
-  const [entryPrice, setEntryPrice] = useState('175.50');
-  const [exitPrice, setExitPrice] = useState('180.00');
-  const [stopLoss, setStopLoss] = useState('173.00');
-  const [takeProfit, setTakeProfit] = useState('182.00');
-  const [fees, setFees] = useState('2.50');
+  const [entryPrice, setEntryPrice] = useState('');
+  const [exitPrice, setExitPrice] = useState('');
+  const [stopLoss, setStopLoss] = useState('');
+  const [takeProfit, setTakeProfit] = useState('');
+  const [fees, setFees] = useState('');
   const [accountBalance, setAccountBalance] = useState('50000');
   const [leverage, setLeverage] = useState('1');
 
   // Section 3: Strategy & Context
-  const [setupName, setSetupName] = useState('Breakout Bounce');
-  const [marketConditions, setMarketConditions] = useState<string[]>(['Trending']);
-  const [correlatedPositions, setCorrelatedPositions] = useState('QQQ, SPY');
+  const [setupName, setSetupName] = useState('');
+  const [marketConditions, setMarketConditions] = useState<string[]>([]);
+  const [correlatedPositions, setCorrelatedPositions] = useState('');
   const [newsEventTag, setNewsEventTag] = useState('');
   const [beforeFile, setBeforeFile] = useState<File | null>(null);
   const [afterFile, setAfterFile] = useState<File | null>(null);
@@ -106,7 +106,7 @@ export default function NewTradePage() {
           take_profit: parseFloat(takeProfit) || 0,
           fees_commissions: numFees,
           account_balance_at_trade: numBalance,
-          entry_time: new Date(entryTime).toISOString(),
+          entry_time: entryTime ? new Date(entryTime).toISOString() : new Date().toISOString(),
           session: manualSession || undefined,
         });
 
@@ -184,7 +184,7 @@ export default function NewTradePage() {
       });
 
       if (!tradeRes.success || !tradeRes.data) {
-        setErrorMsg(tradeRes.error || 'Failed to log trade');
+        setErrorMsg(tradeRes.error || 'Could not save trade');
         setLoading(false);
         return;
       }
@@ -210,7 +210,7 @@ export default function NewTradePage() {
       setLoading(false);
       router.push(`/trades/${tradeId}`);
     } catch (err: any) {
-      setErrorMsg(err.message || 'Error creating trade');
+      setErrorMsg(err.message || 'Something went wrong');
       setLoading(false);
     }
   };
@@ -230,14 +230,15 @@ export default function NewTradePage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            {/* SECTION 0: PRE-TRADE PLAN */}
+            {/* PRE-TRADE PLAN */}
             <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-4">
               <div className="flex justify-between items-center mb-2">
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4 text-[#dfff00]" />
                   <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
-                    00 — Pre-Trade Plan (Timestamped Before Execution)
+                    Pre-Trade Plan
                   </span>
+                  <span className="text-[10px] text-slate-500">What you planned before entering</span>
                 </div>
                 <button
                   type="button"
@@ -248,82 +249,52 @@ export default function NewTradePage() {
                       : 'border-slate-800 text-slate-400 hover:border-slate-700'
                   }`}
                 >
-                  {hasPlan ? '✓ Plan Linked' : '+ Link Pre-Trade Plan'}
+                  {hasPlan ? '✓ Added' : '+ Add Plan'}
                 </button>
               </div>
 
               {hasPlan && (
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4 pt-4 border-t border-slate-800">
                   <div>
-                    <label className="form-label">PLANNED ENTRY</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={plannedEntry}
-                      onChange={(e) => setPlannedEntry(e.target.value)}
-                      placeholder="0.00"
-                      className="form-input"
-                    />
+                    <label className="form-label">Planned Entry</label>
+                    <input type="number" step="0.01" value={plannedEntry} onChange={(e) => setPlannedEntry(e.target.value)} placeholder="0.00" className="form-input" />
                   </div>
                   <div>
-                    <label className="form-label">PLANNED STOP LOSS</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={plannedStop}
-                      onChange={(e) => setPlannedStop(e.target.value)}
-                      placeholder="0.00"
-                      className="form-input text-rose-400"
-                    />
+                    <label className="form-label">Planned Stop</label>
+                    <p className="text-[9px] text-slate-500 mb-1">Where you'd cut losses</p>
+                    <input type="number" step="0.01" value={plannedStop} onChange={(e) => setPlannedStop(e.target.value)} placeholder="0.00" className="form-input text-rose-400" />
                   </div>
                   <div>
-                    <label className="form-label">PLANNED TAKE PROFIT</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={plannedTarget}
-                      onChange={(e) => setPlannedTarget(e.target.value)}
-                      placeholder="0.00"
-                      className="form-input text-[#dfff00]"
-                    />
+                    <label className="form-label">Planned Target</label>
+                    <p className="text-[9px] text-slate-500 mb-1">Where you'd take profit</p>
+                    <input type="number" step="0.01" value={plannedTarget} onChange={(e) => setPlannedTarget(e.target.value)} placeholder="0.00" className="form-input text-[#dfff00]" />
                   </div>
                   <div>
-                    <label className="form-label">ONE-LINE THESIS</label>
-                    <input
-                      type="text"
-                      value={planThesis}
-                      onChange={(e) => setPlanThesis(e.target.value)}
-                      placeholder="Key thesis..."
-                      className="form-input"
-                    />
+                    <label className="form-label">Why this trade?</label>
+                    <input type="text" value={planThesis} onChange={(e) => setPlanThesis(e.target.value)} placeholder="One-line reason" className="form-input" />
                   </div>
                 </div>
               )}
             </section>
 
-            {/* SECTION 1: TRADE BASICS */}
+            {/* BASICS */}
             <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
               <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
                 <Compass className="w-4 h-4 text-[#dfff00]" />
                 <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  01 — Trade Basics
+                  What did you trade?
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                 <div className="md:col-span-3">
-                  <label className="form-label">TICKER / ASSET</label>
-                  <input
-                    type="text"
-                    value={asset}
-                    onChange={(e) => setAsset(e.target.value.toUpperCase())}
-                    className="form-input font-bold text-white uppercase"
-                    required
-                  />
+                  <label className="form-label">Ticker</label>
+                  <input type="text" value={asset} onChange={(e) => setAsset(e.target.value.toUpperCase())} className="form-input font-bold text-white uppercase" placeholder="AAPL" required />
                 </div>
 
                 <div className="md:col-span-3">
-                  <label className="form-label">DIRECTION</label>
+                  <label className="form-label">Direction</label>
+                  <p className="text-[9px] text-slate-500 mb-1">Bought (long) or sold (short)?</p>
                   <SegmentedToggle
                     name="direction"
                     value={direction}
@@ -336,61 +307,34 @@ export default function NewTradePage() {
                 </div>
 
                 <div className="md:col-span-3">
-                  <label className="form-label">POSITION SIZE</label>
+                  <label className="form-label">How much?</label>
                   <div className="flex gap-2">
-                    <input
-                      type="number"
-                      value={positionSize}
-                      onChange={(e) => setPositionSize(e.target.value)}
-                      className="form-input text-right"
-                      required
-                    />
-                    <select
-                      value={positionUnit}
-                      onChange={(e) => setPositionUnit(e.target.value)}
-                      className="form-input bg-slate-900 text-xs w-28"
-                    >
-                      <option value="shares">SHARES</option>
-                      <option value="lots">LOTS</option>
-                      <option value="contracts">CONTRACTS</option>
+                    <input type="number" value={positionSize} onChange={(e) => setPositionSize(e.target.value)} className="form-input text-right" placeholder="100" required />
+                    <select value={positionUnit} onChange={(e) => setPositionUnit(e.target.value)} className="form-input bg-slate-900 text-xs w-28">
+                      <option value="shares">Shares</option>
+                      <option value="lots">Lots</option>
+                      <option value="contracts">Contracts</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="md:col-span-3">
-                  <label className="form-label">BROKER / PLATFORM</label>
-                  <input
-                    type="text"
-                    value={brokerPlatform}
-                    onChange={(e) => setBrokerPlatform(e.target.value)}
-                    className="form-input"
-                  />
+                  <label className="form-label">Broker</label>
+                  <input type="text" value={brokerPlatform} onChange={(e) => setBrokerPlatform(e.target.value)} className="form-input" placeholder="e.g. IBKR" />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                 <div className="md:col-span-5">
-                  <label className="form-label">ENTRY TIME (UTC)</label>
-                  <input
-                    type="datetime-local"
-                    value={entryTime}
-                    onChange={(e) => setEntryTime(e.target.value)}
-                    className="form-input"
-                    required
-                  />
+                  <label className="form-label">Entry Time</label>
+                  <input type="datetime-local" value={entryTime} onChange={(e) => setEntryTime(e.target.value)} className="form-input" required />
                 </div>
                 <div className="md:col-span-5">
-                  <label className="form-label">EXIT TIME (UTC)</label>
-                  <input
-                    type="datetime-local"
-                    value={exitTime}
-                    onChange={(e) => setExitTime(e.target.value)}
-                    className="form-input"
-                    required
-                  />
+                  <label className="form-label">Exit Time</label>
+                  <input type="datetime-local" value={exitTime} onChange={(e) => setExitTime(e.target.value)} className="form-input" required />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="form-label">DURATION</label>
+                  <label className="form-label">Duration</label>
                   <div className="form-input bg-slate-900/60 text-center text-slate-400 flex items-center justify-center gap-1">
                     <Clock className="w-3.5 h-3.5" />
                     <span>{getDuration()}</span>
@@ -399,136 +343,80 @@ export default function NewTradePage() {
               </div>
             </section>
 
-            {/* SECTION 2: PRICE & RISK */}
+            {/* PRICES */}
             <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
               <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
                 <DollarSign className="w-4 h-4 text-[#dfff00]" />
                 <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  02 — Price & Risk Parameters
+                  Prices & Risk
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
                 <div className="md:col-span-8 grid grid-cols-3 gap-4">
                   <div>
-                    <label className="form-label">ENTRY PRICE</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={entryPrice}
-                      onChange={(e) => setEntryPrice(e.target.value)}
-                      className="form-input text-right"
-                      required
-                    />
+                    <label className="form-label">Entry Price</label>
+                    <input type="number" step="0.01" value={entryPrice} onChange={(e) => setEntryPrice(e.target.value)} className="form-input text-right" placeholder="0.00" required />
                   </div>
                   <div>
-                    <label className="form-label">EXIT PRICE</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={exitPrice}
-                      onChange={(e) => setExitPrice(e.target.value)}
-                      className="form-input text-right"
-                      required
-                    />
+                    <label className="form-label">Exit Price</label>
+                    <input type="number" step="0.01" value={exitPrice} onChange={(e) => setExitPrice(e.target.value)} className="form-input text-right" placeholder="0.00" required />
                   </div>
                   <div>
-                    <label className="form-label">STOP LOSS</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={stopLoss}
-                      onChange={(e) => setStopLoss(e.target.value)}
-                      className="form-input text-right text-rose-400"
-                      required
-                    />
+                    <label className="form-label">Stop Loss</label>
+                    <p className="text-[9px] text-slate-500 mb-1">Max loss price</p>
+                    <input type="number" step="0.01" value={stopLoss} onChange={(e) => setStopLoss(e.target.value)} className="form-input text-right text-rose-400" placeholder="0.00" required />
                   </div>
                   <div>
-                    <label className="form-label">TAKE PROFIT</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={takeProfit}
-                      onChange={(e) => setTakeProfit(e.target.value)}
-                      className="form-input text-right text-[#dfff00]"
-                      required
-                    />
+                    <label className="form-label">Take Profit</label>
+                    <p className="text-[9px] text-slate-500 mb-1">Target price</p>
+                    <input type="number" step="0.01" value={takeProfit} onChange={(e) => setTakeProfit(e.target.value)} className="form-input text-right text-[#dfff00]" placeholder="0.00" required />
                   </div>
                   <div>
-                    <label className="form-label">FEES ($)</label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={fees}
-                      onChange={(e) => setFees(e.target.value)}
-                      className="form-input text-right"
-                    />
+                    <label className="form-label">Fees ($)</label>
+                    <input type="number" step="0.01" value={fees} onChange={(e) => setFees(e.target.value)} className="form-input text-right" placeholder="0.00" />
                   </div>
                   <div>
-                    <label className="form-label">ACCOUNT BALANCE ($)</label>
-                    <input
-                      type="number"
-                      value={accountBalance}
-                      onChange={(e) => setAccountBalance(e.target.value)}
-                      className="form-input text-right"
-                      required
-                    />
+                    <label className="form-label">Account Size ($)</label>
+                    <p className="text-[9px] text-slate-500 mb-1">Your total capital</p>
+                    <input type="number" value={accountBalance} onChange={(e) => setAccountBalance(e.target.value)} className="form-input text-right" required />
                   </div>
                 </div>
 
                 <div className="md:col-span-4 border border-slate-800 bg-slate-900/60 p-6 rounded-2xl flex flex-col justify-center items-end shadow-inner">
                   <span className="font-mono text-xs text-slate-400">
-                    R-MULTIPLE:{' '}
-                    <span className="text-[#dfff00] font-bold">
-                      {metricsReadout.r_multiple}R
-                    </span>
+                    R-Multiple: <span className="text-[#dfff00] font-bold">{metricsReadout.r_multiple}R</span>
                   </span>
-                  <div
-                    className={`font-mono text-3xl md:text-4xl font-bold mt-2 tracking-tight ${
-                      metricsReadout.pnl_currency >= 0 ? 'text-emerald-400' : 'text-rose-400'
-                    }`}
-                  >
-                    {metricsReadout.pnl_currency >= 0
-                      ? `+$${metricsReadout.pnl_currency.toFixed(2)}`
-                      : `-$${Math.abs(metricsReadout.pnl_currency).toFixed(2)}`}
+                  <p className="text-[9px] text-slate-500">Risk-to-reward ratio</p>
+                  <div className={`font-mono text-3xl md:text-4xl font-bold mt-2 tracking-tight ${metricsReadout.pnl_currency >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    {metricsReadout.pnl_currency >= 0 ? `+$${metricsReadout.pnl_currency.toFixed(2)}` : `-$${Math.abs(metricsReadout.pnl_currency).toFixed(2)}`}
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* SECTION 3: STRATEGY & CONTEXT */}
+            {/* STRATEGY */}
             <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
               <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
                 <Target className="w-4 h-4 text-[#dfff00]" />
                 <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  03 — Strategy & Market Context
+                  Strategy & Context
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <label className="form-label">SETUP NAME</label>
-                    <input
-                      type="text"
-                      value={setupName}
-                      onChange={(e) => setSetupName(e.target.value)}
-                      className="form-input"
-                      required
-                    />
+                    <label className="form-label">Strategy Name</label>
+                    <input type="text" value={setupName} onChange={(e) => setSetupName(e.target.value)} className="form-input" placeholder="e.g. Breakout" required />
                   </div>
                   <div>
-                    <label className="form-label">CORRELATED POSITIONS</label>
-                    <input
-                      type="text"
-                      value={correlatedPositions}
-                      onChange={(e) => setCorrelatedPositions(e.target.value)}
-                      placeholder="e.g. QQQ, SPY"
-                      className="form-input"
-                    />
+                    <label className="form-label">Related Positions</label>
+                    <p className="text-[9px] text-slate-500 mb-1">Other tickers you had open</p>
+                    <input type="text" value={correlatedPositions} onChange={(e) => setCorrelatedPositions(e.target.value)} placeholder="QQQ, SPY" className="form-input" />
                   </div>
                   <div>
-                    <label className="form-label">MARKET CONDITIONS</label>
+                    <label className="form-label">Market Conditions</label>
                     <TagChipSelect
                       availableTags={['Trending', 'Choppy', 'High Volatility', 'Range Bound']}
                       selectedTags={marketConditions}
@@ -538,7 +426,7 @@ export default function NewTradePage() {
                 </div>
 
                 <div>
-                  <label className="form-label mb-2">CHART EVIDENCE</label>
+                  <label className="form-label mb-2">Screenshots</label>
                   <div className="grid grid-cols-2 gap-4">
                     <ScreenshotDropzone label="BEFORE" onFileSelect={setBeforeFile} />
                     <ScreenshotDropzone label="AFTER" onFileSelect={setAfterFile} />
@@ -547,18 +435,18 @@ export default function NewTradePage() {
               </div>
             </section>
 
-            {/* SECTION 4: EXIT REVIEW */}
+            {/* EXIT */}
             <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
               <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
                 <CheckCircle2 className="w-4 h-4 text-[#dfff00]" />
                 <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  04 — Exit Reason & Execution Grade
+                  How did it end?
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="form-label mb-2">EXIT REASON</label>
+                  <label className="form-label mb-2">Why did you exit?</label>
                   <SegmentedToggle
                     name="exit_reason"
                     value={exitReason}
@@ -573,29 +461,30 @@ export default function NewTradePage() {
                   />
                 </div>
                 <div>
-                  <label className="form-label mb-2">TRADE GRADE</label>
+                  <label className="form-label mb-2">Rate your execution</label>
+                  <p className="text-[9px] text-slate-500 mb-2">1 = poor, 5 = perfect</p>
                   <TradeGradeDial value={tradeGrade} onChange={setTradeGrade} />
                 </div>
               </div>
             </section>
 
-            {/* SECTION 5: PSYCHOLOGY */}
+            {/* MINDSET */}
             <section className="bg-[#0d1322] border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-6">
               <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
                 <HeartHandshake className="w-4 h-4 text-[#dfff00]" />
                 <span className="font-sans text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  05 — Psychology & Discipline Review
+                  Mindset & Discipline
                 </span>
               </div>
 
               <div className="space-y-6">
                 <div>
-                  <label className="form-label mb-2">EMOTIONAL STATE</label>
+                  <label className="form-label mb-2">How were you feeling?</label>
                   <EmotionSelect value={emotionalState} onChange={setEmotionalState} />
                 </div>
 
                 <div>
-                  <label className="form-label mb-2">RULE COMPLIANCE</label>
+                  <label className="form-label mb-2">Did you follow your plan?</label>
                   <div className="flex gap-4">
                     <button
                       type="button"
@@ -606,7 +495,7 @@ export default function NewTradePage() {
                           : 'border-slate-800 text-slate-400 hover:border-slate-700'
                       }`}
                     >
-                      ✓ FOLLOWED MY PLAN
+                      ✓ Yes
                     </button>
                     <button
                       type="button"
@@ -617,26 +506,27 @@ export default function NewTradePage() {
                           : 'border-slate-800 text-slate-400 hover:border-slate-700'
                       }`}
                     >
-                      ✗ BROKE MY PLAN
+                      ✗ No
                     </button>
                   </div>
                 </div>
 
                 <div>
-                  <label className="form-label mb-2">MISTAKE TAGS</label>
+                  <label className="form-label mb-2">Mistakes</label>
+                  <p className="text-[9px] text-slate-500 mb-2">Tag what went wrong (if anything)</p>
                   <TagChipSelect
-                    availableTags={['Chased Entry', 'Moved Stop Loss', 'FOMO Entry', 'Early Exit', 'Overleveraged']}
+                    availableTags={['Chased Entry', 'Moved Stop', 'FOMO Entry', 'Early Exit', 'Too Much Size']}
                     selectedTags={mistakeTags}
                     onChange={setMistakeTags}
                   />
                 </div>
 
                 <div>
-                  <label className="form-label">LESSONS LEARNED</label>
+                  <label className="form-label">What did you learn?</label>
                   <textarea
                     value={lessonsLearned}
                     onChange={(e) => setLessonsLearned(e.target.value)}
-                    placeholder="What went well? What could be improved?"
+                    placeholder="What went well? What would you change?"
                     rows={4}
                     className="form-input resize-none"
                   />
@@ -644,12 +534,12 @@ export default function NewTradePage() {
               </div>
             </section>
 
-            {/* STICKY SAVE BAR */}
+            {/* SAVE BAR */}
             <div className="fixed bottom-0 left-0 w-full bg-[#070a14]/95 border-t border-slate-800 p-4 z-50">
               <div className="max-w-5xl mx-auto w-full flex justify-between items-center">
                 <span className="font-mono text-xs text-emerald-400 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                  Autosave Active
+                  Autosave on
                 </span>
                 <button
                   type="submit"
@@ -657,7 +547,7 @@ export default function NewTradePage() {
                   className="bg-[#dfff00] text-black font-sans font-bold text-xs px-8 py-3 rounded-xl hover:bg-[#c8e600] transition-all shadow-[0_0_15px_rgba(223,255,0,0.2)] disabled:opacity-50 uppercase tracking-wider flex items-center gap-2 cursor-pointer"
                 >
                   <Save className="w-4 h-4" />
-                  <span>{loading ? 'Saving Trade...' : 'Save Trade'}</span>
+                  <span>{loading ? 'Saving...' : 'Save Trade'}</span>
                 </button>
               </div>
             </div>
