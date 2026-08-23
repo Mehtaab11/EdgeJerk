@@ -52,7 +52,7 @@ export default function TradeDetailPage({ params }: Params) {
         <TopHeaderBar />
         <SidebarNav />
         <div className="flex-1 flex items-center justify-center font-mono text-xs text-slate-400">
-          <span className="w-2 h-2 rounded-full bg-[#2962ff] dark:bg-[#dfff00] animate-ping mr-2"></span>
+          <span className="w-2 h-2 rounded-full bg-[#2962ff] animate-ping mr-2"></span>
           Loading trade #{params.id}...
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function TradeDetailPage({ params }: Params) {
           <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 font-mono text-xs mb-4">
             {errorMsg || 'Trade not found'}
           </div>
-          <Link href="/trades" className="font-mono text-xs text-[#2962ff] dark:text-[#dfff00] hover:underline flex items-center gap-1.5">
+          <Link href="/trades" className="font-mono text-xs text-[#2962ff] hover:underline flex items-center gap-1.5">
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Trade Log</span>
           </Link>
@@ -86,7 +86,7 @@ export default function TradeDetailPage({ params }: Params) {
       <SidebarNav />
 
       <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-5xl mx-auto w-full space-y-6">
-        <Link href="/trades" className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-500 dark:text-slate-400 hover:text-[#2962ff] dark:hover:text-[#dfff00] transition-colors">
+        <Link href="/trades" className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-500 dark:text-slate-400 hover:text-[#2962ff] transition-colors">
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Trade Log</span>
         </Link>
@@ -156,7 +156,7 @@ export default function TradeDetailPage({ params }: Params) {
           </div>
           <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-xs">
             <span className="form-label">Target</span>
-            <span className="font-mono text-sm font-bold text-[#2962ff] dark:text-[#dfff00]">${trade.take_profit}</span>
+            <span className="font-mono text-sm font-bold text-[#2962ff] dark:text-[#388bfd]">${trade.take_profit}</span>
           </div>
           <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-xs">
             <span className="form-label">Size</span>
@@ -164,14 +164,14 @@ export default function TradeDetailPage({ params }: Params) {
           </div>
           <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-xs">
             <span className="form-label">Risk %</span>
-            <span className="font-mono text-sm font-bold text-[#2962ff] dark:text-[#dfff00]">{trade.risk_percent_of_account}%</span>
+            <span className="font-mono text-sm font-bold text-[#2962ff] dark:text-[#388bfd]">{trade.risk_percent_of_account}%</span>
           </div>
         </div>
 
         {/* SCREENSHOTS */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <ImageIcon className="w-4 h-4 text-[#2962ff] dark:text-[#dfff00]" />
+            <ImageIcon className="w-4 h-4 text-[#2962ff]" />
             <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
               Screenshots
             </span>
@@ -181,7 +181,7 @@ export default function TradeDetailPage({ params }: Params) {
               {trade.screenshots.map((s: any) => (
                 <div key={s.id} className="border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0d1322] rounded-xl p-3 space-y-3 shadow-xs">
                   <div className="flex justify-between items-center font-mono text-xs text-slate-500 dark:text-slate-400">
-                    <span className="font-bold uppercase text-[#2962ff] dark:text-[#dfff00]">{s.label}</span>
+                    <span className="font-bold uppercase text-[#2962ff]">{s.label}</span>
                     <span>{s.created_at?.slice(0, 10)}</span>
                   </div>
                   <img src={s.storage_url} alt={`${s.label} Chart`} className="w-full h-72 object-cover rounded-lg border border-slate-200 dark:border-slate-800" />
@@ -204,7 +204,7 @@ export default function TradeDetailPage({ params }: Params) {
             </div>
             <div>
               <span className="form-label">Execution Rating</span>
-              <span className="text-[#2962ff] dark:text-[#dfff00] font-bold text-sm">{trade.trade_grade} / 5</span>
+              <span className="text-[#2962ff] dark:text-[#388bfd] font-bold text-sm">{trade.trade_grade} / 5</span>
             </div>
             <div>
               <span className="form-label">Mood</span>

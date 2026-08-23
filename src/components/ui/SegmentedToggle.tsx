@@ -22,7 +22,7 @@ export function SegmentedToggle({ options, value, onChange, name }: SegmentedTog
         const isLong = opt.value === 'long';
         const isShort = opt.value === 'short';
 
-        let activeStyle = 'bg-white dark:bg-slate-800 text-[#2962ff] dark:text-[#dfff00] font-bold shadow-xs';
+        let activeStyle = 'bg-white dark:bg-slate-800 text-[#2962ff] dark:text-[#388bfd] font-bold shadow-xs';
         if (isLong && isSelected) activeStyle = 'bg-emerald-600 text-white font-bold shadow-xs';
         if (isShort && isSelected) activeStyle = 'bg-rose-600 text-white font-bold shadow-xs';
 

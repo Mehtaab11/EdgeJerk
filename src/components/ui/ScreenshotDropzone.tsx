@@ -24,7 +24,7 @@ export function ScreenshotDropzone({ label, existingUrl, onFileSelect }: Screens
   return (
     <div
       onClick={() => fileInputRef.current?.click()}
-      className="border-2 border-dashed border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0d1322] hover:border-[#2962ff] dark:hover:border-[#dfff00] transition-all rounded-xl h-36 flex flex-col items-center justify-center cursor-pointer relative overflow-hidden group p-3"
+      className="border-2 border-dashed border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#0d1322] hover:border-[#2962ff] transition-all rounded-xl h-36 flex flex-col items-center justify-center cursor-pointer relative overflow-hidden group p-3"
     >
       <input
         ref={fileInputRef}
@@ -46,10 +46,10 @@ export function ScreenshotDropzone({ label, existingUrl, onFileSelect }: Screens
         </div>
       ) : (
         <div className="flex flex-col items-center text-center gap-1.5">
-          <div className="w-9 h-9 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 group-hover:text-[#2962ff] dark:group-hover:text-[#dfff00] transition-colors">
+          <div className="w-9 h-9 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-400 group-hover:text-[#2962ff] transition-colors">
             <ImageIcon className="w-4 h-4" />
           </div>
-          <span className="font-sans text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-[#2962ff] dark:group-hover:text-[#dfff00] transition-colors">
+          <span className="font-sans text-xs font-medium text-slate-700 dark:text-slate-300 group-hover:text-[#2962ff] transition-colors">
             Upload {label} Chart
           </span>
           <span className="font-mono text-[10px] text-slate-400">

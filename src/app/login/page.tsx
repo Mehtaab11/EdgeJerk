@@ -104,7 +104,7 @@ function LoginContent() {
 
       {/* LOGO */}
       <div className="text-center mb-6 flex flex-col items-center">
-        <div className="w-11 h-11 rounded-xl bg-[#2962ff] dark:bg-[#dfff00] flex items-center justify-center text-white dark:text-black font-bold mb-3 shadow-xs">
+        <div className="w-11 h-11 rounded-xl bg-[#2962ff] flex items-center justify-center text-white font-bold mb-3 shadow-xs">
           <Terminal className="w-6 h-6 stroke-[2.5]" />
         </div>
         <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-wider uppercase font-mono">
@@ -220,7 +220,7 @@ function LoginContent() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-lg bg-[#2962ff] dark:bg-[#dfff00] text-white dark:text-black font-extrabold text-xs uppercase tracking-wider hover:opacity-90 transition-all flex items-center justify-center gap-2 disabled:opacity-50 mt-2 cursor-pointer"
+            className="w-full py-2.5 rounded-lg bg-[#2962ff] hover:bg-[#1e4bd8] text-white font-extrabold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 disabled:opacity-50 mt-2 cursor-pointer"
           >
             <span>{loading ? 'Loading...' : isSignUp ? 'Create Account' : 'Sign In'}</span>
             {!loading && <ArrowRight className="w-4 h-4 stroke-[3]" />}
@@ -235,7 +235,7 @@ function LoginContent() {
               setIsSignUp(!isSignUp);
               setErrorMsg(null);
             }}
-            className="text-[#2962ff] dark:text-[#dfff00] font-bold hover:underline font-mono cursor-pointer"
+            className="text-[#2962ff] dark:text-[#388bfd] font-bold hover:underline font-mono cursor-pointer"
           >
             {isSignUp ? 'Sign In' : 'Create Account'}
           </button>

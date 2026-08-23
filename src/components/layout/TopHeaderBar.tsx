@@ -39,7 +39,7 @@ export function TopHeaderBar() {
 
         <Link
           href="/"
-          className="font-mono text-base font-extrabold text-[#2962ff] dark:text-[#dfff00] tracking-wider hover:opacity-90 transition-opacity"
+          className="font-mono text-base font-extrabold text-[#2962ff] dark:text-[#3b82f6] tracking-wider hover:opacity-90 transition-opacity"
         >
           EdgeJerk
         </Link>
@@ -52,7 +52,7 @@ export function TopHeaderBar() {
             value={searchVal}
             onChange={(e) => setSearchVal(e.target.value)}
             placeholder="Search ticker..."
-            className="bg-slate-100 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-mono text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 pl-9 pr-3 py-1.5 w-44 focus:outline-none focus:border-[#2962ff] dark:focus:border-[#dfff00] uppercase"
+            className="bg-slate-100 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 rounded-lg text-xs font-mono text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 pl-9 pr-3 py-1.5 w-44 focus:outline-none focus:border-[#2962ff] uppercase"
           />
         </form>
       </div>
@@ -76,7 +76,7 @@ export function TopHeaderBar() {
         {/* LOG TRADE BUTTON */}
         <Link
           href="/trades/new"
-          className="px-3.5 py-1.5 rounded-lg bg-[#2962ff] dark:bg-[#dfff00] text-white dark:text-black font-sans font-bold text-xs tracking-wide hover:opacity-90 transition-all flex items-center gap-1.5"
+          className="px-3.5 py-1.5 rounded-lg bg-[#2962ff] hover:bg-[#1e4bd8] text-white font-sans font-bold text-xs tracking-wide transition-all flex items-center gap-1.5"
         >
           <Plus className="w-4 h-4 stroke-[3]" />
           <span>Log Trade</span>

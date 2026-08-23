@@ -42,7 +42,7 @@ export function BottomFooterBar() {
         </span>
         <span>
           Win Rate:{' '}
-          <strong className="text-[#2962ff] dark:text-[#dfff00] font-bold">
+          <strong className="text-[#2962ff] dark:text-[#3b82f6] font-bold">
             {stats.winRate}%
           </strong>
         </span>

@@ -19,12 +19,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Clean Cards & Containers (No Glows, Flat TradingView Feel) */
-.soft-card {
-  border-radius: 12px;
-  transition: all 0.15s ease;
-}
-
 /* Form Inputs */
 .form-input {
   font-family: 'JetBrains Mono', monospace;
@@ -43,7 +37,7 @@
 }
 
 .dark .form-input:focus {
-  border-color: #dfff00;
+  border-color: #2962ff;
 }
 
 html:not(.dark) .form-input {
@@ -87,12 +81,12 @@ html:not(.dark) .form-label {
   border-radius: 9999px;
 }
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #2962ff;
 }
 html:not(.dark) ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 9999px;
 }
 html:not(.dark) ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #2962ff;
 }

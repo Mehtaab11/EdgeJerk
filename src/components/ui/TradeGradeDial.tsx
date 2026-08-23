@@ -19,7 +19,7 @@ export function TradeGradeDial({ value, onChange }: TradeGradeDialProps) {
             onClick={() => onChange(grade)}
             className={`flex-1 rounded-lg border font-mono text-sm font-bold transition-all flex items-center justify-center cursor-pointer ${
               isFilled
-                ? 'bg-[#2962ff] dark:bg-[#dfff00] border-transparent text-white dark:text-black font-bold'
+                ? 'bg-[#2962ff] hover:bg-[#1e4bd8] border-transparent text-white font-bold'
                 : 'bg-white dark:bg-[#0d1322] border-slate-200 dark:border-slate-800 text-slate-400 hover:border-slate-400 dark:hover:border-slate-700'
             }`}
           >

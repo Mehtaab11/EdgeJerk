@@ -232,7 +232,7 @@ export default function NewTradePage() {
           <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-4">
             <div className="flex justify-between items-center mb-2">
               <div className="flex items-center gap-2">
-                <FileText className="w-4 h-4 text-[#2962ff] dark:text-[#dfff00]" />
+                <FileText className="w-4 h-4 text-[#2962ff]" />
                 <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
                   Pre-Trade Plan
                 </span>
@@ -243,7 +243,7 @@ export default function NewTradePage() {
                 onClick={() => setHasPlan(!hasPlan)}
                 className={`text-xs font-mono px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${
                   hasPlan
-                    ? 'bg-[#2962ff] dark:bg-[#dfff00] text-white dark:text-black border-transparent font-bold'
+                    ? 'bg-[#2962ff] text-white border-transparent font-bold'
                     : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700'
                 }`}
               >
@@ -265,7 +265,7 @@ export default function NewTradePage() {
                 <div>
                   <label className="form-label">Planned Target</label>
                   <p className="text-[9px] text-slate-400 mb-1">Where you'd take profit</p>
-                  <input type="number" step="0.01" value={plannedTarget} onChange={(e) => setPlannedTarget(e.target.value)} placeholder="0.00" className="form-input text-[#2962ff] dark:text-[#dfff00]" />
+                  <input type="number" step="0.01" value={plannedTarget} onChange={(e) => setPlannedTarget(e.target.value)} placeholder="0.00" className="form-input text-[#2962ff]" />
                 </div>
                 <div>
                   <label className="form-label">Why this trade?</label>
@@ -278,7 +278,7 @@ export default function NewTradePage() {
           {/* BASICS */}
           <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-6">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-              <Compass className="w-4 h-4 text-[#2962ff] dark:text-[#dfff00]" />
+              <Compass className="w-4 h-4 text-[#2962ff]" />
               <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
                 What did you trade?
               </span>
@@ -344,7 +344,7 @@ export default function NewTradePage() {
           {/* PRICES */}
           <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-6">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-              <DollarSign className="w-4 h-4 text-[#2962ff] dark:text-[#dfff00]" />
+              <DollarSign className="w-4 h-4 text-[#2962ff]" />
               <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
                 Prices & Risk
               </span>
@@ -368,7 +368,7 @@ export default function NewTradePage() {
                 <div>
                   <label className="form-label">Take Profit</label>
                   <p className="text-[9px] text-slate-400 mb-1">Target price</p>
-                  <input type="number" step="0.01" value={takeProfit} onChange={(e) => setTakeProfit(e.target.value)} className="form-input text-right text-[#2962ff] dark:text-[#dfff00]" placeholder="0.00" required />
+                  <input type="number" step="0.01" value={takeProfit} onChange={(e) => setTakeProfit(e.target.value)} className="form-input text-right text-[#2962ff]" placeholder="0.00" required />
                 </div>
                 <div>
                   <label className="form-label">Fees ($)</label>
@@ -383,7 +383,7 @@ export default function NewTradePage() {
 
               <div className="md:col-span-4 border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 p-5 rounded-xl flex flex-col justify-center items-end">
                 <span className="font-mono text-xs text-slate-500 dark:text-slate-400">
-                  R-Multiple: <span className="text-[#2962ff] dark:text-[#dfff00] font-bold">{metricsReadout.r_multiple}R</span>
+                  R-Multiple: <span className="text-[#2962ff] dark:text-[#388bfd] font-bold">{metricsReadout.r_multiple}R</span>
                 </span>
                 <p className="text-[9px] text-slate-400">Risk-to-reward ratio</p>
                 <div className={`font-mono text-3xl font-bold mt-2 tracking-tight ${metricsReadout.pnl_currency >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
@@ -396,7 +396,7 @@ export default function NewTradePage() {
           {/* STRATEGY */}
           <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-6">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-              <Target className="w-4 h-4 text-[#2962ff] dark:text-[#dfff00]" />
+              <Target className="w-4 h-4 text-[#2962ff]" />
               <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
                 Strategy & Context
               </span>
@@ -436,7 +436,7 @@ export default function NewTradePage() {
           {/* EXIT */}
           <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-6">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-              <CheckCircle2 className="w-4 h-4 text-[#2962ff] dark:text-[#dfff00]" />
+              <CheckCircle2 className="w-4 h-4 text-[#2962ff]" />
               <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
                 How did it end?
               </span>
@@ -469,7 +469,7 @@ export default function NewTradePage() {
           {/* MINDSET */}
           <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-6">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-              <HeartHandshake className="w-4 h-4 text-[#2962ff] dark:text-[#dfff00]" />
+              <HeartHandshake className="w-4 h-4 text-[#2962ff]" />
               <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
                 Mindset & Discipline
               </span>
@@ -542,7 +542,7 @@ export default function NewTradePage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="bg-[#2962ff] dark:bg-[#dfff00] text-white dark:text-black font-sans font-bold text-xs px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg hover:opacity-90 transition-all disabled:opacity-50 uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+                className="bg-[#2962ff] hover:bg-[#1e4bd8] text-white font-sans font-bold text-xs px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg transition-all disabled:opacity-50 uppercase tracking-wider flex items-center gap-2 cursor-pointer"
               >
                 <Save className="w-4 h-4" />
                 <span>{loading ? 'Saving...' : 'Save Trade'}</span>

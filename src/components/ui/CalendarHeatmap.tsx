@@ -61,7 +61,7 @@ export function CalendarHeatmap({ data, onDayClick }: CalendarHeatmapProps) {
               textColor = 'text-rose-600 dark:text-rose-400';
             } else {
               bgClass = 'bg-blue-500/10 border-blue-500/30 hover:border-blue-500';
-              textColor = 'text-[#2962ff] dark:text-[#dfff00]';
+              textColor = 'text-[#2962ff] dark:text-[#388bfd]';
             }
           }
 

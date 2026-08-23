@@ -22,8 +22,8 @@ export function StatReadout({ label, value, subValue, type = 'neutral', icon: Ic
     valueColor = 'text-rose-600 dark:text-rose-400';
     badgeBg = 'bg-rose-500/5 dark:bg-rose-500/10 border-rose-500/20 dark:border-rose-500/30';
   } else if (type === 'accent') {
-    valueColor = 'text-[#2962ff] dark:text-[#dfff00]';
-    badgeBg = 'bg-blue-500/5 dark:bg-[#dfff00]/10 border-blue-500/20 dark:border-[#dfff00]/30';
+    valueColor = 'text-[#2962ff] dark:text-[#388bfd]';
+    badgeBg = 'bg-blue-500/5 dark:bg-blue-500/10 border-blue-500/20 dark:border-blue-500/30';
   }
 
   return (

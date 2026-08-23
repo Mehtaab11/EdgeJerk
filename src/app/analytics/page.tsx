@@ -68,7 +68,7 @@ export default function AnalyticsPage() {
     router.push('/trades');
   };
 
-  const chartLineColor = theme === 'dark' ? '#dfff00' : '#2962ff';
+  const chartLineColor = theme === 'dark' ? '#388bfd' : '#2962ff';
   const chartGridColor = theme === 'dark' ? '#1e293b' : '#e2e8f0';
 
   return (
@@ -81,7 +81,7 @@ export default function AnalyticsPage() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs">
           <div>
             <div className="flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-[#2962ff] dark:text-[#dfff00]" />
+              <BarChart3 className="w-5 h-5 text-[#2962ff] dark:text-[#388bfd]" />
               <h1 className="font-mono text-base font-bold text-slate-900 dark:text-white tracking-tight">
                 Analytics
               </h1>
@@ -107,7 +107,7 @@ export default function AnalyticsPage() {
             />
             <button
               onClick={() => filterStore.resetFilters()}
-              className="p-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#070a14] font-mono text-xs text-[#2962ff] dark:text-[#dfff00] hover:border-slate-400 dark:hover:border-slate-700 cursor-pointer"
+              className="p-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#070a14] font-mono text-xs text-[#2962ff] dark:text-[#388bfd] hover:border-slate-400 dark:hover:border-slate-700 cursor-pointer"
               title="Reset Filters"
             >
               <RotateCcw className="w-4 h-4" />
@@ -118,7 +118,7 @@ export default function AnalyticsPage() {
         {/* PERFORMANCE SECTION */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
-            <TrendingUp className="w-4 h-4 text-[#2962ff] dark:text-[#dfff00]" />
+            <TrendingUp className="w-4 h-4 text-[#2962ff] dark:text-[#388bfd]" />
             <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
               Performance
             </span>
@@ -156,7 +156,7 @@ export default function AnalyticsPage() {
                 <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
                   Risk Per Trade
                 </span>
-                <span className="font-mono text-xs text-[#2962ff] dark:text-[#dfff00] font-bold">
+                <span className="font-mono text-xs text-[#2962ff] dark:text-[#388bfd] font-bold">
                   Avg: {riskTime?.average_risk_percent || 0}%
                 </span>
               </div>
@@ -186,7 +186,7 @@ export default function AnalyticsPage() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
           <div className="md:col-span-7 bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-xs space-y-4">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-              <ShieldCheck className="w-4 h-4 text-[#2962ff] dark:text-[#dfff00]" />
+              <ShieldCheck className="w-4 h-4 text-[#2962ff] dark:text-[#388bfd]" />
               <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
                 Which Strategies Work?
               </span>
@@ -208,7 +208,7 @@ export default function AnalyticsPage() {
                       <td className="py-2.5 font-bold text-slate-900 dark:text-white uppercase">{row.setup_name}</td>
                       <td className="py-2.5 text-right text-emerald-600 dark:text-emerald-400 font-bold">{row.win_rate_percent}%</td>
                       <td className="py-2.5 text-right">{row.avg_r_multiple}R</td>
-                      <td className="py-2.5 text-right text-[#2962ff] dark:text-[#dfff00] font-bold">${row.expected_value}</td>
+                      <td className="py-2.5 text-right text-[#2962ff] dark:text-[#388bfd] font-bold">${row.expected_value}</td>
                       <td className={`py-2.5 text-right font-bold ${row.total_pnl >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}`}>
                         ${row.total_pnl}
                       </td>
@@ -243,7 +243,7 @@ export default function AnalyticsPage() {
         {/* CALENDAR SECTION */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
-            <CalendarIcon className="w-4 h-4 text-[#2962ff] dark:text-[#dfff00]" />
+            <CalendarIcon className="w-4 h-4 text-[#2962ff] dark:text-[#388bfd]" />
             <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
               Trading Calendar
             </span>

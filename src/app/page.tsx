@@ -64,7 +64,7 @@ export default function DashboardPage() {
     loadDashboardData();
   }, []);
 
-  const chartLineColor = theme === 'dark' ? '#dfff00' : '#2962ff';
+  const chartLineColor = theme === 'dark' ? '#388bfd' : '#2962ff';
   const chartGridColor = theme === 'dark' ? '#1e293b' : '#e2e8f0';
 
   return (
@@ -83,7 +83,7 @@ export default function DashboardPage() {
           </div>
           <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs">
             <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Win Rate</span>
-            <span className="text-2xl font-bold font-mono text-[#2962ff] dark:text-[#dfff00]">
+            <span className="text-2xl font-bold font-mono text-[#2962ff] dark:text-[#388bfd]">
               {winRate}% <span className="text-xs text-slate-400 font-normal">({wins}/{totalTrades})</span>
             </span>
           </div>
@@ -110,7 +110,7 @@ export default function DashboardPage() {
             <span className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
               P&L Over Time
             </span>
-            <span className="text-[11px] text-[#2962ff] dark:text-[#dfff00] font-mono font-bold">LIVE</span>
+            <span className="text-[11px] text-[#2962ff] dark:text-[#388bfd] font-mono font-bold">LIVE</span>
           </div>
 
           <div className="h-64 w-full pt-2">
@@ -145,7 +145,7 @@ export default function DashboardPage() {
             <span className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
               Recent Trades
             </span>
-            <Link href="/trades" className="text-xs text-[#2962ff] dark:text-[#dfff00] font-semibold hover:underline">
+            <Link href="/trades" className="text-xs text-[#2962ff] dark:text-[#388bfd] font-semibold hover:underline">
               View All Trades →
             </Link>
           </div>

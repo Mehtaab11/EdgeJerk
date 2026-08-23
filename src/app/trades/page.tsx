@@ -54,7 +54,7 @@ export default function TradeLogPage() {
             <select
               value={filterStore.startDate || ''}
               onChange={(e) => filterStore.setFilter('startDate', e.target.value)}
-              className="bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300 px-3 py-2 rounded-lg cursor-pointer hover:border-slate-400 dark:hover:border-slate-700 focus:outline-none focus:border-[#2962ff] dark:focus:border-[#dfff00]"
+              className="bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300 px-3 py-2 rounded-lg cursor-pointer hover:border-slate-400 dark:hover:border-slate-700 focus:outline-none focus:border-[#2962ff]"
             >
               <option value="">All Time</option>
               <option value="2026-08-01">This Month</option>
@@ -66,7 +66,7 @@ export default function TradeLogPage() {
               value={filterStore.asset || ''}
               onChange={(e) => filterStore.setFilter('asset', e.target.value.toUpperCase())}
               placeholder="Ticker"
-              className="bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300 px-3 py-2 rounded-lg w-28 uppercase placeholder-slate-400 focus:outline-none focus:border-[#2962ff] dark:focus:border-[#dfff00]"
+              className="bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300 px-3 py-2 rounded-lg w-28 uppercase placeholder-slate-400 focus:outline-none focus:border-[#2962ff]"
             />
 
             <input
@@ -74,13 +74,13 @@ export default function TradeLogPage() {
               value={filterStore.setupName || ''}
               onChange={(e) => filterStore.setFilter('setupName', e.target.value)}
               placeholder="Strategy"
-              className="bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300 px-3 py-2 rounded-lg w-32 placeholder-slate-400 focus:outline-none focus:border-[#2962ff] dark:focus:border-[#dfff00]"
+              className="bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300 px-3 py-2 rounded-lg w-32 placeholder-slate-400 focus:outline-none focus:border-[#2962ff]"
             />
 
             <select
               value={filterStore.direction || ''}
               onChange={(e) => filterStore.setFilter('direction', e.target.value || undefined)}
-              className="bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300 px-3 py-2 rounded-lg cursor-pointer hover:border-slate-400 dark:hover:border-slate-700 focus:outline-none focus:border-[#2962ff] dark:focus:border-[#dfff00]"
+              className="bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300 px-3 py-2 rounded-lg cursor-pointer hover:border-slate-400 dark:hover:border-slate-700 focus:outline-none focus:border-[#2962ff]"
             >
               <option value="">Any Side</option>
               <option value="long">Long Only</option>
@@ -90,7 +90,7 @@ export default function TradeLogPage() {
             <select
               value={filterStore.emotionalState || ''}
               onChange={(e) => filterStore.setFilter('emotionalState', e.target.value || undefined)}
-              className="bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300 px-3 py-2 rounded-lg cursor-pointer hover:border-slate-400 dark:hover:border-slate-700 focus:outline-none focus:border-[#2962ff] dark:focus:border-[#dfff00]"
+              className="bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-700 dark:text-slate-300 px-3 py-2 rounded-lg cursor-pointer hover:border-slate-400 dark:hover:border-slate-700 focus:outline-none focus:border-[#2962ff]"
             >
               <option value="">Any Mood</option>
               <option value="Confident">Confident</option>
@@ -105,7 +105,7 @@ export default function TradeLogPage() {
 
           <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 font-mono">
             <span>{meta ? `${meta.total.toLocaleString()} trades` : '0 trades'}</span>
-            <button title="Export" className="p-2 rounded-lg bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 hover:text-[#2962ff] dark:hover:text-[#dfff00]">
+            <button title="Export" className="p-2 rounded-lg bg-slate-50 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 hover:text-[#2962ff]">
               <Download className="w-4 h-4" />
             </button>
           </div>
@@ -115,7 +115,7 @@ export default function TradeLogPage() {
         <div className="w-full overflow-x-auto border border-slate-200 dark:border-slate-800/80 bg-white dark:bg-[#0d1322] rounded-xl shadow-xs">
           <table className="w-full text-left border-collapse text-xs font-mono">
             <thead>
-              <tr className="bg-slate-50 dark:bg-[#090d1a] border-b border-slate-200 dark:border-slate-800/80 text-slate-500 dark:text-slate-400">
+              <tr className="bg-slate-50 dark:bg-[#090e1a] border-b border-slate-200 dark:border-slate-800/80 text-slate-500 dark:text-slate-400">
                 <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">Date</th>
                 <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">Ticker</th>
                 <th className="py-3.5 px-4 text-[10px] font-sans font-bold tracking-wider uppercase">Side</th>

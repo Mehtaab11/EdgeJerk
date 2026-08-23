@@ -8,31 +8,23 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        dark: {
-          bg: '#070a12',
-          card: '#0d1322',
-          cardHover: '#131b2e',
-          border: '#1e293b',
-          borderHover: '#334155',
-          muted: '#64748b',
+        brand: {
+          blue: '#2962ff',
+          blueHover: '#1e4bd8',
+          lightBlue: '#3b82f6',
         },
-        cyber: {
-          lime: '#dfff00',
-          green: '#10b981',
-          red: '#f43f5e',
-          cyan: '#06b6d4',
-          purple: '#a855f7',
-          yellow: '#eab308',
+        tv: {
+          bgDark: '#0b0e14',
+          cardDark: '#131722',
+          borderDark: '#1e222d',
+          bgLight: '#f0f3fa',
+          cardLight: '#ffffff',
+          borderLight: '#e0e3eb',
         },
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
-      },
-      boxShadow: {
-        glow: '0 0 20px rgba(223, 255, 0, 0.15)',
-        glowGreen: '0 0 20px rgba(16, 185, 129, 0.15)',
-        glowRed: '0 0 20px rgba(244, 63, 94, 0.15)',
       },
     },
   },
