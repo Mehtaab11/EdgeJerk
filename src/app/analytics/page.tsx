@@ -9,7 +9,15 @@ import { CalendarHeatmap } from '@/components/ui/CalendarHeatmap';
 import { useTradeFilterStore } from '@/stores/tradeFilterStore';
 import { useThemeStore } from '@/stores/themeStore';
 import { fetchApi } from '@/lib/api-client';
-import { BarChart3, TrendingUp, ShieldCheck, AlertTriangle, Calendar as CalendarIcon, RotateCcw } from 'lucide-react';
+import {
+  BarChart3,
+  TrendingUp,
+  ShieldCheck,
+  AlertTriangle,
+  Calendar as CalendarIcon,
+  RotateCcw,
+  Wallet,
+} from 'lucide-react';
 import {
   ResponsiveContainer,
   ComposedChart,
@@ -32,6 +40,8 @@ export default function AnalyticsPage() {
   const [exitReasons, setExitReasons] = useState<any[]>([]);
   const [riskTime, setRiskTime] = useState<any>(null);
   const [heatmap, setHeatmap] = useState<any[]>([]);
+  const [startingBalance, setStartingBalance] = useState(10000);
+  const [chartTab, setChartTab] = useState<'pnl' | 'balance'>('pnl');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -42,12 +52,13 @@ export default function AnalyticsPage() {
       if (filterStore.endDate) queryParams.append('endDate', filterStore.endDate);
       const q = queryParams.toString() ? `?${queryParams.toString()}` : '';
 
-      const [eqRes, expRes, exitRes, riskRes, heatRes] = await Promise.all([
+      const [eqRes, expRes, exitRes, riskRes, heatRes, meRes] = await Promise.all([
         fetchApi(`/api/analytics/equity-curve${q}`),
         fetchApi(`/api/analytics/expectancy-per-strategy${q}`),
         fetchApi(`/api/analytics/exit-reasons${q}`),
         fetchApi(`/api/analytics/risk-over-time${q}`),
         fetchApi(`/api/analytics/calendar-heatmap${q}`),
+        fetchApi('/api/auth/me'),
       ]);
 
       if (eqRes.success) setEquity(eqRes.data || []);
@@ -55,6 +66,9 @@ export default function AnalyticsPage() {
       if (exitRes.success) setExitReasons(exitRes.data || []);
       if (riskRes.success) setRiskTime(riskRes.data || null);
       if (heatRes.success) setHeatmap(heatRes.data || []);
+      if (meRes.success && meRes.data?.profile) {
+        setStartingBalance(Number(meRes.data.profile.default_account_size) || 10000);
+      }
 
       setIsLoading(false);
     }
@@ -67,6 +81,11 @@ export default function AnalyticsPage() {
     filterStore.setFilter('endDate', dateStr);
     router.push('/trades');
   };
+
+  const chartData = equity.map((p) => ({
+    ...p,
+    account_balance: Number((startingBalance + (Number(p.cumulative_pnl) || 0)).toFixed(2)),
+  }));
 
   const chartLineColor = theme === 'dark' ? '#388bfd' : '#2962ff';
   const chartGridColor = theme === 'dark' ? '#1e293b' : '#e2e8f0';
@@ -83,11 +102,11 @@ export default function AnalyticsPage() {
             <div className="flex items-center gap-2">
               <BarChart3 className="w-5 h-5 text-[#2962ff] dark:text-[#388bfd]" />
               <h1 className="font-mono text-base font-bold text-slate-900 dark:text-white tracking-tight">
-                Analytics
+                Analytics & Performance
               </h1>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              How your trading is going, broken down
+              Deep dive into your edge, trade expectancy, and capital growth
             </p>
           </div>
 
@@ -115,27 +134,66 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* PERFORMANCE SECTION */}
+        {/* PERFORMANCE & GROWTH SECTION */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
             <TrendingUp className="w-4 h-4 text-[#2962ff] dark:text-[#388bfd]" />
             <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
-              Performance
+              Performance & Equity Growth
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6">
-            {/* Cumulative Equity Curve */}
+            {/* Growth Curve Chart (with P&L vs Account Balance Toggle) */}
             <div className="md:col-span-8 bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 shadow-xs space-y-4">
-              <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider block">
-                Total P&L Over Time
-              </span>
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                <div>
+                  <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider block">
+                    {chartTab === 'pnl' ? 'Total P&L Realized' : 'Total Account Equity ($)'}
+                  </span>
+                  <span className="text-[10px] text-slate-400">
+                    {chartTab === 'pnl' ? 'Cumulative trade P&L progression' : 'Starting capital plus net gains/losses'}
+                  </span>
+                </div>
+
+                {/* TAB TOGGLE */}
+                <div className="flex bg-slate-100 dark:bg-[#070a14] border border-slate-200 dark:border-slate-800 rounded-lg p-0.5 text-xs font-mono">
+                  <button
+                    type="button"
+                    onClick={() => setChartTab('pnl')}
+                    className={`px-3 py-1 rounded-md transition-all font-semibold cursor-pointer flex items-center gap-1.5 ${
+                      chartTab === 'pnl'
+                        ? 'bg-white dark:bg-slate-800 text-[#2962ff] dark:text-[#388bfd] font-bold shadow-2xs'
+                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <TrendingUp className="w-3.5 h-3.5" />
+                    <span>P&L ($)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setChartTab('balance')}
+                    className={`px-3 py-1 rounded-md transition-all font-semibold cursor-pointer flex items-center gap-1.5 ${
+                      chartTab === 'balance'
+                        ? 'bg-white dark:bg-slate-800 text-[#2962ff] dark:text-[#388bfd] font-bold shadow-2xs'
+                        : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <Wallet className="w-3.5 h-3.5" />
+                    <span>Account Size ($)</span>
+                  </button>
+                </div>
+              </div>
+
               <div className="h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={equity} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <ComposedChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                     <CartesianGrid stroke={chartGridColor} strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="entry_time" tick={{ fill: '#94a3b8', fontSize: 11 }} tickFormatter={(s) => s.slice(5, 10)} />
-                    <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                    <XAxis dataKey="entry_time" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(s) => s.slice(5, 10)} />
+                    <YAxis
+                      tick={{ fill: '#94a3b8', fontSize: 10 }}
+                      tickFormatter={(val) => `$${val >= 1000 ? `${(val / 1000).toFixed(1)}k` : val}`}
+                    />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: theme === 'dark' ? '#0d1322' : '#ffffff',
@@ -143,8 +201,13 @@ export default function AnalyticsPage() {
                         borderRadius: '8px',
                         color: theme === 'dark' ? '#f8fafc' : '#0f172a',
                       }}
+                      formatter={(val: any) => [`$${Number(val).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, chartTab === 'pnl' ? 'Cumulative P&L' : 'Account Balance']}
                     />
-                    <Line type="monotone" dataKey="cumulative_pnl" stroke={chartLineColor} strokeWidth={2} dot={false} />
+                    {chartTab === 'pnl' ? (
+                      <Line type="monotone" dataKey="cumulative_pnl" stroke={chartLineColor} strokeWidth={2} dot={false} />
+                    ) : (
+                      <Line type="monotone" dataKey="account_balance" stroke={chartLineColor} strokeWidth={2} dot={false} />
+                    )}
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
@@ -164,8 +227,8 @@ export default function AnalyticsPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={riskTime?.risk_series || []} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <CartesianGrid stroke={chartGridColor} vertical={false} />
-                    <XAxis dataKey="entry_time" tick={{ fill: '#94a3b8', fontSize: 11 }} tickFormatter={(s) => s.slice(5, 10)} />
-                    <YAxis tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                    <XAxis dataKey="entry_time" tick={{ fill: '#94a3b8', fontSize: 10 }} tickFormatter={(s) => s.slice(5, 10)} />
+                    <YAxis tick={{ fill: '#94a3b8', fontSize: 10 }} />
                     <Tooltip
                       contentStyle={{
                         backgroundColor: theme === 'dark' ? '#0d1322' : '#ffffff',
@@ -240,12 +303,12 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        {/* CALENDAR SECTION */}
+        {/* CALENDAR HEATMAP SECTION */}
         <div className="space-y-3">
           <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
             <CalendarIcon className="w-4 h-4 text-[#2962ff] dark:text-[#388bfd]" />
             <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
-              Trading Calendar
+              Trading Calendar & P&L Density
             </span>
           </div>
           <CalendarHeatmap data={heatmap} onDayClick={handleHeatmapDayClick} />

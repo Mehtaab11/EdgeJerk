@@ -25,6 +25,7 @@ import {
   Clock,
   RotateCcw,
   AlertCircle,
+  Globe,
 } from 'lucide-react';
 
 const DRAFT_STORAGE_KEY = 'edgejerk_new_trade_draft';
@@ -40,6 +41,19 @@ const STRATEGY_PRESETS = [
   'Trendline Break and Retest',
   'Double Top/Bottom',
   'Inside Bar Breakout',
+];
+
+const TIMEZONE_OPTIONS = [
+  { value: 'America/New_York', label: 'New York (EST/EDT - UTC-5/-4)' },
+  { value: 'America/Chicago', label: 'Chicago (CST/CDT - UTC-6/-5)' },
+  { value: 'America/Los_Angeles', label: 'Los Angeles (PST/PDT - UTC-8/-7)' },
+  { value: 'Europe/London', label: 'London (GMT/BST - UTC+0/+1)' },
+  { value: 'Europe/Frankfurt', label: 'Frankfurt/CET (UTC+1/+2)' },
+  { value: 'UTC', label: 'UTC (Coordinated Universal Time)' },
+  { value: 'Asia/Kolkata', label: 'India (IST - UTC+5:30)' },
+  { value: 'Asia/Singapore', label: 'Singapore / HK (SGT - UTC+8)' },
+  { value: 'Asia/Tokyo', label: 'Tokyo (JST - UTC+9)' },
+  { value: 'Australia/Sydney', label: 'Sydney (AEST - UTC+10/+11)' },
 ];
 
 export default function NewTradePage() {
@@ -66,7 +80,8 @@ export default function NewTradePage() {
   const [brokerPlatform, setBrokerPlatform] = useState('');
   const [manualSession, setManualSession] = useState<TradeSession | ''>('');
 
-  // Date & Time inputs (split for keyboard-typeable time entry)
+  // Timezone & Date/Time inputs
+  const [timezone, setTimezone] = useState('America/New_York');
   const [entryDate, setEntryDate] = useState(getTodayDate());
   const [entryTime, setEntryTime] = useState('09:30');
   const [exitDate, setExitDate] = useState(getTodayDate());
@@ -100,6 +115,25 @@ export default function NewTradePage() {
   const [mistakeTags, setMistakeTags] = useState<string[]>([]);
   const [lessonsLearned, setLessonsLearned] = useState('');
 
+  // Detect local timezone on mount
+  useEffect(() => {
+    try {
+      const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (localTz) {
+        // If local timezone is in our list or valid, use it
+        const exists = TIMEZONE_OPTIONS.some((t) => t.value === localTz);
+        if (exists) {
+          setTimezone(localTz);
+        } else {
+          // Default to America/New_York
+          setTimezone('America/New_York');
+        }
+      }
+    } catch {
+      // Ignored
+    }
+  }, []);
+
   // Load User Profile / Running Balance & Draft on Mount
   useEffect(() => {
     async function initUserAndDraft() {
@@ -126,6 +160,7 @@ export default function NewTradePage() {
           if (draft.positionSize) setPositionSize(draft.positionSize);
           if (draft.positionUnit) setPositionUnit(draft.positionUnit);
           if (draft.brokerPlatform) setBrokerPlatform(draft.brokerPlatform);
+          if (draft.timezone) setTimezone(draft.timezone);
           if (draft.entryDate) setEntryDate(draft.entryDate);
           if (draft.entryTime) setEntryTime(draft.entryTime);
           if (draft.exitDate) setExitDate(draft.exitDate);
@@ -173,6 +208,7 @@ export default function NewTradePage() {
       positionSize,
       positionUnit,
       brokerPlatform,
+      timezone,
       entryDate,
       entryTime,
       exitDate,
@@ -206,6 +242,7 @@ export default function NewTradePage() {
     positionSize,
     positionUnit,
     brokerPlatform,
+    timezone,
     entryDate,
     entryTime,
     exitDate,
@@ -551,7 +588,7 @@ export default function NewTradePage() {
             )}
           </section>
 
-          {/* SECTION 1: WHAT DID YOU TRADE? (Restructured Layout with Uniform Alignments) */}
+          {/* SECTION 1: WHAT DID YOU TRADE? (With Timezone Selector) */}
           <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-6">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
               <Compass className="w-4 h-4 text-[#2962ff]" />
@@ -581,7 +618,7 @@ export default function NewTradePage() {
               <div className="md:col-span-3">
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
                   <label className="form-label">Direction</label>
-                  <p className="text-[9px] text-slate-400">Long or Short?</p>
+                  <p className="text-[9px] text-slate-400">Bought (long) or sold (short)?</p>
                 </div>
                 <SegmentedToggle
                   name="direction"
@@ -638,65 +675,84 @@ export default function NewTradePage() {
               </div>
             </div>
 
-            {/* ROW 2: TIMING & DURATION (Keyboard Typeable Time + Validation) */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end pt-2 border-t border-slate-100 dark:border-slate-800/60">
-              {/* ENTRY TIME */}
-              <div className="md:col-span-5">
-                <div className="min-h-[38px] flex flex-col justify-end mb-2">
-                  <label className="form-label">Entry Date & Time (24H)</label>
-                  <p className="text-[9px] text-slate-400">When did you enter?</p>
+            {/* ROW 2: TIMING, TIMEZONE & DURATION */}
+            <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800/60">
+              {/* TIMEZONE SELECTOR */}
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                <div className="flex items-center gap-2">
+                  <Globe className="w-3.5 h-3.5 text-[#2962ff]" />
+                  <label className="form-label mb-0">Trading Timezone</label>
                 </div>
-                <div className="grid grid-cols-7 gap-2">
-                  <input
-                    type="date"
-                    value={entryDate}
-                    onChange={(e) => setEntryDate(e.target.value)}
-                    className="form-input col-span-4 text-xs"
-                    required
-                  />
-                  <div className="col-span-3">
-                    <TimeInput
-                      value={entryTime}
-                      onChange={setEntryTime}
-                    />
-                  </div>
-                </div>
+                <select
+                  value={timezone}
+                  onChange={(e) => setTimezone(e.target.value)}
+                  className="form-input bg-slate-50 dark:bg-slate-900/80 text-xs w-full sm:w-80 cursor-pointer font-sans"
+                >
+                  {TIMEZONE_OPTIONS.map((tz) => (
+                    <option key={tz.value} value={tz.value}>
+                      {tz.label}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              {/* EXIT TIME */}
-              <div className="md:col-span-5">
-                <div className="min-h-[38px] flex flex-col justify-end mb-2">
-                  <div className="flex items-center justify-between">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                {/* ENTRY TIME */}
+                <div className="md:col-span-5">
+                  <div className="min-h-[38px] flex flex-col justify-end mb-2">
+                    <label className="form-label">Entry Date & Time (24H)</label>
+                    <p className="text-[9px] text-slate-400">When did you enter?</p>
+                  </div>
+                  <div className="grid grid-cols-7 gap-2">
+                    <input
+                      type="date"
+                      value={entryDate}
+                      onChange={(e) => setEntryDate(e.target.value)}
+                      className="form-input col-span-4 text-xs"
+                      required
+                    />
+                    <div className="col-span-3">
+                      <TimeInput
+                        value={entryTime}
+                        onChange={setEntryTime}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* EXIT TIME */}
+                <div className="md:col-span-5">
+                  <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Exit Date & Time (24H)</label>
+                    <p className="text-[9px] text-slate-400">When did you exit?</p>
                   </div>
-                  <p className="text-[9px] text-slate-400">When did you exit?</p>
-                </div>
-                <div className="grid grid-cols-7 gap-2">
-                  <input
-                    type="date"
-                    value={exitDate}
-                    onChange={(e) => setExitDate(e.target.value)}
-                    className={`form-input col-span-4 text-xs ${timeError ? 'border-rose-500' : ''}`}
-                    required
-                  />
-                  <div className="col-span-3">
-                    <TimeInput
-                      value={exitTime}
-                      onChange={setExitTime}
-                      hasError={Boolean(timeError)}
+                  <div className="grid grid-cols-7 gap-2">
+                    <input
+                      type="date"
+                      value={exitDate}
+                      onChange={(e) => setExitDate(e.target.value)}
+                      className={`form-input col-span-4 text-xs ${timeError ? 'border-rose-500' : ''}`}
+                      required
                     />
+                    <div className="col-span-3">
+                      <TimeInput
+                        value={exitTime}
+                        onChange={setExitTime}
+                        hasError={Boolean(timeError)}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* DURATION BADGE */}
-              <div className="md:col-span-2">
-                <div className="min-h-[38px] flex flex-col justify-end mb-2">
-                  <label className="form-label">Duration</label>
-                </div>
-                <div className="form-input bg-slate-50 dark:bg-slate-900/60 text-center text-slate-600 dark:text-slate-400 flex items-center justify-center gap-1.5 font-mono text-xs">
-                  <Clock className="w-3.5 h-3.5 text-slate-400" />
-                  <span>{durationReadout}</span>
+                {/* DURATION BADGE */}
+                <div className="md:col-span-2">
+                  <div className="min-h-[38px] flex flex-col justify-end mb-2">
+                    <label className="form-label">Duration</label>
+                  </div>
+                  <div className="form-input bg-slate-50 dark:bg-slate-900/60 text-center text-slate-600 dark:text-slate-400 flex items-center justify-center gap-1.5 font-mono text-xs">
+                    <Clock className="w-3.5 h-3.5 text-slate-400" />
+                    <span>{durationReadout}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -710,7 +766,7 @@ export default function NewTradePage() {
             )}
           </section>
 
-          {/* SECTION 2: PRICES & RISK (Standardized Height Alignments Across Columns) */}
+          {/* SECTION 2: PRICES & RISK */}
           <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-6">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
               <DollarSign className="w-4 h-4 text-[#2962ff]" />
@@ -722,7 +778,6 @@ export default function NewTradePage() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
               {/* LEFT 3-COLUMN INPUTS */}
               <div className="md:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {/* COLUMN 1 */}
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Entry Price</label>
@@ -738,7 +793,6 @@ export default function NewTradePage() {
                   />
                 </div>
 
-                {/* COLUMN 2 */}
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Exit Price</label>
@@ -754,7 +808,6 @@ export default function NewTradePage() {
                   />
                 </div>
 
-                {/* COLUMN 3 */}
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Stop Loss</label>
@@ -771,7 +824,6 @@ export default function NewTradePage() {
                   />
                 </div>
 
-                {/* ROW 2 - COLUMN 1 */}
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Take Profit</label>
@@ -788,7 +840,6 @@ export default function NewTradePage() {
                   />
                 </div>
 
-                {/* ROW 2 - COLUMN 2 */}
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Fees ($)</label>
@@ -803,7 +854,6 @@ export default function NewTradePage() {
                   />
                 </div>
 
-                {/* ROW 2 - COLUMN 3 */}
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Account Size ($)</label>
@@ -841,7 +891,7 @@ export default function NewTradePage() {
             </div>
           </section>
 
-          {/* SECTION 3: STRATEGY & CONTEXT (Preset Dropdown + Custom Tag Support) */}
+          {/* SECTION 3: STRATEGY & CONTEXT */}
           <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-6">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
               <Target className="w-4 h-4 text-[#2962ff]" />
@@ -852,7 +902,6 @@ export default function NewTradePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                {/* STRATEGY PRESETS */}
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Strategy / Setup</label>
@@ -906,7 +955,6 @@ export default function NewTradePage() {
                   )}
                 </div>
 
-                {/* MARKET CONDITIONS */}
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Market Conditions</label>
@@ -919,7 +967,6 @@ export default function NewTradePage() {
                 </div>
               </div>
 
-              {/* SCREENSHOTS */}
               <div>
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
                   <label className="form-label">Screenshots</label>
@@ -969,7 +1016,7 @@ export default function NewTradePage() {
             </div>
           </section>
 
-          {/* SECTION 5: MINDSET & DISCIPLINE (Multi-Select Emotional States) */}
+          {/* SECTION 5: MINDSET & DISCIPLINE */}
           <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-6">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
               <HeartHandshake className="w-4 h-4 text-[#2962ff]" />
