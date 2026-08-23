@@ -1,19 +1,23 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import { SidebarNav } from '@/components/layout/SidebarNav';
-import { TopHeaderBar } from '@/components/layout/TopHeaderBar';
-import { BottomFooterBar } from '@/components/layout/BottomFooterBar';
-import { SegmentedToggle } from '@/components/ui/SegmentedToggle';
-import { EmotionSelect } from '@/components/ui/EmotionSelect';
-import { TradeGradeDial } from '@/components/ui/TradeGradeDial';
-import { TagChipSelect } from '@/components/ui/TagChipSelect';
-import { ScreenshotDropzone } from '@/components/ui/ScreenshotDropzone';
-import { TimeInput } from '@/components/ui/TimeInput';
-import { fetchApi } from '@/lib/api-client';
-import { calculateTradeMetrics } from '@/lib/utils/trade-calculations';
-import { TradeDirection, ExitReason, TradeSession } from '@/types/database.types';
+import React, { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { SidebarNav } from "@/components/layout/SidebarNav";
+import { TopHeaderBar } from "@/components/layout/TopHeaderBar";
+import { BottomFooterBar } from "@/components/layout/BottomFooterBar";
+import { SegmentedToggle } from "@/components/ui/SegmentedToggle";
+import { EmotionSelect } from "@/components/ui/EmotionSelect";
+import { TradeGradeDial } from "@/components/ui/TradeGradeDial";
+import { TagChipSelect } from "@/components/ui/TagChipSelect";
+import { ScreenshotDropzone } from "@/components/ui/ScreenshotDropzone";
+import { TimeInput } from "@/components/ui/TimeInput";
+import { fetchApi } from "@/lib/api-client";
+import { calculateTradeMetrics } from "@/lib/utils/trade-calculations";
+import {
+  TradeDirection,
+  ExitReason,
+  TradeSession,
+} from "@/types/database.types";
 import {
   FileText,
   Compass,
@@ -26,34 +30,34 @@ import {
   RotateCcw,
   AlertCircle,
   Globe,
-} from 'lucide-react';
+} from "lucide-react";
 
-const DRAFT_STORAGE_KEY = 'edgejerk_new_trade_draft';
+const DRAFT_STORAGE_KEY = "edgejerk_new_trade_draft";
 
 const STRATEGY_PRESETS = [
-  'Liquidity Sweep',
-  'Order Block',
-  'Fair Value Gap',
-  'Break of Structure',
-  'Change of Character',
-  'Supply and Demand Zone',
-  'Support/Resistance Flip',
-  'Trendline Break and Retest',
-  'Double Top/Bottom',
-  'Inside Bar Breakout',
+  "Liquidity Sweep",
+  "Order Block",
+  "Fair Value Gap",
+  "Break of Structure",
+  "Change of Character",
+  "Supply and Demand Zone",
+  "Support/Resistance Flip",
+  "Trendline Break and Retest",
+  "Double Top/Bottom",
+  "Inside Bar Breakout",
 ];
 
 const TIMEZONE_OPTIONS = [
-  { value: 'America/New_York', label: 'New York (EST/EDT - UTC-5/-4)' },
-  { value: 'America/Chicago', label: 'Chicago (CST/CDT - UTC-6/-5)' },
-  { value: 'America/Los_Angeles', label: 'Los Angeles (PST/PDT - UTC-8/-7)' },
-  { value: 'Europe/London', label: 'London (GMT/BST - UTC+0/+1)' },
-  { value: 'Europe/Frankfurt', label: 'Frankfurt/CET (UTC+1/+2)' },
-  { value: 'UTC', label: 'UTC (Coordinated Universal Time)' },
-  { value: 'Asia/Kolkata', label: 'India (IST - UTC+5:30)' },
-  { value: 'Asia/Singapore', label: 'Singapore / HK (SGT - UTC+8)' },
-  { value: 'Asia/Tokyo', label: 'Tokyo (JST - UTC+9)' },
-  { value: 'Australia/Sydney', label: 'Sydney (AEST - UTC+10/+11)' },
+  { value: "America/New_York", label: "New York (EST/EDT - UTC-5/-4)" },
+  { value: "America/Chicago", label: "Chicago (CST/CDT - UTC-6/-5)" },
+  { value: "America/Los_Angeles", label: "Los Angeles (PST/PDT - UTC-8/-7)" },
+  { value: "Europe/London", label: "London (GMT/BST - UTC+0/+1)" },
+  { value: "Europe/Frankfurt", label: "Frankfurt/CET (UTC+1/+2)" },
+  { value: "UTC", label: "UTC (Coordinated Universal Time)" },
+  { value: "Asia/Kolkata", label: "India (IST - UTC+5:30)" },
+  { value: "Asia/Singapore", label: "Singapore / HK (SGT - UTC+8)" },
+  { value: "Asia/Tokyo", label: "Tokyo (JST - UTC+9)" },
+  { value: "Australia/Sydney", label: "Sydney (AEST - UTC+10/+11)" },
 ];
 
 export default function NewTradePage() {
@@ -63,57 +67,57 @@ export default function NewTradePage() {
   const [draftRestored, setDraftRestored] = useState(false);
 
   // Helper for today's ISO date (YYYY-MM-DD)
-  const getTodayDate = () => new Date().toISOString().split('T')[0];
+  const getTodayDate = () => new Date().toISOString().split("T")[0];
 
   // Section 0: Plan state
   const [hasPlan, setHasPlan] = useState(false);
-  const [plannedEntry, setPlannedEntry] = useState('');
-  const [plannedStop, setPlannedStop] = useState('');
-  const [plannedTarget, setPlannedTarget] = useState('');
-  const [planThesis, setPlanThesis] = useState('');
+  const [plannedEntry, setPlannedEntry] = useState("");
+  const [plannedStop, setPlannedStop] = useState("");
+  const [plannedTarget, setPlannedTarget] = useState("");
+  const [planThesis, setPlanThesis] = useState("");
 
   // Section 1: Trade Basics
-  const [asset, setAsset] = useState('');
-  const [direction, setDirection] = useState<TradeDirection>('long');
-  const [positionSize, setPositionSize] = useState('');
-  const [positionUnit, setPositionUnit] = useState('shares');
-  const [brokerPlatform, setBrokerPlatform] = useState('');
-  const [manualSession, setManualSession] = useState<TradeSession | ''>('');
+  const [asset, setAsset] = useState("");
+  const [direction, setDirection] = useState<TradeDirection>("long");
+  const [positionSize, setPositionSize] = useState("");
+  const [positionUnit, setPositionUnit] = useState("shares");
+  const [brokerPlatform, setBrokerPlatform] = useState("");
+  const [manualSession, setManualSession] = useState<TradeSession | "">("");
 
   // Timezone & Date/Time inputs
-  const [timezone, setTimezone] = useState('America/New_York');
+  const [timezone, setTimezone] = useState("America/New_York");
   const [entryDate, setEntryDate] = useState(getTodayDate());
-  const [entryTime, setEntryTime] = useState('09:30');
+  const [entryTime, setEntryTime] = useState("09:30");
   const [exitDate, setExitDate] = useState(getTodayDate());
-  const [exitTime, setExitTime] = useState('10:30');
+  const [exitTime, setExitTime] = useState("10:30");
 
   // Section 2: Price & Risk
-  const [entryPrice, setEntryPrice] = useState('');
-  const [exitPrice, setExitPrice] = useState('');
-  const [stopLoss, setStopLoss] = useState('');
-  const [takeProfit, setTakeProfit] = useState('');
-  const [fees, setFees] = useState('');
-  const [accountBalance, setAccountBalance] = useState('10000');
-  const [leverage, setLeverage] = useState('1');
+  const [entryPrice, setEntryPrice] = useState("");
+  const [exitPrice, setExitPrice] = useState("");
+  const [stopLoss, setStopLoss] = useState("");
+  const [takeProfit, setTakeProfit] = useState("");
+  const [fees, setFees] = useState("");
+  const [accountBalance, setAccountBalance] = useState("10000");
+  const [leverage, setLeverage] = useState("1");
 
   // Section 3: Strategy & Context
-  const [setupName, setSetupName] = useState('Liquidity Sweep');
-  const [customSetup, setCustomSetup] = useState('');
+  const [setupName, setSetupName] = useState("Liquidity Sweep");
+  const [customSetup, setCustomSetup] = useState("");
   const [isCustomSetup, setIsCustomSetup] = useState(false);
   const [marketConditions, setMarketConditions] = useState<string[]>([]);
-  const [newsEventTag, setNewsEventTag] = useState('');
+  const [newsEventTag, setNewsEventTag] = useState("");
   const [beforeFile, setBeforeFile] = useState<File | null>(null);
   const [afterFile, setAfterFile] = useState<File | null>(null);
 
   // Section 4: Exit & Execution
-  const [exitReason, setExitReason] = useState<ExitReason>('manual_close');
+  const [exitReason, setExitReason] = useState<ExitReason>("manual_close");
   const [tradeGrade, setTradeGrade] = useState(4);
 
   // Section 5: Psychology (Multi-select)
-  const [emotionalState, setEmotionalState] = useState<string[]>(['Calm']);
+  const [emotionalState, setEmotionalState] = useState<string[]>(["Calm"]);
   const [followedPlan, setFollowedPlan] = useState(true);
   const [mistakeTags, setMistakeTags] = useState<string[]>([]);
-  const [lessonsLearned, setLessonsLearned] = useState('');
+  const [lessonsLearned, setLessonsLearned] = useState("");
 
   // Detect local timezone on mount
   useEffect(() => {
@@ -126,7 +130,7 @@ export default function NewTradePage() {
           setTimezone(localTz);
         } else {
           // Default to America/New_York
-          setTimezone('America/New_York');
+          setTimezone("America/New_York");
         }
       }
     } catch {
@@ -139,9 +143,11 @@ export default function NewTradePage() {
     async function initUserAndDraft() {
       // 1. Fetch current running balance
       try {
-        const res = await fetchApi('/api/auth/me');
+        const res = await fetchApi("/api/auth/me");
         if (res.success && res.data?.profile) {
-          const balance = res.data.profile.current_account_balance || res.data.profile.default_account_size;
+          const balance =
+            res.data.profile.current_account_balance ||
+            res.data.profile.default_account_size;
           if (balance) {
             setAccountBalance(String(balance));
           }
@@ -176,12 +182,13 @@ export default function NewTradePage() {
               setSetupName(draft.setupName);
               setIsCustomSetup(false);
             } else {
-              setSetupName('Custom');
+              setSetupName("Custom");
               setCustomSetup(draft.setupName);
               setIsCustomSetup(true);
             }
           }
-          if (draft.marketConditions) setMarketConditions(draft.marketConditions);
+          if (draft.marketConditions)
+            setMarketConditions(draft.marketConditions);
           if (draft.emotionalState) setEmotionalState(draft.emotionalState);
           if (draft.mistakeTags) setMistakeTags(draft.mistakeTags);
           if (draft.lessonsLearned) setLessonsLearned(draft.lessonsLearned);
@@ -273,16 +280,16 @@ export default function NewTradePage() {
     } catch {
       // Ignored
     }
-    setAsset('');
-    setPositionSize('');
-    setEntryPrice('');
-    setExitPrice('');
-    setStopLoss('');
-    setTakeProfit('');
-    setFees('');
-    setLessonsLearned('');
+    setAsset("");
+    setPositionSize("");
+    setEntryPrice("");
+    setExitPrice("");
+    setStopLoss("");
+    setTakeProfit("");
+    setFees("");
+    setLessonsLearned("");
     setMistakeTags([]);
-    setEmotionalState(['Calm']);
+    setEmotionalState(["Calm"]);
     setDraftRestored(false);
   };
 
@@ -295,13 +302,21 @@ export default function NewTradePage() {
       const exitTimestamp = new Date(exitIso).getTime();
 
       let err: string | null = null;
-      if (!isNaN(entryTimestamp) && !isNaN(exitTimestamp) && exitTimestamp < entryTimestamp) {
-        err = 'Exit time cannot be earlier than entry time';
+      if (
+        !isNaN(entryTimestamp) &&
+        !isNaN(exitTimestamp) &&
+        exitTimestamp < entryTimestamp
+      ) {
+        err = "Exit time cannot be earlier than entry time";
       }
 
       return {
-        fullEntryIso: !isNaN(entryTimestamp) ? new Date(entryIso).toISOString() : new Date().toISOString(),
-        fullExitIso: !isNaN(exitTimestamp) ? new Date(exitIso).toISOString() : new Date().toISOString(),
+        fullEntryIso: !isNaN(entryTimestamp)
+          ? new Date(entryIso).toISOString()
+          : new Date().toISOString(),
+        fullExitIso: !isNaN(exitTimestamp)
+          ? new Date(exitIso).toISOString()
+          : new Date().toISOString(),
         timeError: err,
       };
     } catch {
@@ -318,13 +333,13 @@ export default function NewTradePage() {
     try {
       const start = new Date(`${entryDate}T${entryTime}:00`).getTime();
       const end = new Date(`${exitDate}T${exitTime}:00`).getTime();
-      if (isNaN(start) || isNaN(end) || end < start) return '0m';
+      if (isNaN(start) || isNaN(end) || end < start) return "0m";
       const diffMinutes = Math.floor((end - start) / 60000);
       const hours = Math.floor(diffMinutes / 60);
       const mins = diffMinutes % 60;
       return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
     } catch {
-      return '0m';
+      return "0m";
     }
   }, [entryDate, entryTime, exitDate, exitTime]);
 
@@ -334,7 +349,7 @@ export default function NewTradePage() {
     pnl_percent: 0,
     r_multiple: 0,
     risk_percent_of_account: 0,
-    session: 'overlap' as TradeSession,
+    session: "overlap" as TradeSession,
   });
 
   useEffect(() => {
@@ -371,7 +386,18 @@ export default function NewTradePage() {
     } catch {
       // Ignore parse errors
     }
-  }, [direction, entryPrice, exitPrice, positionSize, stopLoss, takeProfit, fees, accountBalance, fullEntryIso, manualSession]);
+  }, [
+    direction,
+    entryPrice,
+    exitPrice,
+    positionSize,
+    stopLoss,
+    takeProfit,
+    fees,
+    accountBalance,
+    fullEntryIso,
+    manualSession,
+  ]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -382,11 +408,12 @@ export default function NewTradePage() {
 
     try {
       let linkedPlanId = null;
-      const finalStrategy = (isCustomSetup ? customSetup : setupName) || 'Liquidity Sweep';
+      const finalStrategy =
+        (isCustomSetup ? customSetup : setupName) || "Liquidity Sweep";
 
       if (hasPlan && plannedEntry && plannedStop && plannedTarget) {
-        const planRes = await fetchApi('/api/trade-plans', {
-          method: 'POST',
+        const planRes = await fetchApi("/api/trade-plans", {
+          method: "POST",
           body: JSON.stringify({
             asset,
             planned_entry_price: parseFloat(plannedEntry),
@@ -418,25 +445,26 @@ export default function NewTradePage() {
         fees_commissions: parseFloat(fees) || 0,
         account_balance_at_trade: parseFloat(accountBalance),
         leverage_used: parseFloat(leverage) || 1,
-        broker_platform: brokerPlatform || 'Default',
+        broker_platform: brokerPlatform || "Default",
         exit_reason: exitReason,
         trade_grade: tradeGrade,
         setup_name: finalStrategy,
         market_conditions: marketConditions,
         news_event_tag: newsEventTag || null,
-        emotional_state: emotionalState.length > 0 ? emotionalState.join(', ') : 'Calm',
+        emotional_state:
+          emotionalState.length > 0 ? emotionalState.join(", ") : "Calm",
         followed_plan: followedPlan,
         lessons_learned: lessonsLearned,
         mistake_tag_names: mistakeTags,
       };
 
-      const tradeRes = await fetchApi('/api/trades', {
-        method: 'POST',
+      const tradeRes = await fetchApi("/api/trades", {
+        method: "POST",
         body: JSON.stringify(tradePayload),
       });
 
       if (!tradeRes.success || !tradeRes.data) {
-        setErrorMsg(tradeRes.error || 'Could not save trade');
+        setErrorMsg(tradeRes.error || "Could not save trade");
         setLoading(false);
         return;
       }
@@ -445,18 +473,24 @@ export default function NewTradePage() {
 
       if (beforeFile) {
         const formData = new FormData();
-        formData.append('trade_id', tradeId);
-        formData.append('label', 'BEFORE');
-        formData.append('file', beforeFile);
-        await fetch('/api/screenshots/upload', { method: 'POST', body: formData });
+        formData.append("trade_id", tradeId);
+        formData.append("label", "BEFORE");
+        formData.append("file", beforeFile);
+        await fetch("/api/screenshots/upload", {
+          method: "POST",
+          body: formData,
+        });
       }
 
       if (afterFile) {
         const formData = new FormData();
-        formData.append('trade_id', tradeId);
-        formData.append('label', 'AFTER');
-        formData.append('file', afterFile);
-        await fetch('/api/screenshots/upload', { method: 'POST', body: formData });
+        formData.append("trade_id", tradeId);
+        formData.append("label", "AFTER");
+        formData.append("file", afterFile);
+        await fetch("/api/screenshots/upload", {
+          method: "POST",
+          body: formData,
+        });
       }
 
       // Clear draft on success
@@ -469,7 +503,7 @@ export default function NewTradePage() {
       setLoading(false);
       router.push(`/trades/${tradeId}`);
     } catch (err: any) {
-      setErrorMsg(err.message || 'Something went wrong');
+      setErrorMsg(err.message || "Something went wrong");
       setLoading(false);
     }
   };
@@ -479,7 +513,7 @@ export default function NewTradePage() {
       <TopHeaderBar />
       <SidebarNav />
 
-      <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-5xl mx-auto w-full pb-36">
+      <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-5xl mx-auto w-full pb-64 sm:pb-72">
         {/* DRAFT RESTORED ALERT */}
         {draftRestored && (
           <div className="mb-6 p-3 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-xs font-mono flex items-center justify-between">
@@ -513,18 +547,20 @@ export default function NewTradePage() {
                 <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
                   Pre-Trade Plan
                 </span>
-                <span className="text-[10px] text-slate-400 hidden sm:inline">What you planned before entering</span>
+                <span className="text-[10px] text-slate-400 hidden sm:inline">
+                  What you planned before entering
+                </span>
               </div>
               <button
                 type="button"
                 onClick={() => setHasPlan(!hasPlan)}
                 className={`text-xs font-mono px-3 py-1.5 rounded-lg border transition-all cursor-pointer ${
                   hasPlan
-                    ? 'bg-[#2962ff] text-white border-transparent font-bold'
-                    : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700'
+                    ? "bg-[#2962ff] text-white border-transparent font-bold"
+                    : "border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700"
                 }`}
               >
-                {hasPlan ? '✓ Added' : '+ Add Plan'}
+                {hasPlan ? "✓ Added" : "+ Add Plan"}
               </button>
             </div>
 
@@ -546,7 +582,9 @@ export default function NewTradePage() {
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Planned Stop</label>
-                    <p className="text-[9px] text-slate-400">Where you'd cut losses</p>
+                    <p className="text-[9px] text-slate-400">
+                      Where you'd cut losses
+                    </p>
                   </div>
                   <input
                     type="number"
@@ -560,7 +598,9 @@ export default function NewTradePage() {
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Planned Target</label>
-                    <p className="text-[9px] text-slate-400">Where you'd take profit</p>
+                    <p className="text-[9px] text-slate-400">
+                      Where you'd take profit
+                    </p>
                   </div>
                   <input
                     type="number"
@@ -618,15 +658,17 @@ export default function NewTradePage() {
               <div className="md:col-span-3">
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
                   <label className="form-label">Direction</label>
-                  <p className="text-[9px] text-slate-400">Bought (long) or sold (short)?</p>
+                  <p className="text-[9px] text-slate-400">
+                    Bought (long) or sold (short)?
+                  </p>
                 </div>
                 <SegmentedToggle
                   name="direction"
                   value={direction}
                   onChange={(val) => setDirection(val as TradeDirection)}
                   options={[
-                    { value: 'long', label: 'LONG' },
-                    { value: 'short', label: 'SHORT' },
+                    { value: "long", label: "LONG" },
+                    { value: "short", label: "SHORT" },
                   ]}
                 />
               </div>
@@ -635,7 +677,9 @@ export default function NewTradePage() {
               <div className="md:col-span-3">
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
                   <label className="form-label">How much?</label>
-                  <p className="text-[9px] text-slate-400">Position size & unit</p>
+                  <p className="text-[9px] text-slate-400">
+                    Position size & unit
+                  </p>
                 </div>
                 <div className="flex gap-2">
                   <input
@@ -700,8 +744,12 @@ export default function NewTradePage() {
                 {/* ENTRY TIME */}
                 <div className="md:col-span-5">
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
-                    <label className="form-label">Entry Date & Time (24H)</label>
-                    <p className="text-[9px] text-slate-400">When did you enter?</p>
+                    <label className="form-label">
+                      Entry Date & Time (24H)
+                    </label>
+                    <p className="text-[9px] text-slate-400">
+                      When did you enter?
+                    </p>
                   </div>
                   <div className="grid grid-cols-7 gap-2">
                     <input
@@ -712,10 +760,7 @@ export default function NewTradePage() {
                       required
                     />
                     <div className="col-span-3">
-                      <TimeInput
-                        value={entryTime}
-                        onChange={setEntryTime}
-                      />
+                      <TimeInput value={entryTime} onChange={setEntryTime} />
                     </div>
                   </div>
                 </div>
@@ -724,14 +769,16 @@ export default function NewTradePage() {
                 <div className="md:col-span-5">
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Exit Date & Time (24H)</label>
-                    <p className="text-[9px] text-slate-400">When did you exit?</p>
+                    <p className="text-[9px] text-slate-400">
+                      When did you exit?
+                    </p>
                   </div>
                   <div className="grid grid-cols-7 gap-2">
                     <input
                       type="date"
                       value={exitDate}
                       onChange={(e) => setExitDate(e.target.value)}
-                      className={`form-input col-span-4 text-xs ${timeError ? 'border-rose-500' : ''}`}
+                      className={`form-input col-span-4 text-xs ${timeError ? "border-rose-500" : ""}`}
                       required
                     />
                     <div className="col-span-3">
@@ -857,7 +904,9 @@ export default function NewTradePage() {
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Account Size ($)</label>
-                    <p className="text-[9px] text-slate-400">Your total capital</p>
+                    <p className="text-[9px] text-slate-400">
+                      Your total capital
+                    </p>
                   </div>
                   <input
                     type="number"
@@ -873,14 +922,19 @@ export default function NewTradePage() {
               {/* RIGHT LIVE READOUT PANEL */}
               <div className="md:col-span-4 border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 p-5 rounded-xl flex flex-col justify-center items-end self-stretch min-h-[148px]">
                 <span className="font-mono text-xs text-slate-500 dark:text-slate-400">
-                  R-Multiple: <span className="text-[#2962ff] dark:text-[#388bfd] font-bold">{metricsReadout.r_multiple}R</span>
+                  R-Multiple:{" "}
+                  <span className="text-[#2962ff] dark:text-[#388bfd] font-bold">
+                    {metricsReadout.r_multiple}R
+                  </span>
                 </span>
-                <p className="text-[9px] text-slate-400">Risk-to-reward ratio</p>
+                <p className="text-[9px] text-slate-400">
+                  Risk-to-reward ratio
+                </p>
                 <div
                   className={`font-mono text-3xl font-bold mt-2 tracking-tight ${
                     metricsReadout.pnl_currency >= 0
-                      ? 'text-emerald-600 dark:text-emerald-400'
-                      : 'text-rose-600 dark:text-rose-400'
+                      ? "text-emerald-600 dark:text-emerald-400"
+                      : "text-rose-600 dark:text-rose-400"
                   }`}
                 >
                   {metricsReadout.pnl_currency >= 0
@@ -905,7 +959,9 @@ export default function NewTradePage() {
                 <div>
                   <div className="min-h-[38px] flex flex-col justify-end mb-2">
                     <label className="form-label">Strategy / Setup</label>
-                    <p className="text-[9px] text-slate-400">Select preset or type custom</p>
+                    <p className="text-[9px] text-slate-400">
+                      Select preset or type custom
+                    </p>
                   </div>
 
                   {!isCustomSetup ? (
@@ -913,9 +969,9 @@ export default function NewTradePage() {
                       <select
                         value={setupName}
                         onChange={(e) => {
-                          if (e.target.value === '__custom__') {
+                          if (e.target.value === "__custom__") {
                             setIsCustomSetup(true);
-                            setCustomSetup('');
+                            setCustomSetup("");
                           } else {
                             setSetupName(e.target.value);
                           }
@@ -945,7 +1001,7 @@ export default function NewTradePage() {
                         type="button"
                         onClick={() => {
                           setIsCustomSetup(false);
-                          setSetupName('Liquidity Sweep');
+                          setSetupName("Liquidity Sweep");
                         }}
                         className="px-3 py-2 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-500 rounded-lg hover:border-slate-400"
                       >
@@ -960,7 +1016,12 @@ export default function NewTradePage() {
                     <label className="form-label">Market Conditions</label>
                   </div>
                   <TagChipSelect
-                    availableTags={['Trending', 'Choppy', 'High Volatility', 'Range Bound']}
+                    availableTags={[
+                      "Trending",
+                      "Choppy",
+                      "High Volatility",
+                      "Range Bound",
+                    ]}
                     selectedTags={marketConditions}
                     onChange={setMarketConditions}
                   />
@@ -972,8 +1033,14 @@ export default function NewTradePage() {
                   <label className="form-label">Screenshots</label>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <ScreenshotDropzone label="BEFORE" onFileSelect={setBeforeFile} />
-                  <ScreenshotDropzone label="AFTER" onFileSelect={setAfterFile} />
+                  <ScreenshotDropzone
+                    label="BEFORE"
+                    onFileSelect={setBeforeFile}
+                  />
+                  <ScreenshotDropzone
+                    label="AFTER"
+                    onFileSelect={setAfterFile}
+                  />
                 </div>
               </div>
             </div>
@@ -998,18 +1065,20 @@ export default function NewTradePage() {
                   value={exitReason}
                   onChange={(val) => setExitReason(val as ExitReason)}
                   options={[
-                    { value: 'stop_hit', label: 'STOP' },
-                    { value: 'target_hit', label: 'TARGET' },
-                    { value: 'manual_close', label: 'MANUAL' },
-                    { value: 'time_based', label: 'TIME' },
-                    { value: 'other', label: 'OTHER' },
+                    { value: "stop_hit", label: "STOP" },
+                    { value: "target_hit", label: "TARGET" },
+                    { value: "manual_close", label: "MANUAL" },
+                    { value: "time_based", label: "TIME" },
+                    { value: "other", label: "OTHER" },
                   ]}
                 />
               </div>
               <div>
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
                   <label className="form-label">Rate your execution</label>
-                  <p className="text-[9px] text-slate-400">1 = poor, 5 = perfect</p>
+                  <p className="text-[9px] text-slate-400">
+                    1 = poor, 5 = perfect
+                  </p>
                 </div>
                 <TradeGradeDial value={tradeGrade} onChange={setTradeGrade} />
               </div>
@@ -1017,7 +1086,7 @@ export default function NewTradePage() {
           </section>
 
           {/* SECTION 5: MINDSET & DISCIPLINE */}
-          <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-6">
+          <section className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-5 sm:p-6 shadow-xs space-y-6 mb-12">
             <div className="flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
               <HeartHandshake className="w-4 h-4 text-[#2962ff]" />
               <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
@@ -1028,14 +1097,21 @@ export default function NewTradePage() {
             <div className="space-y-6">
               <div>
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
-                  <label className="form-label">How were you feeling? (Multi-Select)</label>
+                  <label className="form-label">
+                    How were you feeling? (Multi-Select)
+                  </label>
                 </div>
-                <EmotionSelect value={emotionalState} onChange={setEmotionalState} />
+                <EmotionSelect
+                  value={emotionalState}
+                  onChange={setEmotionalState}
+                />
               </div>
 
               <div>
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
-                  <label className="form-label">Did you follow your plan?</label>
+                  <label className="form-label">
+                    Did you follow your plan?
+                  </label>
                 </div>
                 <div className="flex gap-4">
                   <button
@@ -1043,8 +1119,8 @@ export default function NewTradePage() {
                     onClick={() => setFollowedPlan(true)}
                     className={`px-5 py-2 rounded-lg font-mono text-xs font-bold border transition-all cursor-pointer ${
                       followedPlan
-                        ? 'bg-emerald-600 text-white border-emerald-600'
-                        : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700'
+                        ? "bg-emerald-600 text-white border-emerald-600"
+                        : "border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700"
                     }`}
                   >
                     ✓ Yes
@@ -1054,8 +1130,8 @@ export default function NewTradePage() {
                     onClick={() => setFollowedPlan(false)}
                     className={`px-5 py-2 rounded-lg font-mono text-xs font-bold border transition-all cursor-pointer ${
                       !followedPlan
-                        ? 'bg-rose-600 text-white border-rose-600'
-                        : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700'
+                        ? "bg-rose-600 text-white border-rose-600"
+                        : "border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700"
                     }`}
                   >
                     ✗ No
@@ -1066,10 +1142,18 @@ export default function NewTradePage() {
               <div>
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
                   <label className="form-label">Mistakes</label>
-                  <p className="text-[9px] text-slate-400">Tag what went wrong (if anything)</p>
+                  <p className="text-[9px] text-slate-400">
+                    Tag what went wrong (if anything)
+                  </p>
                 </div>
                 <TagChipSelect
-                  availableTags={['Chased Entry', 'Moved Stop', 'FOMO Entry', 'Early Exit', 'Too Much Size']}
+                  availableTags={[
+                    "Chased Entry",
+                    "Moved Stop",
+                    "FOMO Entry",
+                    "Early Exit",
+                    "Too Much Size",
+                  ]}
                   selectedTags={mistakeTags}
                   onChange={setMistakeTags}
                 />
@@ -1103,7 +1187,7 @@ export default function NewTradePage() {
                 className="bg-[#2962ff] hover:bg-[#1e4bd8] text-white font-sans font-bold text-xs px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg transition-all disabled:opacity-50 uppercase tracking-wider flex items-center gap-2 cursor-pointer shadow-sm"
               >
                 <Save className="w-4 h-4" />
-                <span>{loading ? 'Saving...' : 'Save Trade'}</span>
+                <span>{loading ? "Saving..." : "Save Trade"}</span>
               </button>
             </div>
           </div>
