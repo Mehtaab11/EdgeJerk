@@ -1180,6 +1180,9 @@ export default function NewTradePage() {
             </div>
           </section>
 
+          {/* EXTRA 150PX BOTTOM SCROLL MARGIN */}
+          <div className="h-[150px] w-full" aria-hidden="true" />
+
           {/* STICKY BOTTOM SAVE BAR */}
           <div className="fixed bottom-0 left-0 w-full bg-white/95 dark:bg-[#070a14]/95 border-t border-slate-200 dark:border-slate-800 p-3 sm:p-4 z-40">
             <div className="max-w-5xl mx-auto w-full flex justify-between items-center">
