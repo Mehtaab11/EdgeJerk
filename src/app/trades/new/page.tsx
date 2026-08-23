@@ -636,7 +636,7 @@ export default function NewTradePage() {
                 What did you trade?
               </span>
             </div>            {/* ROW 1: INSTRUMENT DETAILS */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end">
               {/* TICKER */}
               <div>
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
@@ -671,35 +671,43 @@ export default function NewTradePage() {
                 />
               </div>
 
-              {/* HOW MUCH / POSITION SIZE */}
+              {/* POSITION SIZE */}
               <div>
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
-                  <label className="form-label">How much?</label>
+                  <label className="form-label">Position Size</label>
                   <p className="text-[9px] text-slate-400">
-                    Position size & unit
+                    Quantity
                   </p>
                 </div>
-                <div className="flex gap-2">
-                  <input
-                    type="number"
-                    step="any"
-                    value={positionSize}
-                    onChange={(e) => setPositionSize(e.target.value)}
-                    className="form-input text-right flex-1 min-w-0"
-                    placeholder="10"
-                    required
-                  />
-                  <select
-                    value={positionUnit}
-                    onChange={(e) => setPositionUnit(e.target.value)}
-                    className="form-input bg-slate-100 dark:bg-slate-900 text-xs w-28 shrink-0 cursor-pointer"
-                  >
-                    <option value="shares">Shares</option>
-                    <option value="lots">Lots</option>
-                    <option value="contracts">Contracts</option>
-                    <option value="units">Units</option>
-                  </select>
+                <input
+                  type="number"
+                  step="any"
+                  value={positionSize}
+                  onChange={(e) => setPositionSize(e.target.value)}
+                  className="form-input text-right"
+                  placeholder="10"
+                  required
+                />
+              </div>
+
+              {/* UNIT */}
+              <div>
+                <div className="min-h-[38px] flex flex-col justify-end mb-2">
+                  <label className="form-label">Unit</label>
+                  <p className="text-[9px] text-slate-400">
+                    Shares, lots, contracts
+                  </p>
                 </div>
+                <select
+                  value={positionUnit}
+                  onChange={(e) => setPositionUnit(e.target.value)}
+                  className="form-input bg-slate-50 dark:bg-slate-900 text-xs cursor-pointer font-sans"
+                >
+                  <option value="shares">Shares</option>
+                  <option value="lots">Lots</option>
+                  <option value="contracts">Contracts</option>
+                  <option value="units">Units</option>
+                </select>
               </div>
 
               {/* BROKER */}
