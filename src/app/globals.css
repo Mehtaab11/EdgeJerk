@@ -12,6 +12,10 @@
   }
 }
 
+.dark {
+  color-scheme: dark;
+}
+
 /* Monospace & Tabular Figures Utility */
 .font-mono,
 .tabular-nums {
@@ -39,6 +43,34 @@
 
 .dark .form-input:focus {
   border-color: #2962ff;
+}
+
+/* Date picker calendar icon styling - pure crisp white in dark theme */
+.dark input[type="date"] {
+  color-scheme: dark;
+}
+
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: brightness(0) invert(1);
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.dark input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+html:not(.dark) input[type="date"] {
+  color-scheme: light;
+}
+
+html:not(.dark) input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+html:not(.dark) input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 0.9;
 }
 
 html:not(.dark) .form-input {

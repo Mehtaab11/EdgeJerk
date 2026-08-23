@@ -640,7 +640,7 @@ export default function NewTradePage() {
             {/* ROW 1: INSTRUMENT DETAILS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-4 items-end">
               {/* TICKER */}
-              <div className="md:col-span-3">
+              <div className="md:col-span-2">
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
                   <label className="form-label">Ticker</label>
                 </div>
@@ -674,7 +674,7 @@ export default function NewTradePage() {
               </div>
 
               {/* HOW MUCH / POSITION SIZE */}
-              <div className="md:col-span-3">
+              <div className="md:col-span-4">
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
                   <label className="form-label">How much?</label>
                   <p className="text-[9px] text-slate-400">
@@ -687,14 +687,14 @@ export default function NewTradePage() {
                     step="any"
                     value={positionSize}
                     onChange={(e) => setPositionSize(e.target.value)}
-                    className="form-input text-right"
+                    className="form-input text-right flex-1 min-w-4"
                     placeholder="10"
                     required
                   />
                   <select
                     value={positionUnit}
                     onChange={(e) => setPositionUnit(e.target.value)}
-                    className="form-input bg-slate-100 dark:bg-slate-900 text-xs w-32 shrink-0 cursor-pointer"
+                    className="form-input bg-slate-100 dark:bg-slate-900 text-xs w-14 shrink-0 cursor-pointer"
                   >
                     <option value="shares">Shares</option>
                     <option value="lots">Lots</option>
