@@ -142,14 +142,16 @@ export default function NewTradePage() {
   useEffect(() => {
     async function initUserAndDraft() {
       // 1. Fetch current running balance
+      let userLiveBalance: string | null = null;
       try {
         const res = await fetchApi("/api/auth/me");
         if (res.success && res.data?.profile) {
           const balance =
-            res.data.profile.current_account_balance ||
+            res.data.profile.current_account_balance ??
             res.data.profile.default_account_size;
-          if (balance) {
-            setAccountBalance(String(balance));
+          if (balance !== undefined && balance !== null) {
+            userLiveBalance = String(balance);
+            setAccountBalance(userLiveBalance);
           }
         }
       } catch {
@@ -176,7 +178,9 @@ export default function NewTradePage() {
           if (draft.stopLoss) setStopLoss(draft.stopLoss);
           if (draft.takeProfit) setTakeProfit(draft.takeProfit);
           if (draft.fees) setFees(draft.fees);
-          if (draft.accountBalance) setAccountBalance(draft.accountBalance);
+          if (draft.accountBalance && !userLiveBalance) {
+            setAccountBalance(draft.accountBalance);
+          }
           if (draft.setupName) {
             if (STRATEGY_PRESETS.includes(draft.setupName)) {
               setSetupName(draft.setupName);
@@ -635,7 +639,8 @@ export default function NewTradePage() {
               <span className="font-sans text-xs font-bold text-slate-800 dark:text-slate-300 uppercase tracking-wider">
                 What did you trade?
               </span>
-            </div>            {/* ROW 1: INSTRUMENT DETAILS */}
+            </div>{" "}
+            {/* ROW 1: INSTRUMENT DETAILS */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-end">
               {/* TICKER */}
               <div>
@@ -675,9 +680,7 @@ export default function NewTradePage() {
               <div>
                 <div className="min-h-[38px] flex flex-col justify-end mb-2">
                   <label className="form-label">Position Size</label>
-                  <p className="text-[9px] text-slate-400">
-                    Quantity
-                  </p>
+                  <p className="text-[9px] text-slate-400">Quantity</p>
                 </div>
                 <input
                   type="number"
@@ -724,7 +727,6 @@ export default function NewTradePage() {
                 />
               </div>
             </div>
-
             {/* ROW 2: TIMING, TIMEZONE & DURATION */}
             <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800/60">
               {/* TIMEZONE SELECTOR */}
@@ -809,7 +811,6 @@ export default function NewTradePage() {
                 </div>
               </div>
             </div>
-
             {/* INLINE TIME ERROR */}
             {timeError && (
               <div className="p-2.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-600 dark:text-rose-400 text-xs font-mono flex items-center gap-2">
@@ -1179,9 +1180,6 @@ export default function NewTradePage() {
               </div>
             </div>
           </section>
-
-          {/* EXTRA 150PX BOTTOM SCROLL MARGIN */}
-          <div className="h-[150px] w-full" aria-hidden="true" />
 
           {/* STICKY BOTTOM SAVE BAR */}
           <div className="fixed bottom-0 left-0 w-full bg-white/95 dark:bg-[#070a14]/95 border-t border-slate-200 dark:border-slate-800 p-3 sm:p-4 z-40">

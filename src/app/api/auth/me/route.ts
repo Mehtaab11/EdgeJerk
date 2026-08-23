@@ -13,33 +13,34 @@ export async function GET() {
       return unauthorizedResponse('User is not authenticated');
     }
 
-    // Fetch profile info
+    // Fetch profile info from profiles table if exists
     let profile: any = null;
     try {
       const { data } = await (supabase as any)
         .from('profiles')
         .select('*')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();
       profile = data;
     } catch {
       // Ignored
     }
 
+    // Prioritize user_metadata (which gets updated in realtime via updateUser)
     const displayName =
-      profile?.display_name ||
       user.user_metadata?.display_name ||
+      profile?.display_name ||
       user.user_metadata?.full_name ||
       user.user_metadata?.name ||
       null;
 
     const defaultAccountSize = Number(
-      profile?.default_account_size ||
-      user.user_metadata?.default_account_size ||
+      user.user_metadata?.default_account_size ??
+      profile?.default_account_size ??
       10000
     );
 
-    // Calculate running balance based on total trade P&L
+    // Calculate running balance based on total trade P&L for THIS user
     let totalPnl = 0;
     try {
       const { data: trades } = await (supabase as any)

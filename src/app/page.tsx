@@ -88,37 +88,43 @@ export default function DashboardPage() {
 
       <main className="flex-1 p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full space-y-6 pb-32">
         {/* STATS ROW (60-30-10 TradingView Style) */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4">
-          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Total Balance</span>
-            <span className="text-xl sm:text-2xl font-bold font-mono text-[#2962ff] dark:text-[#388bfd]">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs flex flex-col justify-between overflow-hidden min-w-0">
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1 truncate">Total Balance</span>
+            <span 
+              className="text-lg sm:text-xl lg:text-base xl:text-xl font-bold font-mono text-[#2962ff] dark:text-[#388bfd] tracking-tight truncate block"
+              title={`$${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            >
               ${currentBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
-          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Net P&L</span>
-            <span className={`text-xl sm:text-2xl font-bold font-mono ${netPnl >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-500'}`}>
-              {netPnl >= 0 ? `+$${netPnl.toFixed(2)}` : `-$${Math.abs(netPnl).toFixed(2)}`}
+          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs flex flex-col justify-between overflow-hidden min-w-0">
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1 truncate">Net P&L</span>
+            <span 
+              className={`text-lg sm:text-xl lg:text-base xl:text-xl font-bold font-mono tracking-tight truncate block ${netPnl >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-500'}`}
+              title={netPnl >= 0 ? `+$${netPnl.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : `-$${Math.abs(netPnl).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            >
+              {netPnl >= 0 ? `+$${netPnl.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : `-$${Math.abs(netPnl).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
             </span>
           </div>
-          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Win Rate</span>
-            <span className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-white">
+          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs flex flex-col justify-between overflow-hidden min-w-0">
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1 truncate">Win Rate</span>
+            <span className="text-lg sm:text-xl lg:text-base xl:text-xl font-bold font-mono text-slate-900 dark:text-white tracking-tight truncate block">
               {winRate}% <span className="text-xs text-slate-400 font-normal">({wins}/{totalTrades})</span>
             </span>
           </div>
-          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Avg R</span>
-            <span className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-slate-100">{avgR}R</span>
-            <span className="text-[10px] text-slate-400 block mt-0.5">Risk-reward ratio</span>
+          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs flex flex-col justify-between overflow-hidden min-w-0">
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1 truncate">Avg R</span>
+            <span className="text-lg sm:text-xl lg:text-base xl:text-xl font-bold font-mono text-slate-900 dark:text-slate-100 tracking-tight truncate block">{avgR}R</span>
+            <span className="text-[10px] text-slate-400 block mt-0.5 truncate">Risk-reward</span>
           </div>
-          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Trades</span>
-            <span className="text-xl sm:text-2xl font-bold font-mono text-slate-900 dark:text-slate-100">{totalTrades}</span>
+          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs flex flex-col justify-between overflow-hidden min-w-0">
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1 truncate">Trades</span>
+            <span className="text-lg sm:text-xl lg:text-base xl:text-xl font-bold font-mono text-slate-900 dark:text-slate-100 tracking-tight truncate block">{totalTrades}</span>
           </div>
-          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1">Streak</span>
-            <span className={`text-xl sm:text-2xl font-bold font-mono ${streak >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-500'}`}>
+          <div className="bg-white dark:bg-[#0d1322] border border-slate-200 dark:border-slate-800/80 rounded-xl p-4 shadow-xs flex flex-col justify-between overflow-hidden min-w-0">
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider block mb-1 truncate">Streak</span>
+            <span className={`text-lg sm:text-xl lg:text-base xl:text-xl font-bold font-mono tracking-tight truncate block ${streak >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-500'}`}>
               {streak >= 0 ? `+${streak} W` : `${streak} L`}
             </span>
           </div>

@@ -32,17 +32,29 @@ export default function OnboardingPage() {
     setErrorMsg(null);
     setLoading(true);
 
+    const numSize = parseFloat(accountSize) || 10000;
+
     const res = await fetchApi('/api/auth/profile', {
       method: 'PATCH',
       body: JSON.stringify({
         display_name: displayName,
-        default_account_size: parseFloat(accountSize) || 10000,
+        default_account_size: numSize,
       }),
     });
 
     setLoading(false);
 
     if (res.success) {
+      // Clear any old trade draft balance so new account size applies immediately
+      try {
+        const saved = localStorage.getItem('edgejerk_new_trade_draft');
+        if (saved) {
+          const draft = JSON.parse(saved);
+          draft.accountBalance = String(numSize);
+          localStorage.setItem('edgejerk_new_trade_draft', JSON.stringify(draft));
+        }
+      } catch {}
+
       await checkSession();
       router.push('/');
     } else {
