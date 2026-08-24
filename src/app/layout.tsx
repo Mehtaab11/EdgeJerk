@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/layout/ThemeProvider';
+import { AuthGuard } from '@/components/layout/AuthGuard';
 
 export const metadata: Metadata = {
   title: 'EdgeJerk — Trading Journal',
@@ -16,9 +17,12 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className="bg-[#f0f3fa] dark:bg-[#070a14] text-slate-900 dark:text-slate-100 min-h-screen flex flex-col antialiased">
         <ThemeProvider>
-          {children}
+          <AuthGuard>
+            {children}
+          </AuthGuard>
         </ThemeProvider>
       </body>
     </html>
   );
 }
+

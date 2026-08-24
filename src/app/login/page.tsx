@@ -16,7 +16,7 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
-import { BottomFooterBar } from "@/components/layout/BottomFooterBar";
+
 
 function LoginContent() {
   const router = useRouter();
@@ -274,7 +274,6 @@ function LoginContent() {
         </div>
       </div>
 
-      <BottomFooterBar />
     </div>
   );
 }

@@ -21,7 +21,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   defaultAccountSize: null,
 
   checkSession: async () => {
-    set({ isLoading: true });
+    const currentState = useAuthStore.getState();
+    // Only show loading spinner on the very first check
+    if (!currentState.isAuthenticated) {
+      set({ isLoading: true });
+    }
     const res = await fetchApi('/api/auth/me');
     if (res.success && res.data?.user) {
       set({

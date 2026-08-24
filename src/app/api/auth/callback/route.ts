@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { getURL } from '@/lib/getURL';
 
 /**
  * OAuth callback handler.
@@ -8,9 +9,10 @@ import { NextResponse } from 'next/server';
  * Exchanges the auth code for a session, then redirects the user.
  */
 export async function GET(request: NextRequest) {
-  const { searchParams, origin } = new URL(request.url);
+  const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
   const next = searchParams.get('next') ?? '/';
+  const baseUrl = getURL();
 
   if (code) {
     const supabase = createServerSupabaseClient();
@@ -33,13 +35,14 @@ export async function GET(request: NextRequest) {
         };
         await (supabase as any).from('profiles').upsert(profileData, { onConflict: 'id' });
 
-        return NextResponse.redirect(`${origin}/onboarding`);
+        return NextResponse.redirect(new URL('/onboarding', baseUrl));
       }
 
-      return NextResponse.redirect(`${origin}${next}`);
+      return NextResponse.redirect(new URL(next, baseUrl));
     }
   }
 
   // If code exchange failed, redirect to login with error
-  return NextResponse.redirect(`${origin}/login?error=auth_callback_failed`);
+  return NextResponse.redirect(new URL('/login?error=auth_callback_failed', baseUrl));
 }
+
