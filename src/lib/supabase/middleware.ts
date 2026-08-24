@@ -43,15 +43,33 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/api/auth/login') ||
-                      request.nextUrl.pathname.startsWith('/api/auth/signup');
+  const { pathname } = request.nextUrl;
 
-  // Protect protected API routes
-  if (request.nextUrl.pathname.startsWith('/api/') && !isAuthRoute && !user) {
-    return NextResponse.json(
-      { success: false, error: 'Unauthorized. Session expired or missing.' },
-      { status: 401 }
-    );
+  // Public routes that don't require authentication
+  const publicRoutes = ['/login', '/api/auth/login', '/api/auth/signup', '/api/auth/callback'];
+  const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
+
+  // If user is NOT logged in and trying to access a protected route → redirect to /login
+  if (!user && !isPublicRoute) {
+    // For API routes, return 401 JSON
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized. Session expired or missing.' },
+        { status: 401 }
+      );
+    }
+
+    // For page routes, redirect to login
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = '/login';
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // If user IS logged in and trying to access /login → redirect to dashboard
+  if (user && pathname === '/login') {
+    const homeUrl = request.nextUrl.clone();
+    homeUrl.pathname = '/';
+    return NextResponse.redirect(homeUrl);
   }
 
   return response;
